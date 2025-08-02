@@ -4,19 +4,25 @@
 
 ## ⚡ TLDR Quick Start
 
+**Option 1: One command (downloads everything)**
 ```bash
-# Option 1: One command (downloads everything)
 curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
+```
 
-# Option 2: Clone and run
+**Option 2: Clone and run**
+```bash
 git clone https://github.com/nixfred/docker-claude-sandbox.git
 cd docker-claude-sandbox && docker-compose up -d && docker exec -it claude-sandbox bash
+```
 
-# Option 2b: Use setup script (asks for container name)
+**Option 3: Use setup script (asks for container name)**
+```bash
 git clone https://github.com/nixfred/docker-claude-sandbox.git
 cd docker-claude-sandbox && ./run.sh
+```
 
-# Option 3: Direct docker-compose (most portable)
+**Option 4: Direct docker-compose (most portable)**
+```bash
 curl -O https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/{docker-compose.yml,Dockerfile}
 docker-compose up -d && docker exec -it claude-sandbox bash
 ```
