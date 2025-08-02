@@ -46,7 +46,9 @@ RUN echo "⚡ Installing Node.js 18+ for Claude Code..." && \
     apt-get install -y nodejs && \
     echo "🤖 Installing Claude Code globally..." && \
     npm install -g @anthropic-ai/claude-code --silent && \
-    echo "✅ Claude Code installation complete" && \
+    echo "🔍 Verifying Claude Code installation..." && \
+    claude --version && \
+    echo "✅ Claude Code installation verified and working" && \
     echo "🧹 Final cleanup..." && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

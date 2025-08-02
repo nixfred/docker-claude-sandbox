@@ -4,6 +4,16 @@
 
 set -e
 
+# Cleanup function for temporary files
+cleanup_temp_files() {
+    if [ -d "/tmp/docker-claude-sandbox" ]; then
+        rm -rf /tmp/docker-claude-sandbox 2>/dev/null || true
+    fi
+}
+
+# Set cleanup trap for script exit
+trap cleanup_temp_files EXIT
+
 # Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -35,7 +45,7 @@ check_requirements() {
         missing_tools="docker"
     else
         # Docker exists, check if daemon is running
-        if ! docker info &> /dev/null 2>&1; then
+        if ! docker info &> /dev/null; then
             echo -e "${YELLOW}⚠️  Docker is installed but not running${NC}"
             echo ""
             echo "Please start the Docker service and try again."
@@ -124,9 +134,23 @@ ask_container_name() {
     # Always prompt for container name, even in non-interactive mode
     # Use /dev/tty to read directly from terminal
     if [ -c /dev/tty ]; then
-        echo -n "Container name [claude-sandbox]: " > /dev/tty
-        read CONTAINER_NAME < /dev/tty
-        CONTAINER_NAME=${CONTAINER_NAME:-claude-sandbox}
+        while true; do
+            echo -n "Container name [claude-sandbox]: " > /dev/tty
+            read CONTAINER_NAME < /dev/tty
+            CONTAINER_NAME=${CONTAINER_NAME:-claude-sandbox}
+            
+            # Validate container name against Docker restrictions
+            if [[ "$CONTAINER_NAME" =~ ^[a-zA-Z0-9][a-zA-Z0-9._-]*$ ]] && [ ${#CONTAINER_NAME} -le 63 ]; then
+                break
+            else
+                echo -e "${RED}❌ Invalid container name. Docker names must:${NC}" > /dev/tty
+                echo "   • Start with letter or number" > /dev/tty
+                echo "   • Contain only letters, numbers, hyphens, underscores, periods" > /dev/tty
+                echo "   • Be 63 characters or less" > /dev/tty
+                echo "   • No spaces or special characters" > /dev/tty
+                echo "" > /dev/tty
+            fi
+        done
     else
         # Fallback if no tty available
         echo "No terminal available - using default container name"
@@ -280,13 +304,13 @@ main() {
     
     # Wait for container to be ready (proper readiness check)
     echo -e "${CYAN}⏳ Waiting for container to be ready...${NC}"
-    for i in {1..30}; do
+    for i in {1..60}; do
         if docker exec "$CONTAINER_NAME" echo "ready" >/dev/null 2>&1; then
             echo -e "${GREEN}✅ Container ready!${NC}"
             break
         fi
-        if [ $i -eq 30 ]; then
-            echo -e "${RED}❌ Container failed to become ready after 30 seconds${NC}"
+        if [ $i -eq 60 ]; then
+            echo -e "${RED}❌ Container failed to become ready after 60 seconds${NC}"
             echo -e "${YELLOW}You can still try to enter manually:${NC}"
             echo "  docker exec -it $CONTAINER_NAME bash"
             exit 1
