@@ -35,6 +35,8 @@ RUN echo "🔄 Updating package lists and system..." && \
     python3 python3-pip python3-venv python3-dev python3-setuptools python3-wheel \
     # Build tools for compiling Python packages
     gcc \
+    # User management and package installation
+    sudo \
     && echo "🧹 Cleaning up package cache..." && \
     apt-get autoremove -y && \
     apt-get autoclean && \
