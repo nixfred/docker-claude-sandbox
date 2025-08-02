@@ -79,26 +79,10 @@ RUN echo "👤 Creating secure non-root user 'coder'..." && \
 USER coder
 ENV HOME=/home/coder
 
-# Enhanced bashrc with neofetch and help system
-RUN echo "🎨 Setting up enhanced shell environment..." && \
-    echo 'export PS1="\[\033[0;32m\]\u@claude-sandbox\[\033[00m\]:\[\033[0;34m\]\w\[\033[00m\]\$ "' >> /home/coder/.bashrc && \
+# Set up shell environment
+RUN echo 'export PS1="\[\033[0;32m\]\u@claude-sandbox\[\033[00m\]:\[\033[0;34m\]\w\[\033[00m\]\$ "' >> /home/coder/.bashrc && \
     echo 'cd /${WORKSPACE}' >> /home/coder/.bashrc && \
-    echo 'echo "🤖 Claude Code sandbox ready!"' >> /home/coder/.bashrc && \
-    echo 'echo "📦 Start: claude"' >> /home/coder/.bashrc && \
-    echo 'echo "❓ Show tools: help"' >> /home/coder/.bashrc && \
-    echo 'echo "🔧 Need more software? Ask Claude: \\"Install [tool] because [reason]\\""' >> /home/coder/.bashrc && \
-    echo 'echo "💡 This container is MINIMAL by design - extend as needed!"' >> /home/coder/.bashrc
-
-# Add comprehensive help function
-RUN echo "ℹ️  Setting up help system..." && \
-    echo 'help() {' >> /home/coder/.bashrc && \
-    echo '  echo "Claude Code Sandbox - Available Tools:"' >> /home/coder/.bashrc && \
-    echo '  echo "  Claude Code: claude (start here!)"' >> /home/coder/.bashrc && \
-    echo '  echo "  Node.js: node, npm (v18+)"' >> /home/coder/.bashrc && \
-    echo '  echo "  Python: python3, pip3, black, flake8, pylint, pytest"' >> /home/coder/.bashrc && \
-    echo '  echo "  Git: git (version control)"' >> /home/coder/.bashrc && \
-    echo '  echo "  Network: curl (for downloads)"' >> /home/coder/.bashrc && \
-    echo '}' >> /home/coder/.bashrc
+    echo 'echo "claude"' >> /home/coder/.bashrc
 
 
 CMD ["/bin/bash"]

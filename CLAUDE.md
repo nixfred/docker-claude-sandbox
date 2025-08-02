@@ -125,7 +125,7 @@ node --version     # Verify Node.js 18+ available
 python3 --version  # Verify Python available
 git --version      # Verify git available  
 curl --version     # Verify network tools
-ls /workspace      # Check persistent workspace
+ls /workspace      # Check persistent workspace (CLAUDE.md files persist here!)
 
 # Container includes ONLY these essentials:
 # - Claude Code pre-installed globally

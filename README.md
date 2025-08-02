@@ -126,8 +126,8 @@ When you enter the container, you get:
 # Start Claude Code
 claude
 
-# Show available tools
-help
+# Just run Claude Code - that's it!
+# Everything else is handled through Claude Code conversation
 
 # Test Node.js and Python environment
 node --version
