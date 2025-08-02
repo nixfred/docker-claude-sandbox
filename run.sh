@@ -260,13 +260,19 @@ main() {
             echo -e "${YELLOW}   Disabling Docker Desktop credential helper for Colima...${NC}"
             export DOCKER_CONFIG_PATH="$HOME/.docker/config.json"
             if [ -f "$DOCKER_CONFIG_PATH" ]; then
-                # Temporarily disable credential helpers
+                # Temporarily disable credential helpers while preserving contexts
                 if grep -q "credsStore" "$DOCKER_CONFIG_PATH" 2>/dev/null; then
                     echo -e "${YELLOW}   Creating temporary Docker config without credential store...${NC}"
                     mkdir -p /tmp/docker-claude-sandbox
-                    jq 'del(.credsStore)' "$DOCKER_CONFIG_PATH" > /tmp/docker-claude-sandbox/config.json 2>/dev/null || \
-                    grep -v '"credsStore"' "$DOCKER_CONFIG_PATH" > /tmp/docker-claude-sandbox/config.json 2>/dev/null || \
-                    echo '{}' > /tmp/docker-claude-sandbox/config.json
+                    # Copy entire .docker directory but modify config.json
+                    cp -r "$HOME/.docker"/* /tmp/docker-claude-sandbox/ 2>/dev/null || true
+                    # Remove credential store from config while keeping everything else
+                    if command -v jq >/dev/null 2>&1; then
+                        jq 'del(.credsStore)' "$DOCKER_CONFIG_PATH" > /tmp/docker-claude-sandbox/config.json 2>/dev/null
+                    else
+                        grep -v '"credsStore"' "$DOCKER_CONFIG_PATH" > /tmp/docker-claude-sandbox/config.json 2>/dev/null || \
+                        echo '{}' > /tmp/docker-claude-sandbox/config.json
+                    fi
                     export DOCKER_CONFIG=/tmp/docker-claude-sandbox
                 fi
             fi
