@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  claude-sandbox:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - WORKSPACE=workspace
+    container_name: test1
+    hostname: claude-sandbox
+    stdin_open: true
+    tty: true
+    working_dir: /workspace
+    volumes:
+      - claude_sandbox_data:/workspace
+    environment:
+      - TERM=xterm-256color
+      - CONTAINER_NAME=claude-sandbox
+volumes:
+  claude_sandbox_data:
+    driver: local
