@@ -149,7 +149,8 @@ ask_container_name() {
     # Always prompt for container name, even in non-interactive mode
     # Use /dev/tty to read directly from terminal
     if [ -c /dev/tty ]; then
-        read -p "Container name [claude-sandbox]: " CONTAINER_NAME < /dev/tty
+        echo -n "Container name [claude-sandbox]: " > /dev/tty
+        read CONTAINER_NAME < /dev/tty
         CONTAINER_NAME=${CONTAINER_NAME:-claude-sandbox}
     else
         # Fallback if no tty available
@@ -185,8 +186,9 @@ main() {
     # Check for existing container and handle conflict
     if docker ps -a --format "{{.Names}}" | grep -q "^${CONTAINER_NAME}$"; then
         echo -e "${YELLOW}⚠️  Container '$CONTAINER_NAME' already exists${NC}"
-        if [ -t 0 ]; then
-            read -p "Remove existing container? [y/N]: " REMOVE_EXISTING
+        if [ -c /dev/tty ]; then
+            echo -n "Remove existing container? [y/N]: " > /dev/tty
+            read REMOVE_EXISTING < /dev/tty
             if [[ "$REMOVE_EXISTING" =~ ^[Yy]$ ]]; then
                 echo -e "${CYAN}🗑️  Removing existing container...${NC}"
                 docker rm -f "$CONTAINER_NAME" || true
