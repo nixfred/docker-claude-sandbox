@@ -20,12 +20,15 @@
 ## 🚀 Quick Install
 
 ### Option 1: Docker Hub (Fastest) 
+
+**Most Systems (Auto-detects Architecture):**
 ```bash
-# Most systems (auto-detects architecture)
 docker pull frednix/claude-sandbox:latest
 docker run -it frednix/claude-sandbox:latest
+```
 
-# ARM64 systems (Raspberry Pi, Apple Silicon) - use if auto-detection fails
+**ARM64 Systems (Raspberry Pi, Apple Silicon):**
+```bash
 docker run -it --platform linux/arm64 frednix/claude-sandbox:latest
 ```
 
@@ -110,15 +113,20 @@ For the latest Docker Engine: https://docs.docker.com/engine/install/
 ## 🛠️ Alternative Installation Methods
 
 ### 🐳 Pre-built Multi-Arch Images (Docker Hub)
+
+**Most Systems (Auto-detects Architecture):**
 ```bash
-# Production-ready multi-arch images available now!
 docker pull frednix/claude-sandbox:latest
 docker run -it frednix/claude-sandbox:latest
+```
 
-# ARM64 systems (if auto-detection fails)
+**ARM64 Systems (if auto-detection fails):**
+```bash
 docker run -it --platform linux/arm64 frednix/claude-sandbox:latest
+```
 
-# x86_64 systems (if auto-detection fails)  
+**x86_64 Systems (if auto-detection fails):**
+```bash
 docker run -it --platform linux/amd64 frednix/claude-sandbox:latest
 ```
 
