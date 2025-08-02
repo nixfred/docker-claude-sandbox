@@ -16,12 +16,10 @@ services:
       - claude_sandbox_data:/workspace
     ports:
       - "8000:8000"
-      - "8001:8001"
-      - "8002:8002"
     environment:
       - TERM=xterm-256color
       - CONTAINER_NAME=claude-sandbox
-      - EXPOSED_PORTS=8000,8001,8002
+      - EXPOSED_PORTS=8000
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "python3", "--version"]

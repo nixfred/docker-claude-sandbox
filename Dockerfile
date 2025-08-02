@@ -17,9 +17,12 @@ ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
 
-# Update system and install complete toolset
-RUN apt-get update && \
+# Update system and install essential toolset for Claude Code
+RUN echo "🔄 Updating package lists and system..." && \
+    apt-get update && \
+    echo "🔒 Installing security updates..." && \
     apt-get upgrade -y && \
+    echo "📦 Installing essential tools for Claude Code development..." && \
     apt-get install -y --no-install-recommends \
     # Core utilities
     curl wget git vim nano tree less htop \
@@ -45,30 +48,44 @@ RUN apt-get update && \
     bc file rsync screen tmux \
     # Package management
     software-properties-common apt-transport-https ca-certificates \
-    && apt-get autoremove -y \
-    && apt-get autoclean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    && echo "🧹 Cleaning up package cache..." && \
+    apt-get autoremove -y && \
+    apt-get autoclean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Install complete Python package ecosystem
-RUN pip3 install --no-cache-dir --upgrade pip setuptools wheel && \
+# Install Node.js 18+ (required for Claude Code)
+RUN echo "⚡ Installing Node.js 18+ for Claude Code..." && \
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs && \
+    echo "🤖 Installing Claude Code globally..." && \
+    npm install -g @anthropic-ai/claude-code && \
+    echo "🧹 Final cleanup..." && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Install essential Python packages for Claude Code
+RUN echo "🐍 Installing essential Python packages..." && \
+    pip3 install --no-cache-dir --upgrade pip setuptools wheel && \
+    echo "📚 Installing development and utility packages..." && \
     pip3 install --no-cache-dir \
     # Core libraries
     requests urllib3 certifi \
-    # Data science
-    pandas numpy matplotlib seaborn \
     # Development tools
-    pytest pytest-cov black flake8 pylint \
+    pytest black flake8 pylint \
     # Utilities
-    pyyaml json5 toml \
+    pyyaml toml \
     # System utilities
     psutil \
-    && rm -rf ~/.cache/pip
+    && echo "🧹 Cleaning pip cache..." && \
+    rm -rf ~/.cache/pip
 
 # Create workspace
+RUN echo "📁 Creating workspace directory..." 
 WORKDIR /${WORKSPACE}
 
 # Create non-root user for security
-RUN useradd -m -s /bin/bash coder && \
+RUN echo "👤 Creating secure non-root user 'coder'..." && \
+    useradd -m -s /bin/bash coder && \
     chown -R coder:coder /${WORKSPACE} && \
     usermod -aG sudo coder && \
     echo 'coder ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
@@ -78,21 +95,24 @@ USER coder
 ENV HOME=/home/coder
 
 # Enhanced bashrc with neofetch and help system
-RUN echo 'export PS1="\[\033[0;32m\]\u@claude-sandbox\[\033[00m\]:\[\033[0;34m\]\w\[\033[00m\]\$ "' >> /home/coder/.bashrc && \
+RUN echo "🎨 Setting up enhanced shell environment..." && \
+    echo 'export PS1="\[\033[0;32m\]\u@claude-sandbox\[\033[00m\]:\[\033[0;34m\]\w\[\033[00m\]\$ "' >> /home/coder/.bashrc && \
     echo 'neofetch' >> /home/coder/.bashrc && \
     echo 'cd /${WORKSPACE}' >> /home/coder/.bashrc && \
-    echo 'echo "Claude Code sandbox ready. Type '\''help'\'' for assistance."' >> /home/coder/.bashrc
+    echo 'echo "🤖 Claude Code sandbox ready! Use '\''claude-code'\'' to start. Type '\''help'\'' for tools."' >> /home/coder/.bashrc
 
 # Add comprehensive help function
-RUN echo 'help() {' >> /home/coder/.bashrc && \
+RUN echo "ℹ️  Setting up help system..." && \
+    echo 'help() {' >> /home/coder/.bashrc && \
     echo '  echo "Claude Code Sandbox - Available Tools:"' >> /home/coder/.bashrc && \
+    echo '  echo "  Claude Code: claude-code (installed globally)"' >> /home/coder/.bashrc && \
+    echo '  echo "  Node.js: node, npm (v18+)"' >> /home/coder/.bashrc && \
     echo '  echo "  Python: python3, pip3, black, flake8, pylint, pytest"' >> /home/coder/.bashrc && \
     echo '  echo "  Editors: vim, nano, mc (midnight commander)"' >> /home/coder/.bashrc && \
     echo '  echo "  Network: nmap, tcpdump, telnet, traceroute, ping, ssh"' >> /home/coder/.bashrc && \
     echo '  echo "  System: htop, neofetch, lsof, ps, netstat, screen, tmux"' >> /home/coder/.bashrc && \
     echo '  echo "  Files: tree, tar, zip, unzip, rsync"' >> /home/coder/.bashrc && \
     echo '  echo "  Utils: git, curl, wget, jq, bc"' >> /home/coder/.bashrc && \
-    echo '  echo "  Data: pandas, numpy, matplotlib, seaborn"' >> /home/coder/.bashrc && \
     echo '}' >> /home/coder/.bashrc
 
 # Health check

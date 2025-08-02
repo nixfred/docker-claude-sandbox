@@ -1,6 +1,6 @@
 # 🤖 Docker Claude Sandbox
 
-**Portable Docker container for safely testing Claude Code with comprehensive toolset**
+**Lightweight Docker container optimized for Claude Code development with essential toolset**
 
 ## ⚡ TLDR Quick Start
 
@@ -17,30 +17,30 @@ curl -O https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/{do
 docker-compose up -d && docker exec -it claude-sandbox bash
 ```
 
-**What you get:** Ubuntu 22.04 + Essential tools for Claude Code: Python, git, network tools (ssh, curl), system utilities + Persistent `/workspace`
+**What you get:** Ubuntu 22.04 + **Claude Code installed globally** + Node.js 18+ + Essential Python tools + Git + Network utilities + Persistent `/workspace`
 
-## 🚧 **REFACTORING IN PROGRESS** 
+## ✨ **OPTIMIZED FOR CLAUDE CODE**
 
-**The container currently has bloat that needs removal:**
-- Unnecessary web server examples and HTTP server code
-- Excessive Python packages (matplotlib, seaborn, jupyter) not needed for Claude Code  
-- Multiple port mappings when Claude Code may not need them
-- Missing verbose build explanations for users
-- Need to research what Claude Code actually requires
-
-**Goal:** Strip down to clean Ubuntu + only tools Claude Code needs + verbose build process
+**This container is specifically designed for Claude Code:**
+- ✅ **Claude Code pre-installed globally** - Just run `claude-code` to start
+- ✅ **Node.js 18+** - Required runtime for Claude Code
+- ✅ **Essential Python stack** - Core libraries for development
+- ✅ **Minimal footprint** - Only includes what Claude Code needs
+- ✅ **Verbose build process** - See exactly what's being installed
+- ✅ **Single port** - Simplified networking (8000 only)
 
 ---
 
 ## 🚀 Quick Start
 
 That's it! The setup will:
+- ✅ **Claude Code ready** - Pre-installed and ready to use
 - ✅ **Portable configuration** - Standard docker-compose.yml approach
-- ✅ **Complete Python ecosystem** - Development tools, data science libraries
-- ✅ **Network & TCP/IP tools** - nmap, tcpdump, ssh, and more
+- ✅ **Essential Python stack** - Development tools without bloat
+- ✅ **Network & system tools** - ssh, curl, git, and more
 - ✅ **Self-contained environment** - No external dependencies
 - ✅ **Security hardened** - Latest updates, non-root user
-- ✅ **Drop you into Claude-ready environment**
+- ✅ **Verbose build process** - See every installation step
 
 ## 📁 Multiple Ways to Use
 
@@ -68,9 +68,11 @@ docker-compose up -d
 
 ## ✨ Key Features
 
-### 🛡️ **Complete Development Environment**
+### 🛡️ **Claude Code Optimized Environment**
+- **Claude Code pre-installed globally** - Ready to use immediately
+- **Node.js 18+** - Required runtime environment
 - Ubuntu 22.04 with latest security updates
-- Complete Python ecosystem (pandas, numpy, matplotlib, pytest, black, etc.)
+- Essential Python stack (requests, pytest, black, flake8, pylint)
 - Network tools (nmap, tcpdump, ssh, telnet, traceroute)
 - System tools (neofetch, mc, htop, screen, tmux)
 - Non-root `coder` user with sudo access
@@ -84,21 +86,24 @@ docker-compose up -d
 
 ### 🤖 **Claude Code Ready**
 When you enter the container, you get:
+- **Claude Code installed globally** - Just run `claude-code`
 - Automatic neofetch system information display
-- Built-in help system (`help` command)
-- Complete toolset for Claude Code operations
+- Built-in help system (`help` command) showing all available tools
+- Node.js 18+ runtime for Claude Code requirements
 - Persistent `/workspace` directory for your code
 - Pre-configured development environment
 
-## 🎯 Complete Toolset
+## 🎯 Essential Toolset for Claude Code
 
+- **🤖 Claude Code**: Pre-installed globally - just run `claude-code` to start
+- **⚡ Node.js 18+**: Required runtime environment for Claude Code
 - **🛡️ Safe Environment**: Completely isolated from your host system
-- **🐍 Complete Python Stack**: Python 3 + pip + pandas, numpy, matplotlib, seaborn, pytest, black, flake8, pylint
+- **🐍 Essential Python Stack**: Python 3 + pip + requests, pytest, black, flake8, pylint
 - **🔧 Development Tools**: git, vim, nano, mc (midnight commander), screen, tmux
 - **🌐 Network & TCP/IP Tools**: nmap, tcpdump, ssh, telnet, traceroute, ping, wireshark-common, iptables
 - **📊 System Tools**: neofetch, htop, lsof, ps, netstat, build-essential, cmake  
 - **💾 Persistent Storage**: Your code survives container restarts in `/workspace`
-- **🔌 Standard Ports**: 8000, 8001, 8002 exposed for your applications
+- **🔌 Single Port**: 8000 exposed for applications (simplified networking)
 - **📋 Health Monitoring**: Built-in Docker health checks
 
 ## 🏗️ Architecture
@@ -120,12 +125,16 @@ When you enter the container, you get:
 
 ### Inside the Container
 ```bash
+# Start Claude Code
+claude-code
+
 # Show system info and available tools
 neofetch
 help
 
-# Test Python environment
-python3 -c "import pandas, numpy, matplotlib; print('All Python tools ready!')"
+# Test Node.js and Python environment
+node --version
+python3 -c "import requests, pytest; print('Essential Python tools ready!')"
 
 # File management with midnight commander
 mc
@@ -138,7 +147,7 @@ cd /workspace
 nano mycode.py
 python3 mycode.py
 
-# Start a simple web server
+# Start a simple web server (if needed)
 python3 -m http.server 8000
 # Access at http://localhost:8000
 ```
@@ -149,7 +158,13 @@ python3 -m http.server 8000
    docker exec -it claude-sandbox bash
    ```
 
-2. **Create and test code safely**:
+2. **Start Claude Code**:
+   ```bash
+   # Claude Code is pre-installed globally
+   claude-code
+   ```
+
+3. **Create and test code safely in your workspace**:
    ```bash
    # Your workspace persists between sessions
    cd /workspace
@@ -157,7 +172,7 @@ python3 -m http.server 8000
    python3 my_script.py
    ```
 
-3. **Use development tools**:
+4. **Use development tools**:
    ```bash
    # Format Python code
    black my_script.py
@@ -191,20 +206,18 @@ docker-compose down -v                # Remove container and volume
 
 ## 🌐 Port Access
 
-The container exposes three standard ports:
+The container exposes one port for simplified networking:
 
 ```bash
 # Your services will be available at:
-http://localhost:8000    # Primary port
-http://localhost:8001    # Secondary port  
-http://localhost:8002    # Additional port
+http://localhost:8000    # Single port for applications
 
 # Test port access
 curl http://localhost:8000
-python3 -m http.server 8001  # Start simple server
+python3 -m http.server 8000  # Start simple server
 ```
 
-To customize ports, modify the `ports` section in docker-compose.yml.
+To customize the port, modify the `ports` section in docker-compose.yml.
 
 ## 📊 System Requirements
 
@@ -220,11 +233,12 @@ To customize ports, modify the `ports` section in docker-compose.yml.
 
 ## 🎯 Perfect For
 
-- **Testing Claude AI code** safely without affecting your system
-- **Learning new frameworks** in a clean environment  
+- **Claude Code development** with pre-installed runtime and tools
+- **Safe code testing** without affecting your host system
+- **Learning new frameworks** in a clean, isolated environment  
 - **Quick prototyping** with no setup hassle
 - **Code review** of AI-generated code
-- **Teaching/workshops** with consistent environments
+- **Teaching/workshops** with consistent, reproducible environments
 - **Cross-platform development** with guaranteed consistency
 
 ## 🚨 Troubleshooting
