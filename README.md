@@ -17,7 +17,18 @@ curl -O https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/{do
 docker-compose up -d && docker exec -it claude-sandbox bash
 ```
 
-**What you get:** Ubuntu 22.04 + Complete Python stack + Network tools (nmap, tcpdump, ssh) + System tools (neofetch, mc, git) + Persistent `/workspace`
+**What you get:** Ubuntu 22.04 + Essential tools for Claude Code: Python, git, network tools (ssh, curl), system utilities + Persistent `/workspace`
+
+## 🚧 **REFACTORING IN PROGRESS** 
+
+**The container currently has bloat that needs removal:**
+- Unnecessary web server examples and HTTP server code
+- Excessive Python packages (matplotlib, seaborn, jupyter) not needed for Claude Code  
+- Multiple port mappings when Claude Code may not need them
+- Missing verbose build explanations for users
+- Need to research what Claude Code actually requires
+
+**Goal:** Strip down to clean Ubuntu + only tools Claude Code needs + verbose build process
 
 ---
 

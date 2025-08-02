@@ -13,7 +13,29 @@ docker-compose up -d && docker exec -it claude-sandbox bash
 curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
 ```
 
-**Container includes:** Complete Python stack, network tools (nmap, tcpdump, ssh), system tools (neofetch, mc, git), persistent `/workspace`
+**Container includes:** Essential tools for Claude Code: Python, git, network tools (ssh, curl), system utilities, persistent `/workspace`
+
+## 🚧 **REFACTORING IN PROGRESS**
+
+**Current Issues Being Fixed:**
+- Remove unnecessary web server code and examples 
+- Strip out excessive Python packages not needed for Claude Code
+- Remove unnecessary port mappings
+- Add verbose build explanations for each step
+- Research what Claude Code actually needs
+- Simplify to core purpose: clean Ubuntu + Claude Code tools
+
+**Todo List:**
+1. Remove web server examples and HTTP server code
+2. Remove unnecessary port mappings (currently has 3 ports)
+3. Add verbose build output explaining each step to user
+4. Verify security updates (apt update && apt upgrade -y)
+5. Research if Claude Code auto-installs/starts on container boot
+6. Remove excessive Python packages (matplotlib, seaborn, jupyter, etc.)
+7. Simplify to core purpose: Ubuntu + tools for Claude Code only
+8. Research what ports/services Claude Code actually needs
+9. Update all documentation to reflect simplified approach
+10. Commit clean, simplified version
 
 ---
 
