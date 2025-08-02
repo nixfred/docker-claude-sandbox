@@ -91,104 +91,28 @@ download_config() {
     echo -e "${GREEN}✓ Configuration files downloaded${NC}"
 }
 
-# Smart directory selection
-select_project_directory() {
+# Setup project directory (simplified)
+setup_project_directory() {
     local current_dir=$(pwd)
     local suggested_dir="$HOME/claude-sandbox"
     
-    echo -e "${CYAN}📁 Project Directory Setup${NC}"
-    echo "================================"
-    echo ""
-    echo "Where would you like to create the Claude Sandbox project?"
-    echo ""
-    echo -e "${YELLOW}Options:${NC}"
-    echo "  1. Current directory: $current_dir"
-    echo "  2. Recommended: $suggested_dir"
-    echo "  3. Custom directory (you specify)"
-    echo ""
-    
-    if [ -t 0 ]; then
-        # Interactive mode
-        read -p "Choose [1] current, [2] recommended, [3] custom, or press Enter for recommended: " DIR_CHOICE
-        DIR_CHOICE=${DIR_CHOICE:-2}
-        
-        case "$DIR_CHOICE" in
-            1)
-                PROJECT_DIR="$current_dir"
-                echo -e "${GREEN}✓ Using current directory: $PROJECT_DIR${NC}"
-                ;;
-            2)
-                PROJECT_DIR="$suggested_dir"
-                if [ ! -d "$PROJECT_DIR" ]; then
-                    echo -e "${YELLOW}Creating directory: $PROJECT_DIR${NC}"
-                    if ! mkdir -p "$PROJECT_DIR"; then
-                        echo -e "${RED}❌ Failed to create directory: $PROJECT_DIR${NC}"
-                        exit 1
-                    fi
-                fi
-                echo -e "${GREEN}✓ Using recommended directory: $PROJECT_DIR${NC}"
-                if ! cd "$PROJECT_DIR"; then
-                    echo -e "${RED}❌ Failed to enter directory: $PROJECT_DIR${NC}"
-                    exit 1
-                fi
-                ;;
-            3)
-                read -p "Enter custom directory path: " CUSTOM_DIR
-                if [ -z "$CUSTOM_DIR" ]; then
-                    echo -e "${RED}❌ No directory specified, using current${NC}"
-                    PROJECT_DIR="$current_dir"
-                else
-                    PROJECT_DIR="$CUSTOM_DIR"
-                    if [ ! -d "$PROJECT_DIR" ]; then
-                        echo -e "${YELLOW}Creating directory: $PROJECT_DIR${NC}"
-                        if ! mkdir -p "$PROJECT_DIR"; then
-                            echo -e "${RED}❌ Failed to create directory: $PROJECT_DIR${NC}"
-                            exit 1
-                        fi
-                    fi
-                    echo -e "${GREEN}✓ Using custom directory: $PROJECT_DIR${NC}"
-                    if ! cd "$PROJECT_DIR"; then
-                        echo -e "${RED}❌ Failed to enter directory: $PROJECT_DIR${NC}"
-                        exit 1
-                    fi
-                fi
-                ;;
-            *)
-                PROJECT_DIR="$suggested_dir"
-                if [ ! -d "$PROJECT_DIR" ]; then
-                    echo -e "${YELLOW}Creating directory: $PROJECT_DIR${NC}"
-                    if ! mkdir -p "$PROJECT_DIR"; then
-                        echo -e "${RED}❌ Failed to create directory: $PROJECT_DIR${NC}"
-                        exit 1
-                    fi
-                fi
-                echo -e "${GREEN}✓ Using recommended directory: $PROJECT_DIR${NC}"
-                if ! cd "$PROJECT_DIR"; then
-                    echo -e "${RED}❌ Failed to enter directory: $PROJECT_DIR${NC}"
-                    exit 1
-                fi
-                ;;
-        esac
-    else
-        # Non-interactive mode - use recommended
+    # If not already in a directory with config files, use recommended directory
+    if [ ! -f "docker-compose.yml" ] || [ ! -f "Dockerfile" ]; then
         PROJECT_DIR="$suggested_dir"
         if [ ! -d "$PROJECT_DIR" ]; then
-            echo -e "${YELLOW}Creating recommended directory: $PROJECT_DIR${NC}"
+            echo -e "${CYAN}📁 Creating project directory: $PROJECT_DIR${NC}"
             if ! mkdir -p "$PROJECT_DIR"; then
                 echo -e "${RED}❌ Failed to create directory: $PROJECT_DIR${NC}"
                 exit 1
             fi
         fi
-        echo -e "${GREEN}✓ Using recommended directory: $PROJECT_DIR${NC}"
+        echo -e "${GREEN}✓ Using project directory: $PROJECT_DIR${NC}"
         if ! cd "$PROJECT_DIR"; then
             echo -e "${RED}❌ Failed to enter directory: $PROJECT_DIR${NC}"
             exit 1
         fi
+        echo ""
     fi
-    
-    echo ""
-    echo -e "${CYAN}📂 Working in: $(pwd)${NC}"
-    echo ""
 }
 
 # Ask for container name
@@ -222,7 +146,7 @@ main() {
     if [ -f "docker-compose.yml" ] && [ -f "Dockerfile" ]; then
         echo -e "${GREEN}✓ Found local configuration files${NC}"
     else
-        select_project_directory
+        setup_project_directory
         download_config
     fi
     
