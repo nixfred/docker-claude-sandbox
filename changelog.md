@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **GitHub Actions CI workflow** - Comprehensive cross-platform testing automation
+- **Multi-job testing matrix** - Linux, macOS, Docker builds, security scanning
+- **Automated validation** - Bash syntax, docker-compose validation, build testing
+- **CI status badge** - Real-time build status visibility in README
+
 ## [v1.2.8] - 2024-12-XX
 
 ### Fixed

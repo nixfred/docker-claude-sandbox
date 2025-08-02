@@ -1,0 +1,27 @@
+name: Basic Validation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    name: Quick Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Validate bash syntax
+        run: bash -n run.sh
+        
+      - name: Validate docker-compose
+        run: docker-compose config --quiet
+        
+      - name: Test Docker build
+        run: |
+          echo "🔄 Building Docker image..."
+          docker-compose build
+          echo "✅ Build completed"

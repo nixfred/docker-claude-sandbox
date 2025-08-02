@@ -1,5 +1,6 @@
 # 🤖 Docker Claude Sandbox v1.2.8
 
+![CI](https://img.shields.io/github/actions/workflow/status/nixfred/docker-claude-sandbox/ci.yml?branch=main&label=CI&color=brightgreen)
 ![Version](https://img.shields.io/github/v/release/nixfred/docker-claude-sandbox?label=version&color=blue)
 ![License](https://img.shields.io/github/license/nixfred/docker-claude-sandbox?color=green)
 ![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS-lightgrey)
