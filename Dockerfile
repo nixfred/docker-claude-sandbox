@@ -46,6 +46,8 @@ RUN echo "🔄 Updating package lists and system..." && \
 RUN echo "⚡ Installing Node.js 18+ for Claude Code..." && \
     curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -y nodejs && \
+    echo "📦 Updating npm to latest version..." && \
+    npm install -g npm@latest && \
     echo "🤖 Installing Claude Code globally..." && \
     npm install -g @anthropic-ai/claude-code --silent && \
     echo "🔍 Verifying Claude Code installation..." && \
