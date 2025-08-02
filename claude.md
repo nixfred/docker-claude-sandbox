@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This repository creates a **production-ready Docker environment** specifically optimized for Claude Code development. The system provides cross-platform compatibility (Linux, macOS, ARM64, x86_64) with intelligent platform adaptation and automated CI/CD validation.
 
+**✅ Production Status**: Docker images published to Docker Hub with full multi-architecture support (AMD64 + ARM64).
+
 ### Core Components
 
 **1. `run.sh` - Intelligent Setup Script**
@@ -35,11 +37,12 @@ This repository creates a **production-ready Docker environment** specifically o
 
 ### Container Distribution
 
-**Docker Hub Publishing (Production)**
+**Docker Hub Publishing (Production) ✅**
 - Multi-architecture builds: AMD64 + ARM64
 - Automated publishing via GitHub Actions on version tags
 - Repository: `frednix/claude-sandbox:latest`
 - Semantic versioning with multiple tags (`latest`, `v1.4.1`, `1.4`, `1`)
+- **ARM64 Support**: Requires `--platform linux/arm64` on some systems (Raspberry Pi)
 
 ## Common Development Commands
 
@@ -73,9 +76,12 @@ docker-compose build --no-cache
 # Quick start (prompts for container name)
 ./run.sh
 
-# Test published Docker Hub image
+# Test published Docker Hub images
 docker pull frednix/claude-sandbox:latest
 docker run -it frednix/claude-sandbox:latest
+
+# ARM64 systems (Raspberry Pi, Apple Silicon)
+docker run -it --platform linux/arm64 frednix/claude-sandbox:latest
 
 # Manual container management
 docker exec -it CONTAINER_NAME bash

@@ -21,8 +21,12 @@
 
 ### Option 1: Docker Hub (Fastest) 
 ```bash
+# Most systems (auto-detects architecture)
 docker pull frednix/claude-sandbox:latest
 docker run -it frednix/claude-sandbox:latest
+
+# ARM64 systems (Raspberry Pi, Apple Silicon) - use if auto-detection fails
+docker run -it --platform linux/arm64 frednix/claude-sandbox:latest
 ```
 
 ### Option 2: Build from Source
@@ -111,9 +115,11 @@ For the latest Docker Engine: https://docs.docker.com/engine/install/
 docker pull frednix/claude-sandbox:latest
 docker run -it frednix/claude-sandbox:latest
 
-# Alternative: GitHub Container Registry
-docker pull ghcr.io/nixfred/docker-claude-sandbox:latest
-docker run -it ghcr.io/nixfred/docker-claude-sandbox:latest
+# ARM64 systems (if auto-detection fails)
+docker run -it --platform linux/arm64 frednix/claude-sandbox:latest
+
+# x86_64 systems (if auto-detection fails)  
+docker run -it --platform linux/amd64 frednix/claude-sandbox:latest
 ```
 
 ### Git Clone Method
@@ -402,6 +408,19 @@ curl -fsSL "https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.4
 # Or clone locally
 git clone https://github.com/nixfred/docker-claude-sandbox.git
 cd docker-claude-sandbox && ./run.sh
+```
+
+**"no matching manifest for linux/arm/v8" error (ARM64 systems)**
+```bash
+# Explicitly specify ARM64 platform (Raspberry Pi, Apple Silicon)
+docker run -it --platform linux/arm64 frednix/claude-sandbox:latest
+
+# Enable experimental Docker CLI features
+export DOCKER_CLI_EXPERIMENTAL=enabled
+docker run -it frednix/claude-sandbox:latest
+
+# Use specific ARM64 digest
+docker run -it frednix/claude-sandbox@sha256:9f2298175757ba2d08a5bf54a0f3ea102a7477c867b0d7a12f2c88861df29cf9
 ```
 
 **Multiple containers sharing workspace**
