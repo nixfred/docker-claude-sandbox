@@ -389,8 +389,8 @@ curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/
 ## 🔍 Architecture Details
 
 For technical implementation details, see:
-- **[CLAUDE.md](CLAUDE.md)** - Development guidelines and architecture
-- **[AIINSTALL.md](AIINSTALL.md)** - Comprehensive AI assistant guide
+- **[claude.md](claude.md)** - Development guidelines and architecture
+- **[ai-install.md](ai-install.md)** - Comprehensive AI assistant guide
 
 ## 🏷️ Version Information
 
@@ -401,7 +401,7 @@ For technical implementation details, see:
 
 ## 📄 License
 
-MIT License - See [LICENSE](LICENSE) for details.
+MIT License - See [license](license) for details.
 
 ## 🤝 Contributing
 

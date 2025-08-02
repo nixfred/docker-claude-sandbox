@@ -55,7 +55,7 @@ The goal is to create a standalone Docker image that works without external scri
    ```bash
    curl -fsSL "https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh?v=$(date +%s)" | bash
    ```
-3. Check the [troubleshooting guide](CLAUDE.md#troubleshooting-guide)
+3. Check the [troubleshooting guide](claude.md#troubleshooting-guide)
 
 ### Issue Template
 Please include:
@@ -71,14 +71,14 @@ Please include:
 ### Code Standards
 - **Bash**: Follow existing indentation and error handling patterns
 - **Docker**: Use multi-stage builds when possible, minimize image layers
-- **Documentation**: Update README.md and CLAUDE.md for significant changes
+- **Documentation**: Update readme.md and claude.md for significant changes
 - **Testing**: Test on multiple platforms (Linux ARM64/x86_64, macOS)
 
 ### Versioning (SemVer)
 Every commit must update version in 3 locations:
 1. `run.sh` line 2: `# Docker Claude Sandbox - Portable One-Command Setup v1.2.2`
 2. `run.sh` thank you messages: `Thank you for using Docker Claude Sandbox v1.2.2` (2 locations)
-3. `README.md` line 1: `# 🤖 Docker Claude Sandbox v1.2.2`
+3. `readme.md` line 1: `# 🤖 Docker Claude Sandbox v1.2.2`
 
 **Version Format**: `vMAJOR.MINOR.PATCH`
 - **MAJOR**: Breaking changes affecting existing users
@@ -107,7 +107,7 @@ docker system prune -f
 1. **Create an issue** describing the problem/enhancement
 2. **Fork the repository** and create a feature branch
 3. **Test thoroughly** on your platform
-4. **Update documentation** (README.md, CLAUDE.md if needed)
+4. **Update documentation** (readme.md, claude.md if needed)
 5. **Follow version increment** requirements above
 
 ### PR Template
@@ -126,8 +126,8 @@ docker system prune -f
 
 ## 🔗 Resources
 
-- **Main documentation**: [CLAUDE.md](CLAUDE.md) - Technical implementation details
-- **User guide**: [README.md](README.md) - Installation and usage
+- **Main documentation**: [claude.md](claude.md) - Technical implementation details
+- **User guide**: [readme.md](readme.md) - Installation and usage
 - **Issues**: [GitHub Issues](https://github.com/nixfred/docker-claude-sandbox/issues)
 - **Releases**: [GitHub Releases](https://github.com/nixfred/docker-claude-sandbox/releases)
 
@@ -160,4 +160,4 @@ Looking for ways to help? Consider:
 
 ---
 
-**Questions?** Open an issue or check the [technical documentation](CLAUDE.md) for implementation details.
+**Questions?** Open an issue or check the [technical documentation](claude.md) for implementation details.

@@ -10,9 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [v1.2.3] - 2024-12-XX
 
 ### Added
-- LICENSE file (MIT license)
+- license file (MIT license)
 - GitHub issue templates (bug report, feature request, platform support)
-- Comprehensive CONTRIBUTING.md with development guidelines
+- Comprehensive contributing.md with development guidelines
 - Professional documentation structure
 - CHANGELOG.md with complete version history
 - Professional badges in README (license, platform, Node.js, issues, stars)
@@ -135,12 +135,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **v1.2.0**: Major milestone with cache-busting and documentation
 - **v1.2.1**: Critical volume collision bug fix
 - **v1.2.2**: Documentation consistency and professionalization
-- **v1.2.3**: GitHub professionalization with LICENSE, issue templates, badges
+- **v1.2.3**: GitHub professionalization with license, issue templates, badges
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines and how to contribute to this project.
+See [contributing.md](contributing.md) for development guidelines and how to contribute to this project.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [license](license) file for details.
