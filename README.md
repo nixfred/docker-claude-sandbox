@@ -61,8 +61,9 @@ cd docker-claude-sandbox
 ./run.sh
 ```
 **Benefits:**
-- Asks for custom container name (default: claude-sandbox)
-- Handles existing container conflicts
+- Always prompts for custom container name (default: claude-sandbox)
+- Works with both local and remote execution (`curl ... | bash`)
+- Handles existing container conflicts with interactive prompts
 - Automatically enters container when ready
 
 ### Option 2: Direct Docker Compose
@@ -209,7 +210,7 @@ docker-compose down -v                # Remove container and volume
 ```
 
 ### Container Naming
-The setup script (`./run.sh`) asks for a container name:
+The setup script (`./run.sh`) now always asks for a container name, even when run via `curl | bash`:
 ```
 🐳 Container Configuration
 ===============================
@@ -218,7 +219,8 @@ Container name [claude-sandbox]: your-custom-name
 ```
 - Press **Enter** for default name `claude-sandbox`
 - Type custom name for multiple projects (e.g., `project1-claude`, `testing-env`)
-- Handles existing container conflicts automatically
+- Works correctly with both local execution (`./run.sh`) and remote execution (`curl ... | bash`)
+- Handles existing container conflicts automatically with interactive prompts
 
 ## 🌐 No Ports Required
 

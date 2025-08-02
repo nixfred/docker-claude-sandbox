@@ -32,7 +32,7 @@ This repository creates a lightweight Docker environment optimized specifically 
 
 ### Container Lifecycle
 ```bash
-# Recommended: Use setup script (asks for container name)
+# Recommended: Use setup script (always prompts for container name, works with curl | bash)
 ./run.sh
 
 # Or manual setup
@@ -55,11 +55,12 @@ docker system prune -f  # Remove unused images
 ```
 
 ### Container Naming
-The `./run.sh` script provides container name customization:
-- Interactive prompt: `Container name [claude-sandbox]: `
+The `./run.sh` script provides container name customization with improved interactive support:
+- Always prompts: `Container name [claude-sandbox]: ` (even when run via `curl ... | bash`)
 - Default: `claude-sandbox` (just press Enter)
 - Custom names: `project1-claude`, `testing-env`, etc.
-- Automatic conflict resolution for existing containers
+- Automatic conflict resolution for existing containers with interactive prompts
+- Uses `/dev/tty` redirection to ensure prompts work correctly when piped
 
 ### Testing Changes
 ```bash
@@ -155,6 +156,7 @@ ls /workspace      # Check persistent workspace (CLAUDE.md files persist here!)
 - **Permission issues**: Container runs as `coder` user with sudo access
 - **Volume persistence**: Files in `/workspace` persist, other locations don't
 - **Build failures**: Use `docker-compose build --no-cache` to force clean build
+- **Interactive prompts not working**: Script now uses `/dev/tty` redirection to ensure prompts work with `curl | bash`
 
 ### Development Testing
 ```bash
