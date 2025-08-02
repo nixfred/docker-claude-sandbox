@@ -1,0 +1,143 @@
+# Dependabot configuration for automated dependency updates and security scanning
+# This file configures GitHub's Dependabot to automatically check for vulnerabilities
+# and create pull requests for dependency updates across multiple package ecosystems
+
+version: 2
+updates:
+  # Docker base image and dependencies
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "nixfred"
+    assignees:
+      - "nixfred"
+    commit-message:
+      prefix: "🐳"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "docker"
+      - "security"
+
+  # GitHub Actions workflows
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday" 
+      time: "06:30"
+      timezone: "UTC"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "nixfred"
+    assignees:
+      - "nixfred"
+    commit-message:
+      prefix: "⚙️"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "ci-cd"
+
+  # Python dependencies (requirements.txt)
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "06:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 3
+    reviewers:
+      - "nixfred"
+    assignees:
+      - "nixfred"
+    commit-message:
+      prefix: "🐍"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "python"
+      - "security"
+    # Group related Python packages together
+    groups:
+      testing:
+        patterns:
+          - "pytest*"
+          - "coverage*"
+          - "tox*"
+      linting:
+        patterns:
+          - "black*"
+          - "flake8*"
+          - "pylint*"
+          - "mypy*"
+      core:
+        patterns:
+          - "requests*"
+          - "urllib3*"
+          - "certifi*"
+
+  # Node.js/npm dependencies (if package.json exists)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "06:30"
+      timezone: "UTC"
+    open-pull-requests-limit: 3
+    reviewers:
+      - "nixfred"
+    assignees:
+      - "nixfred"
+    commit-message:
+      prefix: "📦"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "nodejs"
+      - "security"
+    # Ignore development dependencies for container builds
+    ignore:
+      - dependency-name: "*"
+        dependency-type: "development"
+
+# Security-focused configuration notes:
+# 
+# 1. Weekly Schedule: Balances security with stability
+#    - Runs on weekdays for timely review
+#    - Staggered times prevent resource conflicts
+#    - UTC timezone for consistency
+#
+# 2. Pull Request Limits: Prevents overwhelming maintainers
+#    - Docker: 5 PRs (base images change frequently)
+#    - Actions: 5 PRs (many workflow dependencies)
+#    - Python/Node: 3 PRs (more stable, grouped updates)
+#
+# 3. Automatic Assignment: Ensures prompt review
+#    - Assigns to repository maintainer
+#    - Adds appropriate reviewers
+#    - Labels for easy filtering and triage
+#
+# 4. Semantic Commit Messages: Clear update history
+#    - Emoji prefixes for visual recognition
+#    - Scope inclusion for context
+#    - Consistent with project commit style
+#
+# 5. Dependency Grouping: Reduces PR noise
+#    - Related packages updated together
+#    - Testing tools grouped separately
+#    - Core dependencies isolated
+#
+# 6. Security Priority: Focuses on vulnerabilities
+#    - All ecosystems monitored
+#    - Security labels applied
+#    - Development deps ignored for production containers

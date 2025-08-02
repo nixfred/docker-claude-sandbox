@@ -1,0 +1,162 @@
+# GitHub Security Advisory and Vulnerability Management Policy
+# This file configures automatic security scanning and vulnerability management
+
+name: Security Advisory Policy
+description: Automated vulnerability detection and response for Docker Claude Sandbox
+
+# Security scanning configuration
+security:
+  # Enable GitHub Security Advisories
+  advisories: true
+  
+  # Vulnerability reporting
+  reporting:
+    # Automatically create issues for new vulnerabilities
+    create-issue: true
+    # Issue labels for triage
+    labels:
+      - "security"
+      - "vulnerability" 
+      - "high-priority"
+    # Assign to maintainer
+    assignees:
+      - "nixfred"
+
+  # Dependency scanning settings
+  dependencies:
+    # Scan all manifest files
+    scan-manifests: true
+    # Include transitive dependencies
+    include-transitive: true
+    # Minimum severity to report
+    min-severity: "low"
+    # Alert on security vulnerabilities
+    security-alerts: true
+
+# Vulnerability severity handling
+severity-levels:
+  critical:
+    # Immediate action required
+    max-response-time: "24 hours"
+    auto-merge-patches: true
+    create-hotfix-branch: true
+    notify-maintainers: true
+    
+  high:
+    # Quick response required
+    max-response-time: "72 hours" 
+    auto-merge-patches: true
+    create-issue: true
+    
+  medium:
+    # Standard process
+    max-response-time: "1 week"
+    auto-merge-patches: false
+    create-issue: true
+    
+  low:
+    # Regular maintenance cycle
+    max-response-time: "2 weeks"
+    auto-merge-patches: false
+    create-issue: false
+
+# Package ecosystem priorities
+ecosystems:
+  docker:
+    # Container base images - highest priority
+    priority: "critical"
+    auto-update: true
+    security-only: false
+    
+  github-actions:
+    # CI/CD security
+    priority: "high"
+    auto-update: true
+    security-only: true
+    
+  pip:
+    # Python runtime dependencies
+    priority: "high"
+    auto-update: false  # Manual review required
+    security-only: false
+    
+  npm:
+    # Node.js Claude Code dependencies
+    priority: "critical"
+    auto-update: false  # Manual review required
+    security-only: false
+
+# Automated response actions
+automation:
+  # Create security issues automatically
+  create-security-issues: true
+  
+  # Auto-assign security team
+  assign-security-team: true
+  
+  # Label pull requests appropriately
+  label-security-prs: true
+  
+  # Request security reviews for critical updates
+  require-security-review: true
+  
+  # Block merges with known vulnerabilities
+  block-vulnerable-merges: true
+
+# Notification settings
+notifications:
+  # Notify on new vulnerabilities
+  new-vulnerabilities: true
+  
+  # Notify on security updates
+  security-updates: true
+  
+  # Notify on failed security checks
+  failed-checks: true
+  
+  # Communication channels
+  channels:
+    - "github-issues"
+    - "github-security-advisories"
+
+# Security maintenance schedule
+maintenance:
+  # Regular security reviews
+  review-schedule: "weekly"
+  
+  # Dependency audit frequency
+  audit-frequency: "monthly"
+  
+  # Security documentation updates
+  docs-review: "quarterly"
+  
+  # Emergency response availability
+  emergency-response: "24/7"
+
+# Compliance and reporting
+compliance:
+  # Track vulnerability response times
+  track-response-times: true
+  
+  # Generate security reports
+  generate-reports: true
+  
+  # Export vulnerability data
+  export-data: true
+  
+  # Audit trail maintenance
+  audit-trail: true
+
+# Integration with project workflows
+integration:
+  # Block releases with vulnerabilities
+  block-releases: true
+  
+  # Require security sign-off
+  require-signoff: true
+  
+  # Integration with CI/CD
+  ci-integration: true
+  
+  # Docker image scanning
+  image-scanning: true

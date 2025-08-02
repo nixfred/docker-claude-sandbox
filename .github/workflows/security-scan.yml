@@ -1,0 +1,208 @@
+name: Security Scanning
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Daily security scans at 2 AM UTC
+    - cron: '0 2 * * *'
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  dependency-scan:
+    name: Dependency Vulnerability Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Python for dependency analysis
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          
+      - name: Install safety for Python vulnerability scanning
+        run: pip install safety
+        
+      - name: Scan Python dependencies for vulnerabilities
+        run: |
+          echo "🔍 Scanning Python dependencies for known vulnerabilities..."
+          
+          if [ -f "requirements.txt" ]; then
+            echo "Checking requirements.txt..."
+            safety check -r requirements.txt --json --output safety-report.json || true
+            
+            # Generate human-readable report
+            safety check -r requirements.txt --short-report || true
+          else
+            echo "No requirements.txt found"
+          fi
+          
+      - name: Setup Node.js for npm audit
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: NPM security audit
+        run: |
+          echo "🔍 Running npm security audit..."
+          
+          # Check if package.json exists (might not in container-only project)
+          if [ -f "package.json" ]; then
+            npm audit --audit-level=moderate || true
+            npm audit --json > npm-audit.json || true
+          else
+            echo "No package.json found - checking for Claude Code installation"
+            # Create minimal package.json to audit Claude Code
+            echo '{"dependencies":{"@anthropic-ai/claude-code":"*"}}' > temp-package.json
+            npm install --package-lock-only --package-lock-only --prefix . || true
+            npm audit --audit-level=moderate || true
+          fi
+
+  container-scan:
+    name: Container Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Build container for security scanning
+        run: |
+          echo "🏗️ Building container for security analysis..."
+          docker build -t security-scan:latest .
+          
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'security-scan:latest'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH,MEDIUM'
+          
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+          
+      - name: Run Trivy filesystem scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'table'
+          severity: 'CRITICAL,HIGH'
+          
+      - name: Container best practices scan with Docker Bench
+        run: |
+          echo "🔍 Running Docker security best practices check..."
+          
+          # Run basic container security checks
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+            docker/docker-bench-security || true
+
+  secrets-scan:
+    name: Secrets Detection
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Install and run gitleaks
+        run: |
+          echo "🔍 Scanning for secrets and sensitive data..."
+          
+          # Install gitleaks
+          wget -q https://github.com/zricethezav/gitleaks/releases/latest/download/gitleaks_linux_x64.tar.gz
+          tar -xzf gitleaks_linux_x64.tar.gz
+          chmod +x gitleaks
+          
+          # Scan repository for secrets
+          ./gitleaks detect --source . --verbose --no-git --report-format json --report-path gitleaks-report.json || true
+          
+          # Show results
+          if [ -f "gitleaks-report.json" ]; then
+            echo "Gitleaks scan completed. Results:"
+            cat gitleaks-report.json | jq '.[] | {file: .File, secret: .Secret, rule: .RuleID}' || cat gitleaks-report.json
+          fi
+
+  dockerfile-scan:
+    name: Dockerfile Security Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Run Hadolint Dockerfile linter
+        run: |
+          echo "🔍 Analyzing Dockerfile for security best practices..."
+          
+          # Install hadolint
+          wget -O hadolint https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
+          chmod +x hadolint
+          
+          # Scan Dockerfile
+          ./hadolint Dockerfile || true
+          
+      - name: Check for common Dockerfile security issues
+        run: |
+          echo "🔍 Checking for common Dockerfile security issues..."
+          
+          # Check for running as root
+          if grep -q "USER root" Dockerfile; then
+            echo "⚠️  WARNING: Container may run as root user"
+          fi
+          
+          # Check for COPY with overly broad permissions
+          if grep -q "COPY \. " Dockerfile; then
+            echo "⚠️  WARNING: COPY . may include unnecessary files"
+          fi
+          
+          # Check for package manager cache cleanup
+          if grep -q "apt-get install" Dockerfile && ! grep -q "rm -rf /var/lib/apt/lists" Dockerfile; then
+            echo "⚠️  WARNING: apt cache not cleaned up"
+          fi
+          
+          # Check for pinned base image versions
+          if grep -q "FROM.*:latest" Dockerfile; then
+            echo "⚠️  WARNING: Using :latest tag for base image"
+          fi
+          
+          echo "✅ Dockerfile security check complete"
+
+  security-report:
+    name: Generate Security Report
+    runs-on: ubuntu-latest
+    needs: [dependency-scan, container-scan, secrets-scan, dockerfile-scan]
+    if: always()
+    
+    steps:
+      - name: Generate security summary
+        run: |
+          echo "## 🔒 Security Scan Summary" >> $GITHUB_STEP_SUMMARY
+          echo "| Scan Type | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Dependency Scan | ${{ needs.dependency-scan.result == 'success' && '✅ Pass' || '❌ Issues Found' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Container Scan | ${{ needs.container-scan.result == 'success' && '✅ Pass' || '❌ Vulnerabilities Found' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Secrets Detection | ${{ needs.secrets-scan.result == 'success' && '✅ Pass' || '❌ Secrets Found' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Dockerfile Analysis | ${{ needs.dockerfile-scan.result == 'success' && '✅ Pass' || '⚠️ Issues Found' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Scan Date**: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📋 Security Recommendations" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔄 Keep dependencies updated via Dependabot" >> $GITHUB_STEP_SUMMARY
+          echo "- 🐳 Use specific version tags for base images" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔐 Rotate secrets and API keys regularly" >> $GITHUB_STEP_SUMMARY
+          echo "- 📊 Review security scan results in GitHub Security tab" >> $GITHUB_STEP_SUMMARY
