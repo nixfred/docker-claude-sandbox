@@ -78,9 +78,9 @@ Please include:
 
 ### Versioning (SemVer)
 Every commit must update version in 3 locations:
-1. `run.sh` line 2: `# Docker Claude Sandbox - Portable One-Command Setup v1.2.6`
-2. `run.sh` thank you messages: `Thank you for using Docker Claude Sandbox v1.2.6` (2 locations)
-3. `readme.md` line 1: `# 🤖 Docker Claude Sandbox v1.2.6`
+1. `run.sh` line 2: `# Docker Claude Sandbox - Portable One-Command Setup v1.2.7`
+2. `run.sh` thank you messages: `Thank you for using Docker Claude Sandbox v1.2.7` (2 locations)
+3. `readme.md` line 1: `# 🤖 Docker Claude Sandbox v1.2.7`
 
 **Version Format**: `vMAJOR.MINOR.PATCH`
 - **MAJOR**: Breaking changes affecting existing users
@@ -129,6 +129,7 @@ docker system prune -f
 ## 🔗 Resources
 
 - **Main documentation**: [claude.md](claude.md) - Technical implementation details
+- **AI Development**: [AI_DEVELOPMENT_GUIDE.md](AI_DEVELOPMENT_GUIDE.md) - Complete AI assistant guide
 - **User guide**: [readme.md](readme.md) - Installation and usage
 - **Issues**: [GitHub Issues](https://github.com/nixfred/docker-claude-sandbox/issues)
 - **Releases**: [GitHub Releases](https://github.com/nixfred/docker-claude-sandbox/releases)

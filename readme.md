@@ -1,4 +1,4 @@
-# 🤖 Docker Claude Sandbox v1.2.6
+# 🤖 Docker Claude Sandbox v1.2.7
 
 ![Version](https://img.shields.io/github/v/release/nixfred/docker-claude-sandbox?label=version&color=blue)
 ![License](https://img.shields.io/github/license/nixfred/docker-claude-sandbox?color=green)
@@ -102,7 +102,7 @@ cd docker-claude-sandbox
 
 ### Version-Pinned Install
 ```bash
-curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.2.6/run.sh | bash
+curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.2.7/run.sh | bash
 ```
 
 ### Cache-Busting Install (Force Latest)
@@ -284,7 +284,7 @@ docker exec -it YOUR_CONTAINER_NAME bash -c "cd /workspace && code ."
 # .github/workflows/test.yml
 - name: Setup Claude Code Environment
   run: |
-    curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.2.6/run.sh | bash
+    curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.2.7/run.sh | bash
     docker exec claude-sandbox claude --version
 ```
 
@@ -364,7 +364,7 @@ docker system prune -f
 **"Input device is not a TTY" error**
 ```bash
 # Use specific commit to bypass CDN cache
-curl -fsSL "https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.2.6/run.sh" | bash
+curl -fsSL "https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.2.7/run.sh" | bash
 
 # Or clone locally
 git clone https://github.com/nixfred/docker-claude-sandbox.git
@@ -390,11 +390,11 @@ curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/
 
 For technical implementation details, see:
 - **[claude.md](claude.md)** - Development guidelines and architecture
-- **[ai-install.md](ai-install.md)** - Comprehensive AI assistant guide
+- **[AI_DEVELOPMENT_GUIDE.md](AI_DEVELOPMENT_GUIDE.md)** - Complete AI assistant development guide
 
 ## 🏷️ Version Information
 
-- **Current version**: v1.2.6
+- **Current version**: v1.2.7
 - **Tested platforms**: Linux ARM64/x86_64, macOS Apple Silicon (Intel untested)  
 - **Docker compatibility**: 20.10+, Buildx optional
 - **Base image**: Ubuntu 22.04 LTS

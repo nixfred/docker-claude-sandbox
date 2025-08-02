@@ -301,7 +301,7 @@ This welcome banner is configured in the Dockerfile's final RUN command (lines 8
 4. **GitHub release**: Create release with comprehensive notes
 5. **Documentation**: Update all .md files with new features/fixes
 
-## 📋 Outstanding Development Tasks (v1.2.6)
+## 📋 Outstanding Development Tasks (v1.2.7)
 
 ### 🔴 High Priority
 - **Update help text from Node.js 18+ to 20+** - ✅ COMPLETED - All documentation now consistently references Node.js 20+  

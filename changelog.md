@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v1.2.7] - 2024-12-XX
+
+### Changed
+- Renamed ai-install.md → AI_DEVELOPMENT_GUIDE.md for clarity
+- Enhanced AI assistant onboarding documentation
+- Updated all file references to use new naming convention
+
+### Improved
+- Clearer purpose and discoverability for AI development guide
+- Better follows GitHub naming conventions for important files
+- Enhanced documentation structure for AI assistant comprehension
+
 ## [v1.2.6] - 2024-12-XX
 
 ### Added
@@ -195,6 +207,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **v1.2.4**: Timezone detection, filename modernization, portability improvements
 - **v1.2.5**: Comprehensive progress indicators and enhanced user experience
 - **v1.2.6**: Security documentation and GitHub professionalization completion
+- **v1.2.7**: AI development guide restructure and naming improvements
 
 ## Contributing
 
