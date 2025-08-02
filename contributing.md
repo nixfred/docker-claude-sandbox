@@ -78,9 +78,9 @@ Please include:
 
 ### Versioning (SemVer)
 Every commit must update version in 3 locations:
-1. `run.sh` line 2: `# Docker Claude Sandbox - Portable One-Command Setup v1.2.2`
-2. `run.sh` thank you messages: `Thank you for using Docker Claude Sandbox v1.2.2` (2 locations)
-3. `readme.md` line 1: `# 🤖 Docker Claude Sandbox v1.2.2`
+1. `run.sh` line 2: `# Docker Claude Sandbox - Portable One-Command Setup v1.2.6`
+2. `run.sh` thank you messages: `Thank you for using Docker Claude Sandbox v1.2.6` (2 locations)
+3. `readme.md` line 1: `# 🤖 Docker Claude Sandbox v1.2.6`
 
 **Version Format**: `vMAJOR.MINOR.PATCH`
 - **MAJOR**: Breaking changes affecting existing users
