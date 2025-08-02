@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v1.2.6] - 2024-12-XX
+
+### Added
+- SECURITY.md with comprehensive vulnerability reporting process
+- .github/PULL_REQUEST_TEMPLATE.md for standardized contributions
+- Security best practices documentation for curl | bash distribution
+- Supported versions table and security timeline commitments
+- Responsible disclosure policy and contact information
+
+### Changed
+- Enhanced repository security posture and professional standards
+- Complete GitHub documentation suite now in place
+- Improved contributor guidance with detailed PR requirements
+
+### Security
+- Documented security measures for script distribution
+- Container security characteristics clearly outlined
+- User security best practices provided
+- Development security process documented
+
 ## [v1.2.5] - 2024-12-XX
 
 ### Added
@@ -174,6 +194,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **v1.2.3**: GitHub professionalization with license, issue templates, badges
 - **v1.2.4**: Timezone detection, filename modernization, portability improvements
 - **v1.2.5**: Comprehensive progress indicators and enhanced user experience
+- **v1.2.6**: Security documentation and GitHub professionalization completion
 
 ## Contributing
 
