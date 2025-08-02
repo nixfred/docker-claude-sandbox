@@ -231,6 +231,8 @@ main() {
     echo ""
     echo -e "${CYAN}💡 Or use the sclaw alias (if you have FeNix):${NC}"
     echo -e "${YELLOW}  sclaw${NC}"
+    echo ""
+    echo -e "${RED}🔧 FIXED: No more TTY errors! (Test commit)${NC}"
 }
 
 # Handle command line arguments
