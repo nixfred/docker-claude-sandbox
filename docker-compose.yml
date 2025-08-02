@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  claude-sandbox:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - WORKSPACE=workspace
+    container_name: claude-sandbox
+    hostname: claude-sandbox
+    stdin_open: true
+    tty: true
+    working_dir: /workspace
+    volumes:
+      - claude_sandbox_data:/workspace
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+      - "8002:8002"
+    environment:
+      - TERM=xterm-256color
+      - CONTAINER_NAME=claude-sandbox
+      - EXPOSED_PORTS=8000,8001,8002
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python3", "--version"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - claude_network
+
+volumes:
+  claude_sandbox_data:
+    driver: local
+
+networks:
+  claude_network:
+    driver: bridge
