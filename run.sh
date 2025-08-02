@@ -180,6 +180,24 @@ main() {
     
     ask_container_name
     
+    # Check for existing container and handle conflict
+    if docker ps -a --format "{{.Names}}" | grep -q "^${CONTAINER_NAME}$"; then
+        echo -e "${YELLOW}⚠️  Container '$CONTAINER_NAME' already exists${NC}"
+        if [ -t 0 ]; then
+            read -p "Remove existing container? [y/N]: " REMOVE_EXISTING
+            if [[ "$REMOVE_EXISTING" =~ ^[Yy]$ ]]; then
+                echo -e "${CYAN}🗑️  Removing existing container...${NC}"
+                docker rm -f "$CONTAINER_NAME" || true
+            else
+                echo -e "${RED}❌ Cannot proceed with existing container${NC}"
+                exit 1
+            fi
+        else
+            echo -e "${CYAN}🗑️  Auto-removing existing container in non-interactive mode...${NC}"
+            docker rm -f "$CONTAINER_NAME" || true
+        fi
+    fi
+    
     echo -e "${CYAN}🏗️  Building Claude Sandbox container...${NC}"
     docker-compose build || exit 1
     
