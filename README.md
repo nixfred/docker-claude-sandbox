@@ -1,167 +1,184 @@
-# 🤖 Docker Claude Sandbox V2
+# 🤖 Docker Claude Sandbox
 
-**Enhanced one-command Docker container for safely testing Claude AI code**
+**Portable Docker container for safely testing Claude Code with comprehensive toolset**
 
-## 🚀 Instant Start
+## 🚀 Quick Start
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
 ```
 
-That's it! The enhanced script will:
-- ✅ **Smart port detection** - Automatically avoids conflicts
-- ✅ **Ask 4 quick questions** - With intelligent defaults  
-- ✅ **Latest security updates** - Includes `apt upgrade -y`
-- ✅ **Build optimized container** - Clean, secure, fast
-- ✅ **Comprehensive setup report** - Know exactly what you have
+That's it! The setup will:
+- ✅ **Portable configuration** - Standard docker-compose.yml approach
+- ✅ **Complete Python ecosystem** - Development tools, data science libraries
+- ✅ **Network & TCP/IP tools** - nmap, tcpdump, ssh, and more
+- ✅ **Self-contained environment** - No external dependencies
+- ✅ **Security hardened** - Latest updates, non-root user
 - ✅ **Drop you into Claude-ready environment**
 
-## 📁 Or Clone & Run
+## 📁 Multiple Ways to Use
 
+### Option 1: Direct Docker Compose (Recommended)
+```bash
+git clone https://github.com/nixfred/docker-claude-sandbox.git
+cd docker-claude-sandbox
+docker-compose up -d
+docker exec -it claude-sandbox bash
+```
+
+### Option 2: With Setup Script
 ```bash
 git clone https://github.com/nixfred/docker-claude-sandbox.git
 cd docker-claude-sandbox
 ./run.sh
 ```
 
-## ✨ What's New in V2
+### Option 3: Download and Compose
+```bash
+curl -O https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/Dockerfile
+docker-compose up -d
+```
 
-### 🔍 **Smart Port Detection**
-- Automatically scans ports 8000-9000 for availability
-- Finds 3 open ports and suggests them
-- No more "port already in use" errors!
-- Falls back to safe defaults if needed
+## ✨ Key Features
 
-### 🛡️ **Enhanced Security & Updates**
-- Runs `apt upgrade -y` for latest security patches
-- Optimized container image (removes apt cache, temp files)
-- Non-root user (`coder`) for security
-- Health checks for container monitoring
+### 🛡️ **Complete Development Environment**
+- Ubuntu 22.04 with latest security updates
+- Complete Python ecosystem (pandas, numpy, matplotlib, pytest, black, etc.)
+- Network tools (nmap, tcpdump, ssh, telnet, traceroute)
+- System tools (neofetch, mc, htop, screen, tmux)
+- Non-root `coder` user with sudo access
 
-### 📊 **Comprehensive Startup Report**
-When you enter the container, you get a detailed report:
-- System information (OS, Python, Node.js versions)
-- Storage details (workspace volume info)
-- Network mapping (all port forwards)
-- Pre-installed tools inventory
-- Step-by-step next steps guide
+### 📊 **Portable Configuration**
+- Standard docker-compose.yml for maximum portability
+- No complex setup scripts required
+- Version-controlled configuration
+- Easy customization of ports and volumes
+- CI/CD friendly
 
-### 🤖 **Claude AI Integration Guide**
-Clear instructions for connecting to Claude:
-- Where to get Claude AI code (https://claude.ai)
-- How to test code safely in the container
-- Web development workflow with port forwarding
-- Best practices for AI code testing
+### 🤖 **Claude Code Ready**
+When you enter the container, you get:
+- Automatic neofetch system information display
+- Built-in help system (`help` command)
+- Complete toolset for Claude Code operations
+- Persistent `/workspace` directory for your code
+- Pre-configured development environment
 
-## 🎯 What You Get
+## 🎯 Complete Toolset
 
 - **🛡️ Safe Environment**: Completely isolated from your host system
-- **🐍 Python Ready**: Python 3 + pip + popular packages (requests, flask, pandas, numpy, matplotlib, jupyter, pytest)
-- **🟢 Node.js Ready**: Node.js + npm + popular packages (express, nodemon, pm2, typescript, ts-node)
-- **🔧 Dev Tools**: git, vim, nano, curl, wget, htop, tree, cmake, build-essential
-- **💾 Persistent Storage**: Your code survives container restarts
-- **🌐 Smart Port Forwarding**: Automatic conflict detection and resolution
-- **📋 System Monitoring**: Built-in health checks and status reporting
+- **🐍 Complete Python Stack**: Python 3 + pip + pandas, numpy, matplotlib, seaborn, pytest, black, flake8, pylint
+- **🔧 Development Tools**: git, vim, nano, mc (midnight commander), screen, tmux
+- **🌐 Network & TCP/IP Tools**: nmap, tcpdump, ssh, telnet, traceroute, ping, wireshark-common, iptables
+- **📊 System Tools**: neofetch, htop, lsof, ps, netstat, build-essential, cmake  
+- **💾 Persistent Storage**: Your code survives container restarts in `/workspace`
+- **🔌 Standard Ports**: 8000, 8001, 8002 exposed for your applications
+- **📋 Health Monitoring**: Built-in Docker health checks
 
-## 🎨 Enhanced Features
+## 🏗️ Architecture
 
-### 🎭 **Visual Experience**
-- Beautiful ASCII art banners
-- Animated progress bars during setup
-- Color-coded output for better readability
-- Enhanced welcome screen with system info
+### 📦 **Portable Design**
+- Standard docker-compose.yml with all configuration
+- Self-contained Dockerfile with comprehensive toolset  
+- Optional run.sh for convenience (downloads compose files)
+- No external dependencies or complex setup
 
-### 🏗️ **Improved Architecture**
-- Multi-stage optimized Dockerfile
-- Better docker-compose configuration
-- Structured workspace directories (`/workspace/{python,javascript,web,scratch}`)
-- Enhanced error handling and user guidance
-
-### 🚀 **Developer Experience**
-- Helpful aliases (`py`, `serve`, `ll`, `help`)
-- Quick test function (`test-env`)
-- Enhanced examples with better error handling
-- Comprehensive help system
+### 🔧 **Container Features**
+- Ubuntu 22.04 base with security updates
+- Non-root `coder` user with passwordless sudo
+- Persistent `/workspace` volume for code storage
+- Fixed container name `claude-sandbox` for consistency
+- Built-in help system and neofetch display
 
 ## 📖 Usage Examples
 
-### Quick Start in Container
+### Inside the Container
 ```bash
-# Test the environment
-python3 /examples/hello.py
-node /examples/hello.js
+# Show system info and available tools
+neofetch
+help
 
-# Create your own code
+# Test Python environment
+python3 -c "import pandas, numpy, matplotlib; print('All Python tools ready!')"
+
+# File management with midnight commander
+mc
+
+# Network scanning
+nmap -sn 192.168.1.0/24
+
+# Create and test code
 cd /workspace
 nano mycode.py
-py mycode.py
+python3 mycode.py
 
-# Start a web server  
-serve 8000
-# Access at http://localhost:<detected-port>
+# Start a simple web server
+python3 -m http.server 8000
+# Access at http://localhost:8000
 ```
 
-### Test Claude AI Code
-1. **Get Code from Claude**:
-   - Go to https://claude.ai
-   - Ask Claude to write code for you
-   - Copy the code Claude provides
-
-2. **Test Code Safely**:
+### Claude Code Integration
+1. **Enter the container**:
    ```bash
-   # In the container
-   nano claude_code.py
-   # Paste Claude's code
-   py claude_code.py
+   docker exec -it claude-sandbox bash
    ```
 
-3. **Web Development**:
+2. **Create and test code safely**:
    ```bash
-   # Create a web app
-   nano app.py
-   # Paste Claude's Flask/FastAPI code
-   py app.py
-   # Access at http://localhost:<your-port>
+   # Your workspace persists between sessions
+   cd /workspace
+   nano my_script.py
+   python3 my_script.py
+   ```
+
+3. **Use development tools**:
+   ```bash
+   # Format Python code
+   black my_script.py
+   
+   # Run tests
+   pytest
+   
+   # Network diagnostics
+   ping google.com
+   tcpdump -i any
    ```
 
 ## 🔧 Container Management
 
 ```bash
-# View container status and ports
-docker ps | grep claude-sandbox
+# Standard docker-compose commands
+docker-compose up -d          # Start container
+docker-compose down           # Stop and remove container
+docker-compose logs           # View logs
+docker-compose build --no-cache  # Rebuild container
 
-# Access the container
-docker exec -it claude-sandbox bash
+# Container access and status
+docker exec -it claude-sandbox bash   # Enter container
+docker ps | grep claude-sandbox       # Check status
+docker logs claude-sandbox            # View container logs
 
-# View comprehensive logs
-docker logs claude-sandbox
-
-# Stop container
-docker stop claude-sandbox
-
-# Start existing container
-docker start claude-sandbox
-
-# Complete cleanup
-docker-compose down && docker system prune
+# Volume management
+docker volume ls | grep claude        # Check persistent volume
+docker-compose down -v                # Remove container and volume
 ```
 
-## 🌐 Port Management
+## 🌐 Port Access
 
-The V2 smart port detection automatically handles port conflicts:
+The container exposes three standard ports:
 
 ```bash
-# Example output:
-🔍 Scanning for available ports...
-✓ Found available ports: 8001 8002 8003
-
 # Your services will be available at:
-http://localhost:8001  # Primary web server
-http://localhost:8002  # Secondary service  
-http://localhost:8003  # Additional service
+http://localhost:8000    # Primary port
+http://localhost:8001    # Secondary port  
+http://localhost:8002    # Additional port
+
+# Test port access
+curl http://localhost:8000
+python3 -m http.server 8001  # Start simple server
 ```
 
-If you have many services running, the system will find the first available ports and configure everything automatically.
+To customize ports, modify the `ports` section in docker-compose.yml.
 
 ## 📊 System Requirements
 
