@@ -261,16 +261,19 @@ main() {
     done
     echo ""
     
-    # Auto-enter container if TTY is available (same logic as container naming)
-    if [ -c /dev/tty ]; then
+    # Auto-enter container if TTY is available
+    # Check if we can actually allocate a TTY (not just if /dev/tty exists)
+    if [ -t 0 ] && [ -t 1 ] && [ -c /dev/tty ]; then
         echo -e "${CYAN}Entering container...${NC}"
         exec docker exec -it "$CONTAINER_NAME" bash
     else
-        echo -e "${YELLOW}To enter the container, run:${NC}"
+        echo -e "${YELLOW}Container is ready! To enter the container, run:${NC}"
         echo "  docker exec -it $CONTAINER_NAME bash"
         echo ""
         echo -e "${YELLOW}To start Claude Code directly:${NC}"
         echo "  docker exec -it $CONTAINER_NAME bash -c 'cd /workspace && claude'"
+        echo ""
+        echo -e "${GREEN}✨ Your Claude Sandbox is ready to use!${NC}"
     fi
 }
 
