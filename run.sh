@@ -250,6 +250,83 @@ check_requirements() {
     echo -e "${GREEN}✓ Docker is ready${NC}"
 }
 
+# Smart directory selection
+select_project_directory() {
+    local current_dir=$(pwd)
+    local current_basename=$(basename "$current_dir")
+    local suggested_dir="$HOME/projects/claude-sandbox"
+    
+    echo -e "${CYAN}📁 Project Directory Setup${NC}"
+    echo "================================"
+    echo ""
+    echo "Where would you like to create the Claude Sandbox project?"
+    echo ""
+    echo -e "${YELLOW}Options:${NC}"
+    echo "  1. Current directory: $current_dir"
+    echo "  2. Recommended: $suggested_dir"
+    echo "  3. Custom directory (you specify)"
+    echo ""
+    
+    if [ -t 0 ]; then
+        # Interactive mode
+        read -p "Choose [1] current, [2] recommended, [3] custom, or press Enter for recommended: " DIR_CHOICE
+        DIR_CHOICE=${DIR_CHOICE:-2}
+        
+        case "$DIR_CHOICE" in
+            1)
+                PROJECT_DIR="$current_dir"
+                echo -e "${GREEN}✓ Using current directory: $PROJECT_DIR${NC}"
+                ;;
+            2)
+                PROJECT_DIR="$suggested_dir"
+                if [ ! -d "$PROJECT_DIR" ]; then
+                    echo -e "${YELLOW}Creating directory: $PROJECT_DIR${NC}"
+                    mkdir -p "$PROJECT_DIR"
+                fi
+                echo -e "${GREEN}✓ Using recommended directory: $PROJECT_DIR${NC}"
+                cd "$PROJECT_DIR"
+                ;;
+            3)
+                read -p "Enter custom directory path: " CUSTOM_DIR
+                if [ -z "$CUSTOM_DIR" ]; then
+                    echo -e "${RED}❌ No directory specified, using current${NC}"
+                    PROJECT_DIR="$current_dir"
+                else
+                    PROJECT_DIR="$CUSTOM_DIR"
+                    if [ ! -d "$PROJECT_DIR" ]; then
+                        echo -e "${YELLOW}Creating directory: $PROJECT_DIR${NC}"
+                        mkdir -p "$PROJECT_DIR"
+                    fi
+                    echo -e "${GREEN}✓ Using custom directory: $PROJECT_DIR${NC}"
+                    cd "$PROJECT_DIR"
+                fi
+                ;;
+            *)
+                PROJECT_DIR="$suggested_dir"
+                if [ ! -d "$PROJECT_DIR" ]; then
+                    echo -e "${YELLOW}Creating directory: $PROJECT_DIR${NC}"
+                    mkdir -p "$PROJECT_DIR"
+                fi
+                echo -e "${GREEN}✓ Using recommended directory: $PROJECT_DIR${NC}"
+                cd "$PROJECT_DIR"
+                ;;
+        esac
+    else
+        # Non-interactive mode - use recommended
+        PROJECT_DIR="$suggested_dir"
+        if [ ! -d "$PROJECT_DIR" ]; then
+            echo -e "${YELLOW}Creating recommended directory: $PROJECT_DIR${NC}"
+            mkdir -p "$PROJECT_DIR"
+        fi
+        echo -e "${GREEN}✓ Using recommended directory: $PROJECT_DIR${NC}"
+        cd "$PROJECT_DIR"
+    fi
+    
+    echo ""
+    echo -e "${CYAN}📂 Working in: $(pwd)${NC}"
+    echo ""
+}
+
 # Interactive setup
 interactive_setup() {
     # Check if we have a TTY (interactive terminal)
@@ -261,8 +338,9 @@ interactive_setup() {
         read -p "Container name [$DEFAULT_CONTAINER_NAME]: " CONTAINER_NAME
         CONTAINER_NAME=${CONTAINER_NAME:-$DEFAULT_CONTAINER_NAME}
         
-        # Workspace directory
-        read -p "Workspace directory [$DEFAULT_WORKSPACE]: " WORKSPACE
+        # Container workspace directory (inside container)
+        echo -e "${CYAN}💡 This is the directory name inside the container where your code will live${NC}"
+        read -p "Container workspace directory [$DEFAULT_WORKSPACE]: " WORKSPACE
         WORKSPACE=${WORKSPACE:-$DEFAULT_WORKSPACE}
         
         # Smart port detection
@@ -278,8 +356,9 @@ interactive_setup() {
         
         echo ""
         echo -e "${CYAN}📋 Configuration Summary:${NC}"
+        echo "  Project Directory: $(pwd)"
         echo "  Container: $CONTAINER_NAME"
-        echo "  Workspace: /$WORKSPACE"
+        echo "  Container Workspace: /$WORKSPACE"
         echo "  Ports: $PORTS"
         echo "  Auto-start: $AUTO_START"
         echo ""
@@ -304,8 +383,9 @@ interactive_setup() {
         AUTO_START="Y"
         
         echo -e "${CYAN}📋 Auto Configuration:${NC}"
+        echo "  Project Directory: $(pwd)"
         echo "  Container: $CONTAINER_NAME"
-        echo "  Workspace: /$WORKSPACE"
+        echo "  Container Workspace: /$WORKSPACE"
         echo "  Ports: $PORTS"
         echo "  Auto-start: $AUTO_START"
         echo ""
@@ -644,6 +724,7 @@ EOF
 main() {
     show_banner
     check_requirements
+    select_project_directory
     interactive_setup
     
     # Clean up any existing files
@@ -667,8 +748,10 @@ main() {
         
         echo -e "${GREEN}🎉 Claude Sandbox V2 Setup Complete!${NC}"
         echo ""
-        echo -e "${CYAN}📊 Container Information:${NC}"
-        echo "  Name: $CONTAINER_NAME"
+        echo -e "${CYAN}📊 Project Information:${NC}"
+        echo "  Project Directory: $(pwd)"
+        echo "  Container Name: $CONTAINER_NAME"
+        echo "  Container Workspace: /$WORKSPACE"
         echo "  Ports: $PORTS"
         echo "  Status: $(docker ps --format "{{.Status}}" --filter "name=$CONTAINER_NAME")"
         echo ""
@@ -678,6 +761,11 @@ main() {
             port=$(echo $port | tr -d ' ')
             echo "  http://localhost:$port"
         done
+        echo ""
+        echo -e "${CYAN}📁 Project Files Created:${NC}"
+        echo "  $(pwd)/Dockerfile"
+        echo "  $(pwd)/docker-compose.yml"
+        echo "  $(pwd)/examples/"
         echo ""
         echo -e "${CYAN}🚀 Entering Claude Sandbox...${NC}"
         echo ""
