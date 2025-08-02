@@ -26,12 +26,12 @@
 docker run -it --rm frednix/claude-sandbox:latest
 ```
 
-**ARM64 Systems (Apple Silicon - works, Raspberry Pi - see troubleshooting):**
+**Apple Silicon (macOS):**
 ```bash
 docker run -it --rm --platform linux/arm64 frednix/claude-sandbox:latest
 ```
 
-**⚠️ Raspberry Pi users:** Docker Hub images may exit immediately due to platform detection issues. Use local build instead:
+**Raspberry Pi / ARM64 Linux - Docker Hub images are broken, use local build:**
 ```bash
 curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
 ```
@@ -129,9 +129,14 @@ For the latest Docker Engine: https://docs.docker.com/engine/install/
 docker run -it --rm frednix/claude-sandbox:latest
 ```
 
-**ARM64 Systems (Apple Silicon - works, Raspberry Pi - may fail):**
+**Apple Silicon (macOS):**
 ```bash
 docker run -it --rm --platform linux/arm64 frednix/claude-sandbox:latest
+```
+
+**Raspberry Pi / ARM64 Linux (Docker Hub broken, use local build):**
+```bash
+curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
 ```
 
 **x86_64 Systems (if auto-detection fails):**
@@ -473,28 +478,22 @@ git clone https://github.com/nixfred/docker-claude-sandbox.git
 cd docker-claude-sandbox && ./run.sh
 ```
 
-**"no matching manifest for linux/arm/v8" error (ARM64 systems)**
+**Raspberry Pi / ARM64 Linux: Docker Hub images don't work**
 
-**⚠️ Known Issue: Docker Hub ARM64 images have platform detection problems on Raspberry Pi (linux/arm/v8 vs linux/arm64 mismatch)**
+**❌ CONFIRMED BROKEN: Docker Hub ARM64 images exit immediately on Raspberry Pi**
 
-**✅ RECOMMENDED SOLUTION: Build locally (100% reliable for Raspberry Pi)**
+Docker Hub ARM64 images have a fundamental platform incompatibility with Raspberry Pi:
+- Raspberry Pi reports as `linux/arm/v8` 
+- Docker Hub images are built for `linux/arm64`
+- Result: Containers pull successfully but exit immediately (code 159)
+
+**✅ SOLUTION: Always use local build for Raspberry Pi**
 ```bash
 curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
-# This creates a working local container that will actually open properly
+# This creates a working local container that actually opens a shell
 ```
 
-**Docker Hub attempts (likely to fail on Raspberry Pi):**
-```bash
-# These commands typically exit immediately on Raspberry Pi due to platform mismatch:
-docker run -it --rm --platform linux/arm64 frednix/claude-sandbox:latest
-# Container exits with code 159 (platform detection failure)
-
-# If you want to try anyway:
-export DOCKER_CLI_EXPERIMENTAL=enabled
-docker run -it --rm --platform linux/arm64 frednix/claude-sandbox:latest
-```
-
-**Why this happens:** Raspberry Pi reports as `linux/arm/v8` but Docker Hub images are built for `linux/arm64`. Local builds work because they adapt to the actual platform.
+**Why local builds work:** They adapt to the actual platform during build time, avoiding the platform detection mismatch that breaks Docker Hub images.
 
 **Multiple containers sharing workspace**
 - ⚠️ **Known behavior**: All containers currently share the same workspace volume
