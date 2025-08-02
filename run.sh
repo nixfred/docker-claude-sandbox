@@ -252,6 +252,19 @@ main() {
     docker-compose build || exit 1
     
     echo -e "${CYAN}🚀 Starting Claude Sandbox...${NC}"
+    
+    # Get the actual built image name dynamically
+    echo -e "${CYAN}🔍 Detecting built image name...${NC}"
+    IMAGE_NAME=$(docker-compose config 2>/dev/null | grep 'image:' | awk '{print $2}' | head -1 2>/dev/null)
+    if [ -z "$IMAGE_NAME" ]; then
+        # Fallback: construct from directory name
+        DIR_NAME=$(basename "$PWD")
+        IMAGE_NAME="${DIR_NAME}_claude-sandbox:latest"
+        echo -e "${YELLOW}   Using fallback image name: $IMAGE_NAME${NC}"
+    else
+        echo -e "${GREEN}   Detected image name: $IMAGE_NAME${NC}"
+    fi
+    
     # Use docker run with custom name instead of docker-compose up
     docker run -d \
         --name "$CONTAINER_NAME" \
@@ -260,7 +273,7 @@ main() {
         --workdir /workspace \
         -v claude_sandbox_data:/workspace \
         -e TERM=xterm-256color \
-        docker-claude-sandbox_claude-sandbox || exit 1
+        "$IMAGE_NAME" || exit 1
     
     echo -e "${GREEN}🎉 Claude Sandbox Setup Complete!${NC}"
     echo ""
