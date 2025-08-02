@@ -1,13 +1,13 @@
 # 🤖 Docker Claude Sandbox v1.3.3
 
 ![CI](https://img.shields.io/github/actions/workflow/status/nixfred/docker-claude-sandbox/ci.yml?branch=main&label=CI&color=brightgreen)
+![Docker Build](https://img.shields.io/github/actions/workflow/status/nixfred/docker-claude-sandbox/docker-build.yml?branch=main&label=Docker%20Build&color=blue)
 ![Version](https://img.shields.io/github/v/release/nixfred/docker-claude-sandbox?label=version&color=blue)
 ![License](https://img.shields.io/github/license/nixfred/docker-claude-sandbox?color=green)
 ![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS-lightgrey)
-![Docker](https://img.shields.io/badge/docker-required-blue)
 ![Architecture](https://img.shields.io/badge/arch-ARM64%20%7C%20x86__64-green)
 ![Node.js](https://img.shields.io/badge/node.js-20%2B-brightgreen)
-![Docker Pulls](https://img.shields.io/docker/pulls/nixfred/claude-sandbox?color=blue)
+![Multi-Arch](https://img.shields.io/badge/docker-multi--arch-blue)
 ![GitHub Issues](https://img.shields.io/github/issues/nixfred/docker-claude-sandbox?color=red)
 ![GitHub Stars](https://img.shields.io/github/stars/nixfred/docker-claude-sandbox?style=social)
 
@@ -96,6 +96,13 @@ For the latest Docker Engine: https://docs.docker.com/engine/install/
 
 ## 🛠️ Alternative Installation Methods
 
+### Pre-built Multi-Arch Images (Coming Soon!)
+```bash
+# AMD64 and ARM64 builds automatically available
+docker pull ghcr.io/nixfred/docker-claude-sandbox:latest
+docker run -it ghcr.io/nixfred/docker-claude-sandbox:latest
+```
+
 ### Git Clone Method
 ```bash
 git clone https://github.com/nixfred/docker-claude-sandbox.git
@@ -142,6 +149,7 @@ curl -fsSL "https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main
 - 📚 **Comprehensive docs** - Including AI assistant integration guide
 - ✅ **Automated testing** - Continuous integration validates every change across platforms
 - 🛡️ **Resource protection** - Containers limited to 2GB RAM and 2 CPU cores to prevent system overload
+- 🏗️ **Multi-arch builds** - Automated ARM64/x86_64 container builds via GitHub Actions
 
 ## 🎯 Welcome Experience
 

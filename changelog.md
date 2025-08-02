@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Multi-architecture Docker builds** - Automated ARM64/x86_64 builds via GitHub Actions
+- **GitHub Container Registry integration** - Pre-built images available at ghcr.io
+- **Build performance metrics** - Automated reporting of image size and build stats
+- **Security scanning integration** - Docker Scout vulnerability scanning in CI
+- **Weekly automated builds** - Catches base image updates automatically
+
+### Enhanced
+- **Professional CI/CD pipeline** - Multi-arch builds with caching and testing
+- **Container registry availability** - Users can docker pull instead of building locally
+- **Cross-platform validation** - Both AMD64 and ARM64 images tested in CI
+
 ## [v1.3.3] - 2024-12-XX
 
 ### Added
