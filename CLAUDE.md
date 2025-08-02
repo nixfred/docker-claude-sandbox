@@ -22,6 +22,7 @@ This repository creates a lightweight Docker environment optimized specifically 
 - **Essential Python stack**: Core libraries without bloat (requests, pytest, black, flake8, pylint)
 - **Git**: Version control (essential for Claude Code workflows)
 - **curl**: For downloading dependencies
+- **gcc**: Compiler for building Python packages on ARM systems (Raspberry Pi)
 - **Verbose build process**: See exactly what's being installed during build
 
 ### What's NOT Included (Ask Claude Code to Install)

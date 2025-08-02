@@ -33,6 +33,8 @@ RUN echo "🔄 Updating package lists and system..." && \
     curl ca-certificates \
     # Python stack
     python3 python3-pip python3-venv python3-dev python3-setuptools python3-wheel \
+    # Build tools for ARM/Python packages
+    gcc \
     && echo "🧹 Cleaning up package cache..." && \
     apt-get autoremove -y && \
     apt-get autoclean && \
@@ -79,11 +81,18 @@ RUN echo "👤 Creating secure non-root user 'coder'..." && \
 USER coder
 ENV HOME=/home/coder
 
-# Set up shell environment
+# Set up shell environment with welcome message
 RUN echo 'export PS1="\[\033[0;32m\]\u@claude-sandbox\[\033[00m\]:\[\033[0;34m\]\w\[\033[00m\]\$ "' >> /home/coder/.bashrc && \
     echo 'cd /${WORKSPACE}' >> /home/coder/.bashrc && \
-    echo 'echo "claude"' >> /home/coder/.bashrc && \
-    echo 'echo "Need software? Ask Claude to install and explain why."' >> /home/coder/.bashrc
+    echo '' >> /home/coder/.bashrc && \
+    echo 'echo ""' >> /home/coder/.bashrc && \
+    echo 'echo "    ╔══════════════════════════════════════════════════════════════════╗"' >> /home/coder/.bashrc && \
+    echo 'echo "    ║    🤖 Claude Code Sandbox Ready!                                ║"' >> /home/coder/.bashrc && \
+    echo 'echo "    ║    🚀 Start Claude Code: claude                                 ║"' >> /home/coder/.bashrc && \
+    echo 'echo "    ║    📦 Need software? Tell Claude why you need it!               ║"' >> /home/coder/.bashrc && \
+    echo 'echo "    ║    ✅ Available: Node.js, Python3, Git, curl, apt, sudo        ║"' >> /home/coder/.bashrc && \
+    echo 'echo "    ╚══════════════════════════════════════════════════════════════════╝"' >> /home/coder/.bashrc && \
+    echo 'echo ""' >> /home/coder/.bashrc
 
 
 CMD ["/bin/bash"]

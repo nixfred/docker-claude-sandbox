@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
       args:
         - WORKSPACE=workspace
-    container_name: last1
+    # container_name is set dynamically by run.sh
     hostname: claude-sandbox
     stdin_open: true
     tty: true
