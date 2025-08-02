@@ -4,6 +4,11 @@
 ```
 Cross-platform Docker container with Claude Code pre-installed. Ready-to-use AI development environment.
 ```
+*Character count: 99/100*
+
+## Recommended Categories
+**Primary**: Developer Tools  
+**Secondary**: Application Frameworks, Programming Languages
 
 ## Full Description
 ```markdown
