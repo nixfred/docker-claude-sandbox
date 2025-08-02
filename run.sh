@@ -163,7 +163,7 @@ ask_container_name() {
     
     # Update docker-compose.yml with the chosen name
     if [ -f "docker-compose.yml" ]; then
-        sed -i.bak "s/container_name: claude-sandbox/container_name: $CONTAINER_NAME/" docker-compose.yml
+        sed -i.bak "s/container_name: .*/container_name: $CONTAINER_NAME/" docker-compose.yml
         rm docker-compose.yml.bak 2>/dev/null || true
     fi
 }
