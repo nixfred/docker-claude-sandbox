@@ -21,6 +21,41 @@ Tested and validated on:
 - **Internet connection** for initial build and package downloads
 - **Terminal with TTY support** for optimal experience
 
+### 🐳 Installing Docker
+
+If Docker is not installed, use these commands:
+
+#### Ubuntu/Debian/Linux Mint
+```bash
+sudo apt update
+sudo apt install -y docker.io docker-compose
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
+#### Fedora/RHEL/CentOS
+```bash
+sudo dnf install -y docker docker-compose
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
+#### Arch/Manjaro
+```bash
+sudo pacman -S docker docker-compose
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
+#### Official Docker Engine (All Distributions)
+For the latest Docker Engine: https://docs.docker.com/engine/install/
+
+**Note:** After installation, log out and back in or run `newgrp docker` to apply group membership.
+
 ## ⚡ Quick Start
 
 ### One-Command Install (Recommended)
