@@ -100,104 +100,19 @@ NC='\033[0m'
 echo -e "${BLUE}"
 cat << "BANNER"
      ╔═══════════════════════════════════════════════════════════╗
-     ║  🤖 Claude Sandbox Ready!                                 ║  
-     ║  Your secure AI code testing environment                  ║
+     ║  🤖 Welcome to Claude Sandbox!                            ║  
+     ║  Safe container for testing Claude AI code                ║
      ║                                                           ║
-     ║  📊 System Report & Next Steps Below                      ║
+     ║  💡 Type 'claude' to access Claude AI                     ║
      ╚═══════════════════════════════════════════════════════════╝
 BANNER
 echo -e "${NC}"
 
-# System Information Report
-echo -e "${CYAN}📊 Container System Report${NC}"
-echo "=================================="
-echo -e "${GREEN}✓${NC} Container: $CONTAINER_NAME"
-echo -e "${GREEN}✓${NC} User: $(whoami) (non-root for security)"
-echo -e "${GREEN}✓${NC} OS: $(cat /etc/os-release | grep PRETTY_NAME | cut -d'"' -f2)"
-echo -e "${GREEN}✓${NC} Python: $(python3 --version)"
-echo -e "${GREEN}✓${NC} Node.js: $(node --version)"
-echo -e "${GREEN}✓${NC} Workspace: /workspace (persistent)"
-echo -e "${GREEN}✓${NC} Exposed Ports: $EXPOSED_PORTS"
-
-# Storage info
+# Simple startup message
 echo ""
-echo -e "${CYAN}💾 Storage Information${NC}"
-echo "======================"
-df -h /workspace 2>/dev/null | tail -1 | awk '{print "Workspace Volume: " $2 " total, " $4 " available"}'
-
-# Network info
-echo ""
-echo -e "${CYAN}🌐 Network Access${NC}"
-echo "=================="
-echo "Host ports forwarded to container:"
-IFS=',' read -ra PORTS <<< "$EXPOSED_PORTS"
-for port in "${PORTS[@]}"; do
-    port=$(echo $port | tr -d ' ')
-    echo "  http://localhost:$port → container:$port"
-done
-
-# Pre-installed packages
-echo ""
-echo -e "${CYAN}📦 Pre-installed Tools${NC}"
-echo "======================="
-echo "Languages: Python 3, Node.js, JavaScript"
-echo "Python packages: requests, flask, fastapi, pandas, numpy, matplotlib"
-echo "System tools: git, vim, nano, curl, wget, htop, tree"
-echo "Build tools: gcc, make, build-essential"
-
-# Next steps
-echo ""
-echo -e "${YELLOW}🚀 Quick Start Guide${NC}"
-echo "===================="
-echo "1. Test the environment:"
-echo "   ${GREEN}python3 /examples/hello.py${NC}"
-echo "   ${GREEN}node /examples/hello.js${NC}"
-echo ""
-echo "2. Start coding:"
-echo "   ${GREEN}cd /workspace${NC}    # Your persistent workspace"
-echo "   ${GREEN}nano mycode.py${NC}   # Create a new file"
-echo ""
-echo "3. Test Claude AI code:"
-echo "   • Copy code from Claude → paste into files here"
-echo "   • Run safely in this isolated environment"
-echo "   • No risk to your host system!"
-echo ""
-echo "4. Start a web server:"
-echo "   ${GREEN}python3 -m http.server 8000${NC}"
-echo "   ${GREEN}# Access at http://localhost:<port>${NC}"
-
-# Claude AI Instructions
-echo ""
-echo -e "${BLUE}🤖 Connecting to Claude AI${NC}"
-echo "==========================="
-echo "This container is perfect for testing Claude AI code:"
-echo ""
-echo "1. ${CYAN}Get Code from Claude:${NC}"
-echo "   • Go to https://claude.ai"
-echo "   • Ask Claude to write code for you"
-echo "   • Copy the code Claude provides"
-echo ""
-echo "2. ${CYAN}Test Code Safely:${NC}"
-echo "   • Paste code into files in /workspace"
-echo "   • Run with: ${GREEN}python3 yourfile.py${NC} or ${GREEN}node yourfile.js${NC}"
-echo "   • Debug and modify as needed"
-echo ""
-echo "3. ${CYAN}Web Development:${NC}"
-echo "   • Create web apps safely"
-echo "   • Test at http://localhost:<your-port>"
-echo "   • Port forwarding already configured!"
-
-# Helpful commands
-echo ""
-echo -e "${CYAN}🛠️ Helpful Commands${NC}"
-echo "==================="
-echo "  ${GREEN}help${NC}              - Show this information again"
-echo "  ${GREEN}py <file>${NC}         - Run Python script"
-echo "  ${GREEN}serve [port]${NC}      - Start HTTP server"
-echo "  ${GREEN}ll${NC}                - List files (detailed)"
-echo "  ${GREEN}tree${NC}              - Show directory structure"
-echo "  ${GREEN}htop${NC}              - System monitor"
-echo "  ${GREEN}exit${NC}              - Leave container (data persists)"
+echo -e "${GREEN}🎉 Environment ready! Your code workspace: /workspace${NC}"
+echo -e "${CYAN}💡 Type 'claude' for Claude AI access instructions${NC}"
+echo -e "${CYAN}💡 Type 'help' for full container guide${NC}"
 
 # Add helpful aliases and functions
 alias ll='ls -alF --color=auto'
@@ -206,6 +121,24 @@ alias py='python3'
 alias serve='python3 -m http.server'
 alias ..='cd ..'
 alias ...='cd ../..'
+
+# Claude AI access function
+claude() {
+    echo -e "${BLUE}🤖 Claude AI Access${NC}"
+    echo "==================="
+    echo "This container provides a safe environment for testing Claude AI code."
+    echo ""
+    echo "To use Claude AI:"
+    echo "1. Open https://claude.ai in your browser"
+    echo "2. Ask Claude to write code for you"
+    echo "3. Copy the code and test it safely here"
+    echo ""
+    echo "Quick commands:"
+    echo "  py script.py    - Run Python code"
+    echo "  node script.js  - Run JavaScript code"
+    echo "  help            - Full container guide"
+    echo ""
+}
 
 # Help function
 help() {
@@ -770,8 +703,19 @@ main() {
         echo -e "${CYAN}🚀 Entering Claude Sandbox...${NC}"
         echo ""
         
-        # Enter the container
-        docker exec -it "$CONTAINER_NAME" bash
+        # Wait a moment for container to be fully ready
+        sleep 2
+        
+        # Enter the container with proper TTY handling
+        if [ -t 0 ] && [ -t 1 ]; then
+            docker exec -it "$CONTAINER_NAME" bash
+        else
+            echo -e "${YELLOW}Container is ready! Access with:${NC}"
+            echo "  docker exec -it $CONTAINER_NAME bash"
+            echo ""
+            echo -e "${CYAN}Or create an alias:${NC}"
+            echo "  alias claude-enter='docker exec -it $CONTAINER_NAME bash'"
+        fi
     else
         echo -e "${GREEN}🎉 Setup complete!${NC}"
         echo ""
