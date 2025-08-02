@@ -20,13 +20,13 @@ Cross-platform Docker container with Claude Code pre-installed. Ready-to-use AI 
 
 ```bash
 # Most systems (auto-detects architecture)
-docker run -it frednix/claude-sandbox:latest
+docker run -it --rm frednix/claude-sandbox:latest
 
 # ARM64 systems (Raspberry Pi, Apple Silicon)
-docker run -it --platform linux/arm64 frednix/claude-sandbox:latest
+docker run -it --rm --platform linux/arm64 frednix/claude-sandbox:latest
 
 # x86_64 systems  
-docker run -it --platform linux/amd64 frednix/claude-sandbox:latest
+docker run -it --rm --platform linux/amd64 frednix/claude-sandbox:latest
 ```
 
 ## ✨ What's Included
@@ -50,15 +50,20 @@ docker run -it --platform linux/amd64 frednix/claude-sandbox:latest
 
 ## 🔧 Common Commands
 
+**Temporary containers (recommended):**
 ```bash
-# Start Claude Code directly
-docker exec -it CONTAINER_NAME claude
+# One command - opens container immediately
+docker run -it --rm frednix/claude-sandbox:latest
+# Then inside: claude
+```
 
-# Enter container shell
-docker exec -it CONTAINER_NAME bash
+**Persistent containers:**
+```bash
+# Create named container
+docker run -it --name my-project frednix/claude-sandbox:latest
 
-# Check versions
-docker exec -it CONTAINER_NAME bash -c "claude --version && node --version"
+# Access later
+docker start my-project && docker exec -it my-project bash
 ```
 
 ## 📋 Troubleshooting
@@ -66,13 +71,17 @@ docker exec -it CONTAINER_NAME bash -c "claude --version && node --version"
 **ARM64 Platform Issues:**
 ```bash
 # Use explicit platform if auto-detection fails
-docker run -it --platform linux/arm64 frednix/claude-sandbox:latest
+docker run -it --rm --platform linux/arm64 frednix/claude-sandbox:latest
 ```
 
 **Multiple Containers:**
 ```bash
-# Each container needs a unique name
-docker run -it --name my-project frednix/claude-sandbox:latest
+# Temporary: Open multiple terminals
+docker run -it --rm frednix/claude-sandbox:latest
+
+# Persistent: Use unique names
+docker run -it --name project-a frednix/claude-sandbox:latest
+docker run -it --name project-b frednix/claude-sandbox:latest
 ```
 
 ## 🔗 Links

@@ -23,14 +23,18 @@
 
 **Most Systems (Auto-detects Architecture):**
 ```bash
-docker pull frednix/claude-sandbox:latest
-docker run -it frednix/claude-sandbox:latest
+docker run -it --rm frednix/claude-sandbox:latest
 ```
 
 **ARM64 Systems (Raspberry Pi, Apple Silicon):**
 ```bash
-docker pull frednix/claude-sandbox:latest
-docker run -it --platform linux/arm64 frednix/claude-sandbox:latest
+docker run -it --rm --platform linux/arm64 frednix/claude-sandbox:latest
+```
+
+**If you need persistent containers (optional):**
+```bash
+docker run -it --name my-claude-project frednix/claude-sandbox:latest
+# Later: docker start my-claude-project && docker exec -it my-claude-project bash
 ```
 
 ### Option 2: Build from Source
@@ -117,20 +121,17 @@ For the latest Docker Engine: https://docs.docker.com/engine/install/
 
 **Most Systems (Auto-detects Architecture):**
 ```bash
-docker pull frednix/claude-sandbox:latest
-docker run -it frednix/claude-sandbox:latest
+docker run -it --rm frednix/claude-sandbox:latest
 ```
 
 **ARM64 Systems (if auto-detection fails):**
 ```bash
-docker pull frednix/claude-sandbox:latest
-docker run -it --platform linux/arm64 frednix/claude-sandbox:latest
+docker run -it --rm --platform linux/arm64 frednix/claude-sandbox:latest
 ```
 
 **x86_64 Systems (if auto-detection fails):**
 ```bash
-docker pull frednix/claude-sandbox:latest
-docker run -it --platform linux/amd64 frednix/claude-sandbox:latest
+docker run -it --rm --platform linux/amd64 frednix/claude-sandbox:latest
 ```
 
 ### Git Clone Method
@@ -224,15 +225,23 @@ Upon entering the container, you'll see:
 ```
 
 ### Access Your Container
+
+**For temporary containers (--rm flag):**
 ```bash
-# Start Claude Code directly (one command!)
-docker exec -it YOUR_CONTAINER_NAME claude
+# Container opens automatically in interactive mode
+# Just run the docker run command above
+```
+
+**For persistent containers (--name flag):**
+```bash
+# Start Claude Code directly
+docker exec -it YOUR_CONTAINER_NAME bash -c "claude"
 
 # Or enter the container shell
 docker exec -it YOUR_CONTAINER_NAME bash
 
-# Quick health check
-docker logs YOUR_CONTAINER_NAME
+# Restart a stopped container
+docker start YOUR_CONTAINER_NAME && docker exec -it YOUR_CONTAINER_NAME bash
 ```
 
 ### Inside the Container
@@ -261,6 +270,16 @@ cd /workspace
 ## 🔧 Container Lifecycle Management
 
 ### Daily Operations
+
+**For temporary containers (recommended):**
+```bash
+# One command - opens container immediately
+docker run -it --rm frednix/claude-sandbox:latest
+
+# Container auto-removes when you exit (type 'exit' to leave)
+```
+
+**For persistent containers:**
 ```bash
 # Check if container is running
 docker ps --filter "name=YOUR_CONTAINER_NAME"
@@ -268,8 +287,8 @@ docker ps --filter "name=YOUR_CONTAINER_NAME"
 # Stop container (preserves workspace data)
 docker stop YOUR_CONTAINER_NAME
 
-# Restart existing container
-docker start YOUR_CONTAINER_NAME
+# Restart and enter existing container
+docker start YOUR_CONTAINER_NAME && docker exec -it YOUR_CONTAINER_NAME bash
 
 # Remove container completely
 docker rm -f YOUR_CONTAINER_NAME
@@ -291,41 +310,64 @@ docker system prune -af
 ```
 
 ### Multiple Container Management
+
+**Temporary containers (simplest):**
+```bash
+# Open multiple terminals and run in each:
+docker run -it --rm frednix/claude-sandbox:latest
+# Each terminal gets its own isolated container
+```
+
+**Persistent containers (advanced):**
 ```bash
 # Run multiple instances with different names
-./run.sh  # Name: project-a
-./run.sh  # Name: project-b  
-./run.sh  # Name: testing-env
+docker run -it --name project-a frednix/claude-sandbox:latest
+docker run -it --name project-b frednix/claude-sandbox:latest
+docker run -it --name testing-env frednix/claude-sandbox:latest
 
-# Each gets its own isolated environment
+# View all containers
 docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+
+# Access specific containers later
+docker exec -it project-a bash
 ```
 
 ## 💡 Integration Examples
 
 ### Quick Access Function
 Add to your `~/.bashrc` or `~/.zshrc`:
+
+**For temporary containers (recommended):**
+```bash
+alias claude-quick="docker run -it --rm frednix/claude-sandbox:latest"
+# Usage: claude-quick
+```
+
+**For persistent containers:**
 ```bash
 claude-dev() {
     local container_name="${1:-claude-sandbox}"
     if ! docker ps --format "{{.Names}}" | grep -q "^${container_name}$"; then
         echo "Starting $container_name..."
         docker start "$container_name" 2>/dev/null || {
-            echo "Container $container_name not found. Run ./run.sh first."
-            return 1
+            echo "Container $container_name not found. Creating new one..."
+            docker run -it --name "$container_name" frednix/claude-sandbox:latest
+            return 0
         }
         sleep 2
     fi
-    docker exec -it "$container_name" bash -c "cd /workspace && claude"
+    docker exec -it "$container_name" bash
 }
-
 # Usage: claude-dev myproject
 ```
 
 ### VS Code Integration
 ```bash
-# Install Dev Containers extension, then:
+# For persistent containers (install Dev Containers extension first):
 docker exec -it YOUR_CONTAINER_NAME bash -c "cd /workspace && code ."
+
+# For temporary containers, use volume mounting:
+docker run -it --rm -v $(pwd):/workspace frednix/claude-sandbox:latest
 ```
 
 ### CI/CD Pipeline Example
@@ -333,8 +375,13 @@ docker exec -it YOUR_CONTAINER_NAME bash -c "cd /workspace && code ."
 # .github/workflows/test.yml
 - name: Setup Claude Code Environment
   run: |
-    curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.4.2/run.sh | bash
-    docker exec claude-sandbox claude --version
+    # Use Docker Hub for faster CI/CD
+    docker run --rm frednix/claude-sandbox:latest claude --version
+    
+    # Or for interactive testing:
+    docker run -d --name test-claude frednix/claude-sandbox:latest tail -f /dev/null
+    docker exec test-claude claude --version
+    docker rm -f test-claude
 ```
 
 ## 📦 What's Included

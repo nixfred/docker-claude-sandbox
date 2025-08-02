@@ -81,16 +81,16 @@ docker exec -it CONTAINER_NAME python3 --version
 # Quick start (prompts for container name)
 ./run.sh
 
-# Test published Docker Hub images
-docker pull frednix/claude-sandbox:latest
-docker run -it frednix/claude-sandbox:latest
+# Test published Docker Hub images (temporary containers)
+docker run -it --rm frednix/claude-sandbox:latest
 
 # ARM64 systems (Raspberry Pi, Apple Silicon)
-docker run -it --platform linux/arm64 frednix/claude-sandbox:latest
+docker run -it --rm --platform linux/arm64 frednix/claude-sandbox:latest
 
-# Manual container management
-docker exec -it CONTAINER_NAME bash
-docker exec -it CONTAINER_NAME bash -c "cd /workspace && claude"
+# Persistent container management
+docker run -it --name my-project frednix/claude-sandbox:latest
+docker exec -it my-project bash
+docker start my-project && docker exec -it my-project bash
 ```
 
 ### CI/CD Workflows
