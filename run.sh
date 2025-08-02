@@ -251,40 +251,65 @@ check_requirements() {
 
 # Interactive setup
 interactive_setup() {
-    echo -e "${YELLOW}🔧 Quick Setup (press Enter for smart defaults)${NC}"
-    echo ""
-    
-    # Container name
-    read -p "Container name [$DEFAULT_CONTAINER_NAME]: " CONTAINER_NAME
-    CONTAINER_NAME=${CONTAINER_NAME:-$DEFAULT_CONTAINER_NAME}
-    
-    # Workspace directory
-    read -p "Workspace directory [$DEFAULT_WORKSPACE]: " WORKSPACE
-    WORKSPACE=${WORKSPACE:-$DEFAULT_WORKSPACE}
-    
-    # Smart port detection
-    find_available_ports
-    
-    # Show suggested ports
-    read -p "Ports to expose [$DEFAULT_PORTS]: " PORTS
-    PORTS=${PORTS:-$DEFAULT_PORTS}
-    
-    # Auto-start
-    read -p "Auto-start container? [Y/n]: " AUTO_START
-    AUTO_START=${AUTO_START:-Y}
-    
-    echo ""
-    echo -e "${CYAN}📋 Configuration Summary:${NC}"
-    echo "  Container: $CONTAINER_NAME"
-    echo "  Workspace: /$WORKSPACE"
-    echo "  Ports: $PORTS"
-    echo "  Auto-start: $AUTO_START"
-    echo ""
-    
-    read -p "Continue? [Y/n]: " CONFIRM
-    if [[ $CONFIRM =~ ^[Nn]$ ]]; then
-        echo "Setup cancelled"
-        exit 0
+    # Check if we have a TTY (interactive terminal)
+    if [ -t 0 ]; then
+        echo -e "${YELLOW}🔧 Quick Setup (press Enter for smart defaults)${NC}"
+        echo ""
+        
+        # Container name
+        read -p "Container name [$DEFAULT_CONTAINER_NAME]: " CONTAINER_NAME
+        CONTAINER_NAME=${CONTAINER_NAME:-$DEFAULT_CONTAINER_NAME}
+        
+        # Workspace directory
+        read -p "Workspace directory [$DEFAULT_WORKSPACE]: " WORKSPACE
+        WORKSPACE=${WORKSPACE:-$DEFAULT_WORKSPACE}
+        
+        # Smart port detection
+        find_available_ports
+        
+        # Show suggested ports
+        read -p "Ports to expose [$DEFAULT_PORTS]: " PORTS
+        PORTS=${PORTS:-$DEFAULT_PORTS}
+        
+        # Auto-start
+        read -p "Auto-start container? [Y/n]: " AUTO_START
+        AUTO_START=${AUTO_START:-Y}
+        
+        echo ""
+        echo -e "${CYAN}📋 Configuration Summary:${NC}"
+        echo "  Container: $CONTAINER_NAME"
+        echo "  Workspace: /$WORKSPACE"
+        echo "  Ports: $PORTS"
+        echo "  Auto-start: $AUTO_START"
+        echo ""
+        
+        read -p "Continue? [Y/n]: " CONFIRM
+        if [[ $CONFIRM =~ ^[Nn]$ ]]; then
+            echo "Setup cancelled"
+            exit 0
+        fi
+    else
+        # Non-interactive mode (curl | bash)
+        echo -e "${YELLOW}🚀 Non-interactive mode detected - using smart defaults${NC}"
+        echo ""
+        
+        # Use defaults
+        CONTAINER_NAME=$DEFAULT_CONTAINER_NAME
+        WORKSPACE=$DEFAULT_WORKSPACE
+        
+        # Smart port detection
+        find_available_ports
+        PORTS=$DEFAULT_PORTS
+        AUTO_START="Y"
+        
+        echo -e "${CYAN}📋 Auto Configuration:${NC}"
+        echo "  Container: $CONTAINER_NAME"
+        echo "  Workspace: /$WORKSPACE"
+        echo "  Ports: $PORTS"
+        echo "  Auto-start: $AUTO_START"
+        echo ""
+        echo -e "${GREEN}✨ Proceeding with smart defaults in 3 seconds...${NC}"
+        sleep 3
     fi
 }
 
