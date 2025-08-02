@@ -42,9 +42,9 @@ RUN echo "🔄 Updating package lists and system..." && \
     apt-get autoclean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Install Node.js 18+ (required for Claude Code)
-RUN echo "⚡ Installing Node.js 18+ for Claude Code..." && \
-    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+# Install Node.js 20+ (required for Claude Code and latest npm)
+RUN echo "⚡ Installing Node.js 20+ for Claude Code..." && \
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get install -y nodejs && \
     echo "📦 Updating npm to latest version..." && \
     npm install -g npm@latest && \
