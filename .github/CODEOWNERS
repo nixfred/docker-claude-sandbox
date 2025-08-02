@@ -1,0 +1,50 @@
+# CODEOWNERS
+# 
+# This file defines who is responsible for reviewing changes to specific files.
+# Lines starting with # are comments.
+# Each line is a file pattern followed by one or more owners.
+
+# Global fallback - requires review for any file not explicitly covered
+* @nixfred
+
+# Core container infrastructure - Critical files that affect all users
+Dockerfile @nixfred
+docker-compose.yml @nixfred
+run.sh @nixfred
+requirements.txt @nixfred
+
+# Version management system - Changes affect all releases
+VERSION @nixfred
+scripts/update-version.sh @nixfred
+scripts/ @nixfred
+Makefile @nixfred
+
+# CI/CD workflows - Changes affect automated builds and deployments
+.github/workflows/ @nixfred
+.github/workflows/*.yml @nixfred
+
+# Security and repository configuration
+SECURITY.md @nixfred
+.github/branch-protection.md @nixfred
+.github/CODEOWNERS @nixfred
+
+# Technical documentation - Requires deep understanding of architecture
+CLAUDE.md @nixfred
+AI_DEVELOPMENT_GUIDE.md @nixfred
+contributing.md @nixfred
+
+# Release documentation - Must stay synchronized with releases
+changelog.md @nixfred
+readme.md @nixfred
+
+# License and legal files
+license @nixfred
+LICENSE @nixfred
+
+# GitHub repository configuration
+.github/ISSUE_TEMPLATE/ @nixfred
+.github/PULL_REQUEST_TEMPLATE.md @nixfred
+
+# Ignore files that can affect build behavior
+.dockerignore @nixfred
+.gitignore @nixfred
