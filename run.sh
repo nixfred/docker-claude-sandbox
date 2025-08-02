@@ -48,7 +48,13 @@ check_requirements() {
         if ! docker info &> /dev/null; then
             echo -e "${YELLOW}⚠️  Docker is installed but not running${NC}"
             echo ""
-            echo "Please start the Docker service and try again."
+            echo "Start Docker with these commands:"
+            echo "  sudo systemctl start docker"
+            echo "  sudo systemctl enable docker"
+            echo ""
+            echo "If you get permission errors after starting Docker:"
+            echo "  sudo usermod -aG docker \$USER"
+            echo "  newgrp docker"
             echo ""
             exit 1
         fi
