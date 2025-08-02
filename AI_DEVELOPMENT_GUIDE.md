@@ -2,9 +2,9 @@
 
 This document provides a comprehensive guide for AI assistants to understand, develop, modify, and maintain the Docker Claude Sandbox project from first principles.
 
-## Project Overview - v1.2.7 Status
+## Project Overview - v1.2.8 Status
 
-The Docker Claude Sandbox is a **production-ready**, cross-platform containerized environment specifically designed for Claude Code development. **v1.2.7 represents a mature, tested system** with extensive validation across multiple platforms and critical bug fixes.
+The Docker Claude Sandbox is a **production-ready**, cross-platform containerized environment specifically designed for Claude Code development. **v1.2.8 represents a mature, tested system** with extensive validation across multiple platforms and critical bug fixes.
 
 **Current Status**:
 - ✅ **Tested and validated** on Linux ARM64 (Raspberry Pi), Linux x86_64, macOS Apple Silicon
@@ -38,7 +38,7 @@ The Docker Claude Sandbox is a **production-ready**, cross-platform containerize
    - Environment: `TERM=xterm-256color`
    - No port mappings (Claude Code is CLI-based)
 
-3. **`run.sh`** - Intelligent setup and deployment script (311 lines)
+3. **`run.sh`** - Intelligent setup and deployment script (449 lines)
    - **Cross-platform compatibility** (Linux/macOS, ARM64/x86_64)
    - **Advanced TTY detection** with 3-level checking
    - **4-tier image detection** with robust fallback strategies

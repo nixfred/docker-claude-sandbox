@@ -8,14 +8,14 @@ This repository creates a **cross-platform Docker environment** optimized specif
 
 ### Core Components
 
-1. **`run.sh`**: Intelligent setup and entry script (311 lines)
+1. **`run.sh`**: Intelligent setup and entry script (449 lines)
    - **Cross-platform compatibility**: Linux, macOS, ARM64, x86_64
    - **TTY intelligence**: Auto-enters on Linux, manual commands on macOS
    - **Robust image detection**: 4-tier fallback system for image naming
    - **macOS optimizations**: Buildx fixes, Colima credential handling
    - **Interactive UX**: Container naming, conflict resolution, progress indicators
 
-2. **`Dockerfile`**: Optimized container image (98 lines)
+2. **`Dockerfile`**: Optimized container image (101 lines)
    - **Base**: Ubuntu 22.04 LTS with security updates
    - **Claude Code**: Pre-installed globally via npm
    - **Runtime**: Node.js 20+ for Claude Code operation
@@ -32,7 +32,7 @@ This repository creates a **cross-platform Docker environment** optimized specif
 4. **Documentation Suite**:
    - **`README.md`**: Comprehensive user guide with troubleshooting
    - **`CLAUDE.md`**: Development architecture and implementation details
-   - **`AIINSTALL.md`**: Technical guide for AI assistant integration
+   - **`AI_DEVELOPMENT_GUIDE.md`**: Technical guide for AI assistant integration
 
 ### Critical Design Decisions
 - **Cross-platform first**: Tested and validated on all major platforms
@@ -226,7 +226,7 @@ The Dockerfile performs these optimized steps:
 
 3. **Node.js 20+ Installation** (Lines 43-51):
    ```bash
-   curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+   curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
    npm install -g @anthropic-ai/claude-code
    # ⚠️ Known issue: No installation verification
    ```
@@ -269,7 +269,7 @@ This welcome banner is configured in the Dockerfile's final RUN command (lines 8
 1. **Test across platforms**: Linux ARM64/x86_64, macOS Intel/Apple Silicon
 2. **Validate TTY behavior**: Both interactive and piped execution modes
 3. **Check image detection**: Ensure all 4 fallback tiers work
-4. **Update documentation**: README.md, CLAUDE.md, and AIINSTALL.md
+4. **Update documentation**: README.md, CLAUDE.md, and AI_DEVELOPMENT_GUIDE.md
 5. **Version appropriately**: Update version strings in run.sh header
 
 ### Code Quality Standards
@@ -353,7 +353,7 @@ Transform into a standalone Docker image that works without external scripts or 
 **Impact**: ✅ Eliminates data corruption between containers
 
 ### v1.2.0 - Node.js Compatibility 
-**Problem**: npm version conflicts with Node.js 18
+**Problem**: npm version conflicts with Node.js 18 (upgraded to Node.js 20)
 **Solution**: Upgraded Dockerfile to Node.js 20
 **Impact**: ✅ Compatible with latest npm versions
 
@@ -412,11 +412,10 @@ This system has evolved from experimental script to production-quality tool thro
 ### Current Bugs Identified But Not Yet Fixed
 
 **HIGH PRIORITY**:
-1. **Volume Name Collision** (Line 262 in run.sh)
-   - All containers share `claude_sandbox_data` volume regardless of container name
-   - **Impact**: Multiple containers overwrite each other's workspace files
-   - **Workaround**: Remove old containers before creating new ones
-   - **Planned Fix**: Use `${CONTAINER_NAME}_data` for individual volumes
+1. **✅ FIXED: Volume Name Collision** (v1.2.1)
+   - **Solution**: External volumes with dynamic naming: `${CONTAINER_NAME:-claude-sandbox}_data`
+   - **Impact**: Each container gets isolated workspace volume
+   - **Implementation**: Lines 339-349 in docker-compose.yml, CONTAINER_NAME env var in run.sh
 
 2. **Container Name Validation Missing** (Line 128 in run.sh)
    - No validation of user input against Docker naming restrictions
@@ -424,16 +423,16 @@ This system has evolved from experimental script to production-quality tool thro
    - **Workaround**: Use alphanumeric names with hyphens only
 
 **MEDIUM PRIORITY**:
-3. **Temporary File Cleanup Missing** (macOS credential fix)
-   - Creates `/tmp/docker-claude-sandbox` but never removes it
-   - **Impact**: Accumulates temp directories over time
+3. **✅ FIXED: Temporary File Cleanup** (Lines 7-15 in run.sh)
+   - Implements EXIT trap for automatic cleanup: `trap cleanup_temp_files EXIT`
+   - **Impact**: All temporary directories cleaned up automatically
 
 4. **Redundant Redirection** (Line 38 in run.sh)
    ```bash
    docker info &> /dev/null 2>&1  # Redundant
    ```
 
-5. **Container Readiness Timeout** (30 seconds may be insufficient)
+5. **Container Readiness Timeout** (60 seconds implemented, may be insufficient for very slow systems)
    - **Impact**: May timeout on slow systems or first-time pulls
 
 **LOW PRIORITY**:

@@ -97,7 +97,7 @@ Please provide the following information:
 curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | less
 
 # 2. Use version-pinned installation for production
-curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.2.7/run.sh | bash
+curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.2.8/run.sh | bash
 
 # 3. Or clone and review locally
 git clone https://github.com/nixfred/docker-claude-sandbox.git

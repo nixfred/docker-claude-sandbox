@@ -1,4 +1,4 @@
-# 🤖 Docker Claude Sandbox v1.2.7
+# 🤖 Docker Claude Sandbox v1.2.8
 
 ![Version](https://img.shields.io/github/v/release/nixfred/docker-claude-sandbox?label=version&color=blue)
 ![License](https://img.shields.io/github/license/nixfred/docker-claude-sandbox?color=green)
@@ -102,7 +102,7 @@ cd docker-claude-sandbox
 
 ### Version-Pinned Install
 ```bash
-curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.2.7/run.sh | bash
+curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.2.8/run.sh | bash
 ```
 
 ### Cache-Busting Install (Force Latest)
@@ -284,7 +284,7 @@ docker exec -it YOUR_CONTAINER_NAME bash -c "cd /workspace && code ."
 # .github/workflows/test.yml
 - name: Setup Claude Code Environment
   run: |
-    curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.2.7/run.sh | bash
+    curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.2.8/run.sh | bash
     docker exec claude-sandbox claude --version
 ```
 
@@ -394,7 +394,7 @@ For technical implementation details, see:
 
 ## 🏷️ Version Information
 
-- **Current version**: v1.2.7
+- **Current version**: v1.2.8
 - **Tested platforms**: Linux ARM64/x86_64, macOS Apple Silicon (Intel untested)  
 - **Docker compatibility**: 20.10+, Buildx optional
 - **Base image**: Ubuntu 22.04 LTS

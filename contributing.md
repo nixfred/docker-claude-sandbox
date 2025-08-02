@@ -31,11 +31,11 @@ docker-compose build --no-cache  # Test build process
 ### 🔴 High Priority Issues
 - **Help text outdated** - ✅ FIXED - All documentation now references Node.js 20+
 - **Container configuration in run.sh** - Should move logic to Dockerfile for better portability
-- **Hardcoded timezone** - Uses America/New_York instead of user's timezone
+- **Hardcoded timezone** - ✅ FIXED - Auto-detects user timezone with timedatectl fallback to UTC
 
 ### 🟡 Medium Priority Issues  
 - **Redundant docker-compose download** - Script downloads but uses `docker run` instead
-- **Manual container readiness** - Uses 60-second wait instead of proper health checks
+- **Manual container readiness** - Uses 60-second spinning wait instead of proper Docker health checks
 - **No input validation feedback** - Container name validation could be more user-friendly
 - **Missing progress indicators** - ✅ FIXED - Added comprehensive progress indicators with emojis and spinners
 - **No security documentation** - ✅ FIXED - Added comprehensive SECURITY.md with vulnerability reporting
@@ -78,9 +78,9 @@ Please include:
 
 ### Versioning (SemVer)
 Every commit must update version in 3 locations:
-1. `run.sh` line 2: `# Docker Claude Sandbox - Portable One-Command Setup v1.2.7`
-2. `run.sh` thank you messages: `Thank you for using Docker Claude Sandbox v1.2.7` (2 locations)
-3. `readme.md` line 1: `# 🤖 Docker Claude Sandbox v1.2.7`
+1. `run.sh` line 2: `# Docker Claude Sandbox - Portable One-Command Setup v1.2.8`
+2. `run.sh` thank you messages: `Thank you for using Docker Claude Sandbox v1.2.8` (2 locations)
+3. `readme.md` line 1: `# 🤖 Docker Claude Sandbox v1.2.8`
 
 **Version Format**: `vMAJOR.MINOR.PATCH`
 - **MAJOR**: Breaking changes affecting existing users
@@ -142,7 +142,7 @@ docker system prune -f
 **Impact**: Each container now gets isolated workspace data
 
 ### v1.2.0 - Node.js Compatibility
-**Problem**: npm version conflicts with Node.js 18
+**Problem**: npm version conflicts with Node.js 18 (upgraded to Node.js 20)
 **Solution**: Upgraded to Node.js 20 in Dockerfile
 **Impact**: Compatible with latest npm versions
 
