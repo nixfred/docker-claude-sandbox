@@ -296,8 +296,8 @@ main() {
     echo -e "${GREEN}✅ Container ready!${NC}"
     echo ""
     
-    # Only auto-enter if we have a real TTY (not piped)
-    if [ -t 0 ] && [ -t 1 ]; then
+    # Auto-enter container if TTY is available (same logic as container naming)
+    if [ -c /dev/tty ]; then
         echo -e "${CYAN}Entering container...${NC}"
         exec docker exec -it "$CONTAINER_NAME" bash
     else
