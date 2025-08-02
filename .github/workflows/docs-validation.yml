@@ -29,7 +29,7 @@ jobs:
       - name: Setup Node.js for link checking
         uses: actions/setup-node@v4
         with:
-          node-js-version: '20'
+          node-version: '20'
           
       - name: Install markdown link checker
         run: npm install -g markdown-link-check
@@ -142,7 +142,7 @@ jobs:
           echo "📁 Validating documentation structure and completeness..."
           
           # Required documentation files
-          REQUIRED_FILES="readme.md CLAUDE.md AI_DEVELOPMENT_GUIDE.md contributing.md changelog.md SECURITY.md license"
+          REQUIRED_FILES="readme.md claude.md AI_DEVELOPMENT_GUIDE.md contributing.md changelog.md SECURITY.md license"
           
           for file in $REQUIRED_FILES; do
             if [ ! -f "$file" ]; then

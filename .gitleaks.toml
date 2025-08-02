@@ -21,22 +21,11 @@ files = [
     '''AI_DEVELOPMENT_GUIDE\.md''', # AI guide can show examples
     '''\.github/workflows/.*\.yml''', # Workflow files use secrets references
 ]
-
-# Allow placeholder tokens in documentation
-[[allowlist.regexes]]
-regex = '''YOUR_DOCKER_TOKEN'''
-description = "Placeholder token in documentation"
-
-[[allowlist.regexes]]
-regex = '''dckr_pat_XXXXXXXXXX'''
-description = "Example token format in documentation"
-
-# Allow references to GitHub secrets syntax
-[[allowlist.regexes]]  
-regex = '''\$\{\{ secrets\.DOCKERHUB_TOKEN \}\}'''
-description = "GitHub Actions secrets syntax"
-
-# Paths to ignore completely
-[[allowlist.paths]]
-regex = '''gitleaks-report\.json'''
-description = "GitLeaks report files"
+paths = [
+    '''gitleaks-report\.json''',  # GitLeaks report files
+]
+regexes = [
+    '''YOUR_DOCKER_TOKEN''',  # Placeholder token in documentation
+    '''dckr_pat_XXXXXXXXXX''',  # Example token format in documentation
+    '''\$\{\{ secrets\.DOCKERHUB_TOKEN \}\}''',  # GitHub Actions secrets syntax
+]

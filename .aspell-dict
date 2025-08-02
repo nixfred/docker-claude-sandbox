@@ -1,0 +1,10 @@
+Docker
+dockerfile
+docker-compose
+GitHub
+npm
+Node.js
+Ubuntu
+ARM64
+x86_64
+EOF < /dev/null
