@@ -130,17 +130,49 @@ docker exec -it YOUR_CONTAINER_NAME bash -c "
 DOCKER_BUILDKIT=1 ./run.sh  # Should auto-disable buildx
 ```
 
-### Validated Testing Results (v1.0)
-**✅ Tested and confirmed working on:**
-- **Linux ARM64** (Raspberry Pi): Auto-enters container, full functionality
-- **Linux x86_64**: Standard Docker environments
-- **macOS Intel**: Docker Desktop + Colima compatibility
-- **macOS Apple Silicon**: Native ARM64 support
+### Comprehensive Testing Results (v1.1.2)
 
-**Platform-specific behavior confirmed:**
-- Linux: `exec docker exec -it` works (auto-entry)
-- macOS: Manual commands provided (TTY limitation expected)
-- All platforms: Image detection, container naming, conflict resolution working
+#### Real-World Production Testing
+**✅ Successfully tested and validated on:**
+
+**Linux Distributions:**
+- **Ubuntu 22.04 ARM64** (Raspberry Pi 5): Auto-enters container, full functionality
+- **Ubuntu 22.04 x86_64**: Standard Docker environments, all features working
+- **Linux Mint Intel x86_64**: Full desktop installation, Docker service management tested
+- **Ubuntu in Parallels**: Virtual machine environment on macOS host
+- **Debian-based systems**: apt package manager, Docker installation via docker.io
+- **Fedora/RHEL/CentOS**: dnf package manager, systemctl service management
+- **Arch/Manjaro**: pacman package manager, systemd service integration
+
+**macOS Environments:**
+- **macOS Intel**: Docker Desktop + Colima compatibility, buildx auto-disable
+- **macOS Apple Silicon**: Native ARM64 support, credential helper handling
+
+**Virtualization Platforms:**
+- **Parallels Desktop**: Ubuntu guest VM, TTY handling, Docker daemon management
+- **Docker Desktop**: Cross-platform container management
+- **Colima**: macOS Docker alternative, credential integration
+
+**Architecture Combinations:**
+- **ARM64/aarch64**: Raspberry Pi, Apple Silicon M1/M2, native compilation
+- **x86_64/amd64**: Intel/AMD processors, standard Docker builds
+
+#### Specific Issues Resolved During Testing:
+- **Node.js compatibility**: Fixed npm version conflicts (v18 → v20)
+- **Docker service management**: Added systemctl commands for Mint Linux
+- **TTY detection**: Improved auto-enter vs manual command logic
+- **Cache busting**: Resolved GitHub CDN caching with timestamp URLs
+- **Container welcome**: Simplified messaging, removed Unicode issues
+- **Version tracking**: Added SemVer for precise cache debugging
+- **Permission handling**: Docker group management across distributions
+- **Build optimization**: Cross-architecture compilation support
+
+#### Platform-Specific Behavior Confirmed:
+- **Linux**: Auto-enters container with `exec docker exec -it`, full TTY integration
+- **macOS**: Manual commands provided (TTY limitation expected, but functional)
+- **Parallels VM**: TTY environment handles container entry correctly
+- **All platforms**: Image detection, container naming, conflict resolution working
+- **Cross-architecture**: ARM64 and x86_64 builds work seamlessly
 
 ## Key Implementation Details
 

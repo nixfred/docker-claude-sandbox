@@ -1,4 +1,4 @@
-# 🤖 Docker Claude Sandbox v1.1.1
+# 🤖 Docker Claude Sandbox v1.1.2
 
 ![Version](https://img.shields.io/github/v/release/nixfred/docker-claude-sandbox?label=version&color=blue)
 ![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS-lightgrey)
@@ -15,11 +15,31 @@ curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/
 
 **What you get:** Ubuntu 22.04 + **Claude Code pre-installed** + Node.js 20+ + Python 3 + Git + Persistent workspace
 
-Tested and validated on:
-- ✅ **Linux ARM64** (Raspberry Pi)
-- ✅ **Linux x86_64** (Standard servers)  
-- ✅ **macOS Intel** (Docker Desktop + Colima)
-- ✅ **macOS Apple Silicon** (Native ARM64)
+## 🧪 Tested and Validated Platforms
+
+### Linux Distributions
+- ✅ **Ubuntu 22.04 ARM64** (Raspberry Pi 5)
+- ✅ **Ubuntu 22.04 x86_64** (Standard servers)
+- ✅ **Linux Mint Intel x86_64** (Full desktop installation)
+- ✅ **Ubuntu in Parallels** (Virtual machine environment)
+- ✅ **Debian-based distributions** (apt package manager)
+- ✅ **Fedora/RHEL/CentOS** (dnf package manager)
+- ✅ **Arch/Manjaro** (pacman package manager)
+
+### macOS Environments  
+- ✅ **macOS Intel** (Docker Desktop + Colima compatibility)
+- ✅ **macOS Apple Silicon** (Native ARM64 support)
+
+### Virtualization & Containers
+- ✅ **Parallels Desktop** (Ubuntu guest on macOS host)
+- ✅ **Docker Desktop** (All platforms)
+- ✅ **Colima** (macOS Docker alternative)
+
+### Architecture Support
+- ✅ **ARM64/aarch64** (Raspberry Pi, Apple Silicon)
+- ✅ **x86_64/amd64** (Intel/AMD processors)
+
+All combinations tested with Node.js 20, Claude Code installation, and container functionality.
 
 ## 📋 System Requirements
 
