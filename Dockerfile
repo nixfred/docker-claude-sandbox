@@ -25,17 +25,14 @@ RUN echo "🔄 Updating package lists and system..." && \
     apt-get update && \
     echo "🔒 Installing security updates..." && \
     apt-get upgrade -y && \
-    echo "📦 Installing essential tools for Claude Code development..." && \
+    echo "📦 Installing ONLY what Claude Code needs..." && \
     apt-get install -y --no-install-recommends \
-    # Core utilities
-    git vim nano \
-    # Complete Python stack
+    # Claude Code essentials
+    git \
+    # Node.js dependencies  
+    curl ca-certificates \
+    # Python stack
     python3 python3-pip python3-venv python3-dev python3-setuptools python3-wheel \
-    # Essential network tools
-    curl wget ssh openssh-client \
-    iputils-ping \
-    # Package management
-    software-properties-common apt-transport-https ca-certificates \
     && echo "🧹 Cleaning up package cache..." && \
     apt-get autoremove -y && \
     apt-get autoclean && \
@@ -87,20 +84,20 @@ RUN echo "🎨 Setting up enhanced shell environment..." && \
     echo 'export PS1="\[\033[0;32m\]\u@claude-sandbox\[\033[00m\]:\[\033[0;34m\]\w\[\033[00m\]\$ "' >> /home/coder/.bashrc && \
     echo 'cd /${WORKSPACE}' >> /home/coder/.bashrc && \
     echo 'echo "🤖 Claude Code sandbox ready!"' >> /home/coder/.bashrc && \
-    echo 'echo "📦 Start Claude Code: claude"' >> /home/coder/.bashrc && \
-    echo 'echo "❓ Show available tools: help"' >> /home/coder/.bashrc && \
-    echo 'echo "🔧 Need more software? Ask Claude Code to install it and explain why!"' >> /home/coder/.bashrc
+    echo 'echo "📦 Start: claude"' >> /home/coder/.bashrc && \
+    echo 'echo "❓ Show tools: help"' >> /home/coder/.bashrc && \
+    echo 'echo "🔧 Need more software? Ask Claude: \\"Install [tool] because [reason]\\""' >> /home/coder/.bashrc && \
+    echo 'echo "💡 This container is MINIMAL by design - extend as needed!"' >> /home/coder/.bashrc
 
 # Add comprehensive help function
 RUN echo "ℹ️  Setting up help system..." && \
     echo 'help() {' >> /home/coder/.bashrc && \
     echo '  echo "Claude Code Sandbox - Available Tools:"' >> /home/coder/.bashrc && \
-    echo '  echo "  Claude Code: claude (installed globally)"' >> /home/coder/.bashrc && \
+    echo '  echo "  Claude Code: claude (start here!)"' >> /home/coder/.bashrc && \
     echo '  echo "  Node.js: node, npm (v18+)"' >> /home/coder/.bashrc && \
     echo '  echo "  Python: python3, pip3, black, flake8, pylint, pytest"' >> /home/coder/.bashrc && \
-    echo '  echo "  Editors: vim, nano"' >> /home/coder/.bashrc && \
-    echo '  echo "  Network: curl, wget, ssh, ping"' >> /home/coder/.bashrc && \
-    echo '  echo "  Utils: git"' >> /home/coder/.bashrc && \
+    echo '  echo "  Git: git (version control)"' >> /home/coder/.bashrc && \
+    echo '  echo "  Network: curl (for downloads)"' >> /home/coder/.bashrc && \
     echo '}' >> /home/coder/.bashrc
 
 

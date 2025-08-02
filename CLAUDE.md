@@ -11,13 +11,22 @@ This repository creates a lightweight Docker environment optimized specifically 
 - **`run.sh`**: Optional setup script for automated deployment
 - **Persistent workspace**: `/workspace` directory survives container restarts
 
-### What's Included
+### What's Included (MINIMAL by Design)
 - **Claude Code**: Pre-installed globally - just run `claude`
 - **Node.js 18+**: Required runtime for Claude Code
 - **Essential Python stack**: Core libraries without bloat (requests, pytest, black, flake8, pylint)
-- **Development tools**: git, vim, nano (minimal essential editors)
-- **Network utilities**: ssh, curl, wget, ping (minimal essential tools)
+- **Git**: Version control (essential for Claude Code workflows)
+- **curl**: For downloading dependencies
 - **Verbose build process**: See exactly what's being installed during build
+
+### What's NOT Included (Ask Claude Code to Install)
+- **Editors** (vim, nano, emacs) - Ask Claude: "Install vim because I need to edit files"
+- **Archive tools** (zip, tar, unzip) - Ask Claude: "Install unzip because I need to extract files"  
+- **System monitoring** (htop, ps) - Ask Claude: "Install htop because I need to monitor processes"
+- **Network tools** (wget, ssh, ping) - Ask Claude: "Install ssh because I need to clone private repos"
+- **File managers** (mc, ranger) - Ask Claude: "Install mc because I need file browser"
+
+**Philosophy**: Container includes ONLY what Claude Code requires. Everything else gets installed on-demand with justification.
 
 ## Common Development Commands
 
@@ -88,18 +97,19 @@ cd /tmp/test && docker-compose up -d
 
 ## Optimized for Claude Code
 
-✅ **Improvements Made**: 
+✅ **MINIMAL Philosophy Applied**: 
 - Claude Code pre-installed globally with Node.js 18+ runtime
+- Removed ALL non-essential tools (editors, archive tools, system monitoring)
 - Removed all port mappings (Claude Code is CLI-based)
 - Removed unnecessary Python packages (matplotlib, seaborn, jupyter)
-- Removed unnecessary network tools (nmap, tcpdump, wireshark, iptables)
-- Removed unnecessary health checks and monitoring
-- Removed heavy build tools (build-essential, make, cmake)
-- Removed custom networks and restart policies
-- Removed neofetch (just eye candy) and screen (tmux is sufficient)
-- Added verbose build output to show installation progress
-- Focused on absolutely minimal essential tools Claude Code needs
-- Added container optimization environment variables
+- Removed network tools (wget, ssh, ping) - install on-demand
+- Removed health checks, custom networks, restart policies
+- Removed build tools, file managers, terminal multiplexers
+- Added clear welcome message: "Ask Claude to install what you need"
+- Container optimization environment variables
+- Focused on ONLY what Claude Code absolutely requires
+
+**Result**: Ultra-minimal container that extends through Claude Code conversation.
 
 ## Essential Commands for Claude Code
 
@@ -117,13 +127,13 @@ git --version      # Verify git available
 curl --version     # Verify network tools
 ls /workspace      # Check persistent workspace
 
-# Container includes these Claude Code essentials:
+# Container includes ONLY these essentials:
 # - Claude Code pre-installed globally
 # - Node.js 18+ runtime (required for Claude Code)
 # - Python 3 with essential packages (requests, pytest, black, flake8, pylint)
 # - Git for version control
-# - Network tools (curl, wget, ssh, ping)
-# - Text editors (vim, nano)
+# - curl for downloads
+# Everything else: Ask Claude to install with justification!
 ```
 
 ## Troubleshooting

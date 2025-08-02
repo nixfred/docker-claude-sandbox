@@ -99,8 +99,8 @@ When you enter the container, you get:
 - **⚡ Node.js 18+**: Required runtime environment for Claude Code
 - **🛡️ Safe Environment**: Completely isolated from your host system
 - **🐍 Essential Python Stack**: Python 3 + pip + requests, pytest, black, flake8, pylint
-- **🔧 Development Tools**: git, vim, nano (essential editors only)
-- **🌐 Network Tools**: curl, wget, ssh, ping (for git and package management)  
+- **🔧 Development Tools**: git (version control only)
+- **🌐 Network Tools**: curl (for downloads only)  
 - **💾 Persistent Storage**: Your code survives container restarts in `/workspace`
 - **🔌 No Ports**: Claude Code is CLI-based - no networking required
 
@@ -133,13 +133,13 @@ help
 node --version
 python3 -c "import requests, pytest; print('Essential Python tools ready!')"
 
-# Test connectivity
-ping google.com
+# Test basic connectivity
+curl -s https://httpbin.org/ip
 
-# Create and test code
+# Create and test code - ask Claude to install editor first!
 cd /workspace
-nano mycode.py
-python3 mycode.py
+# Ask Claude: "Install nano because I need to edit files"
+# Then: nano mycode.py && python3 mycode.py
 ```
 
 ### Claude Code Integration
@@ -162,16 +162,16 @@ python3 mycode.py
    python3 my_script.py
    ```
 
-4. **Use development tools**:
+4. **Ask Claude to install tools as needed**:
    ```bash
-   # Format Python code
-   black my_script.py
+   # Example requests:
+   # "Install vim because I need to edit files"
+   # "Install ssh because I need to clone private repos" 
+   # "Install htop because I need to monitor processes"
    
-   # Run tests
-   pytest
-   
-   # Test connectivity
-   ping google.com
+   # Python tools are pre-installed:
+   black my_script.py  # Format code
+   pytest              # Run tests
    ```
 
 ## 🔧 Container Management
