@@ -51,10 +51,10 @@ This repository creates a **production-ready Docker environment** specifically o
 # Show current version
 make version
 
-# Update version across all files
+# Update version across all files (uses scripts/update-version.sh)
 make update-version
 
-# Create new release
+# Create new release (updates VERSION file, commits, tags)
 make release VERSION=1.4.2
 ```
 
@@ -63,12 +63,17 @@ make release VERSION=1.4.2
 # Build Docker image locally
 make build
 
-# Run local CI tests
+# Run local CI tests (bash syntax + docker-compose validation)
 make test
 
-# Full rebuild cycle
+# Full rebuild cycle with container creation
 docker-compose build --no-cache
 ./run.sh
+
+# Test specific functionality
+docker exec -it CONTAINER_NAME claude --version
+docker exec -it CONTAINER_NAME node --version
+docker exec -it CONTAINER_NAME python3 --version
 ```
 
 ### Container Operations
@@ -90,15 +95,21 @@ docker exec -it CONTAINER_NAME bash -c "cd /workspace && claude"
 
 ### CI/CD Workflows
 ```bash
-# Trigger Docker Hub publishing
+# Trigger Docker Hub publishing (requires version tag)
 git tag v1.4.2
 git push --tags
 
 # Check GitHub Actions status
 gh run list
 
+# View specific workflow run details
+gh run view RUN_ID
+
 # Re-run failed workflows
 gh run rerun RUN_ID
+
+# Manual workflow trigger (if supported)
+gh workflow run "Documentation Validation"
 ```
 
 ## Development Architecture
@@ -111,10 +122,12 @@ The system detects and adapts to different environments:
 - **Container naming**: Dynamic volume isolation per container
 
 ### Workflow Triggers
-- **CI Testing**: Every push to main, all PRs
-- **Docker Hub Publishing**: Version tags (`v*`)
-- **Security Scanning**: Scheduled and on dependency changes
-- **Documentation Validation**: On all documentation file changes
+- **CI Testing**: Every push to main, all PRs (`ci.yml`)
+- **Docker Hub Publishing**: Version tags (`v*`) only (`docker-hub-publish.yml`)
+- **Security Scanning**: Every push + scheduled daily (`security-scan.yml`)
+- **Documentation Validation**: Changes to `*.md` files (`docs-validation.yml`)
+- **Basic Validation**: Every push/PR (`basic-test.yml`)
+- **Docker Build**: Multi-arch testing (`docker-build.yml`)
 
 ### External Volume System
 Critical for data persistence:
@@ -164,11 +177,19 @@ Everything else installed on-demand via Claude with justification.
 ## Critical Workflows
 
 ### Release Process
-1. Update VERSION file: `echo "1.4.2" > VERSION`
-2. Run version update: `./scripts/update-version.sh`
-3. Commit and tag: `git add -A && git commit -m "🚀 Release v1.4.2" && git tag v1.4.2`
-4. Push: `git push && git push --tags`
-5. GitHub Actions automatically publishes to Docker Hub
+```bash
+# Option 1: Using Makefile (recommended)
+make release VERSION=1.4.2
+git push && git push --tags
+
+# Option 2: Manual process
+echo "1.4.2" > VERSION
+./scripts/update-version.sh
+git add -A && git commit -m "🚀 Release v1.4.2"
+git tag v1.4.2
+git push && git push --tags
+```
+GitHub Actions automatically publishes to Docker Hub when tags are pushed.
 
 ### Emergency Fixes
 - Cache-busting URL: `curl -fsSL "https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh?$(date +%s)" | bash`
@@ -176,13 +197,22 @@ Everything else installed on-demand via Claude with justification.
 
 ### Local Development Testing
 ```bash
-# Syntax validation
+# Quick validation (same as `make test`)
 bash -n run.sh
 docker-compose config --quiet
 
-# Full integration test
+# Full integration test cycle
 ./run.sh  # Create container
-docker exec -it CONTAINER_NAME claude --version  # Test functionality
+docker exec -it CONTAINER_NAME claude --version
+docker exec -it CONTAINER_NAME bash -c "cd /workspace && ls -la"
+
+# Test ARM64 compatibility (if on ARM64 system)
+docker run -it --platform linux/arm64 frednix/claude-sandbox:latest claude --version
 ```
 
-This architecture enables rapid Claude Code development with guaranteed consistency across all platforms while maintaining production-quality reliability and security.
+### Key Architecture Insights
+- **run.sh**: 4-tier image detection, TTY intelligence, platform-specific handling
+- **Dockerfile**: Minimal core + on-demand installs via Claude interaction
+- **Volume isolation**: Each container gets unique workspace via `${CONTAINER_NAME}_data`
+- **CI/CD separation**: Regular pushes ≠ Docker Hub updates (only version tags trigger publishing)
+- **Multi-arch**: Automated AMD64/ARM64 builds with platform-specific instructions
