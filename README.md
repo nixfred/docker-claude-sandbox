@@ -153,11 +153,11 @@ Upon entering the container, you'll see:
 
 ### Access Your Container
 ```bash
-# Using your custom container name
-docker exec -it YOUR_CONTAINER_NAME bash
+# Start Claude Code directly (one command!)
+docker exec -it YOUR_CONTAINER_NAME claude
 
-# Start Claude Code directly
-docker exec -it YOUR_CONTAINER_NAME bash -c "cd /workspace && claude"
+# Or enter the container shell
+docker exec -it YOUR_CONTAINER_NAME bash
 
 # Quick health check
 docker logs YOUR_CONTAINER_NAME
