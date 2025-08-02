@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Weekly automated builds** - Catches base image updates automatically
 - **Branch protection rules** - Professional GitHub workflow with required reviews and CI
 - **CODEOWNERS file** - Critical files require maintainer review before changes
+- **Documentation validation** - Automated checking of links, consistency, and quality
+- **Spelling and grammar checks** - Professional documentation quality assurance
 
 ### Enhanced
 - **Professional CI/CD pipeline** - Multi-arch builds with caching and testing

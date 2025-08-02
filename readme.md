@@ -2,6 +2,7 @@
 
 ![CI](https://img.shields.io/github/actions/workflow/status/nixfred/docker-claude-sandbox/ci.yml?branch=main&label=CI&color=brightgreen)
 ![Docker Build](https://img.shields.io/github/actions/workflow/status/nixfred/docker-claude-sandbox/docker-build.yml?branch=main&label=Docker%20Build&color=blue)
+![Docs](https://img.shields.io/github/actions/workflow/status/nixfred/docker-claude-sandbox/docs-validation.yml?branch=main&label=Documentation&color=green)
 ![Version](https://img.shields.io/github/v/release/nixfred/docker-claude-sandbox?label=version&color=blue)
 ![License](https://img.shields.io/github/license/nixfred/docker-claude-sandbox?color=green)
 ![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS-lightgrey)
@@ -150,6 +151,7 @@ curl -fsSL "https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main
 - ✅ **Automated testing** - Continuous integration validates every change across platforms
 - 🛡️ **Resource protection** - Containers limited to 2GB RAM and 2 CPU cores to prevent system overload
 - 🏗️ **Multi-arch builds** - Automated ARM64/x86_64 container builds via GitHub Actions
+- 📚 **Documentation quality** - Automated validation of links, consistency, and structure
 
 ## 🎯 Welcome Experience
 
