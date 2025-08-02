@@ -17,4 +17,5 @@ services:
       - CONTAINER_NAME=claude-sandbox
 volumes:
   claude_sandbox_data:
-    driver: local
+    external: true
+    name: ${CONTAINER_NAME:-claude-sandbox}_data

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Docker Claude Sandbox - Portable One-Command Setup v1.2.0
+# Docker Claude Sandbox - Portable One-Command Setup v1.2.1
 # Usage: curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
 
 set -e
@@ -255,7 +255,7 @@ main() {
         fi
     fi
     
-    docker-compose build || exit 1
+    CONTAINER_NAME="$CONTAINER_NAME" docker-compose build || exit 1
     
     echo -e "${CYAN}🚀 Starting Claude Sandbox...${NC}"
     
@@ -263,7 +263,7 @@ main() {
     echo -e "${CYAN}🔍 Detecting built image name...${NC}"
     
     # First try to get from docker-compose images command
-    IMAGE_NAME=$(docker-compose images -q claude-sandbox 2>/dev/null | head -1)
+    IMAGE_NAME=$(CONTAINER_NAME="$CONTAINER_NAME" docker-compose images -q claude-sandbox 2>/dev/null | head -1)
     if [ -n "$IMAGE_NAME" ]; then
         # Convert image ID to actual name
         IMAGE_NAME=$(docker images --format "{{.Repository}}:{{.Tag}}" --filter "id=$IMAGE_NAME" | head -1)
@@ -271,7 +271,7 @@ main() {
     
     # If that didn't work, try docker-compose config
     if [ -z "$IMAGE_NAME" ]; then
-        IMAGE_NAME=$(docker-compose config 2>/dev/null | grep 'image:' | awk '{print $2}' | head -1)
+        IMAGE_NAME=$(CONTAINER_NAME="$CONTAINER_NAME" docker-compose config 2>/dev/null | grep 'image:' | awk '{print $2}' | head -1)
     fi
     
     # Final fallback: look for any claude-sandbox image
@@ -351,7 +351,7 @@ main() {
     # Check if we can actually allocate a TTY (not just if /dev/tty exists)
     if [ -t 0 ] && [ -t 1 ] && [ -c /dev/tty ]; then
         echo -e "${CYAN}Entering container...${NC}"
-        echo -e "${CYAN}Thank you for using Docker Claude Sandbox v1.2.0${NC}"
+        echo -e "${CYAN}Thank you for using Docker Claude Sandbox v1.2.1${NC}"
         echo ""
         exec docker exec -it "$CONTAINER_NAME" bash
     else
@@ -367,7 +367,7 @@ main() {
         echo ""
         echo -e "${GREEN}✨ Your Claude Sandbox is ready for AI-powered development!${NC}"
         echo ""
-        echo -e "${CYAN}Thank you for using Docker Claude Sandbox v1.2.0${NC}"
+        echo -e "${CYAN}Thank you for using Docker Claude Sandbox v1.2.1${NC}"
     fi
 }
 

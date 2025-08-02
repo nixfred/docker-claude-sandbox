@@ -1,4 +1,4 @@
-# 🤖 Docker Claude Sandbox v1.2.0
+# 🤖 Docker Claude Sandbox v1.2.1
 
 ![Version](https://img.shields.io/github/v/release/nixfred/docker-claude-sandbox?label=version&color=blue)
 ![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS-lightgrey)
