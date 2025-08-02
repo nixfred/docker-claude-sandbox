@@ -1,6 +1,7 @@
 #!/bin/bash
 # Docker Claude Sandbox V2 - Enhanced One-Command Setup
 # Usage: curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
+# Updated: $(date)
 
 set -e
 
