@@ -146,12 +146,14 @@ ask_container_name() {
     echo "==============================="
     echo ""
     
-    if [ -t 0 ]; then
-        # Interactive mode
-        read -p "Container name [claude-sandbox]: " CONTAINER_NAME
+    # Always prompt for container name, even in non-interactive mode
+    # Use /dev/tty to read directly from terminal
+    if [ -c /dev/tty ]; then
+        read -p "Container name [claude-sandbox]: " CONTAINER_NAME < /dev/tty
         CONTAINER_NAME=${CONTAINER_NAME:-claude-sandbox}
     else
-        # Non-interactive mode
+        # Fallback if no tty available
+        echo "No terminal available - using default container name"
         CONTAINER_NAME="claude-sandbox"
     fi
     
