@@ -9,19 +9,25 @@
 curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
 ```
 
-**Option 2: Clone and run**
+**Option 2: FeNix Users - Ultimate Convenience**
+```bash
+# If you have FeNix, just run this from anywhere:
+sclaw
+```
+
+**Option 3: Clone and run**
 ```bash
 git clone https://github.com/nixfred/docker-claude-sandbox.git
 cd docker-claude-sandbox && docker-compose up -d && docker exec -it claude-sandbox bash
 ```
 
-**Option 3: Use setup script (asks for container name)**
+**Option 4: Use setup script (asks for container name)**
 ```bash
 git clone https://github.com/nixfred/docker-claude-sandbox.git
 cd docker-claude-sandbox && ./run.sh
 ```
 
-**Option 4: Direct docker-compose (most portable)**
+**Option 5: Direct docker-compose (most portable)**
 ```bash
 curl -O https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/{docker-compose.yml,Dockerfile}
 docker-compose up -d && docker exec -it claude-sandbox bash
@@ -100,10 +106,20 @@ docker-compose up -d
 - CI/CD friendly
 
 ### 🤖 **Claude Code Ready**
-When you enter the container, you get:
-- **Claude Code installed globally** - Just run `claude-code`
-- Automatic neofetch system information display
-- Built-in help system (`help` command) showing all available tools
+When you enter the container, you get a beautiful welcome message:
+```
+╔══════════════════════════════════════════════════════════════════╗
+║    🤖 Claude Code Sandbox Ready!                               ║
+║    🚀 Start Claude Code: claude                                 ║
+║    📦 Need software? Tell Claude why you need it!               ║
+║    ✅ Available: Node.js, Python3, Git, curl, apt, sudo        ║
+╚══════════════════════════════════════════════════════════════════╝
+```
+
+Features:
+- **Claude Code installed globally** - Just run `claude`
+- **Beautiful welcome experience** - Clear instructions and available tools
+- **Interactive software installation** - Ask Claude to install what you need with explanations
 - Node.js 18+ runtime for Claude Code requirements
 - Persistent `/workspace` directory for your code
 - Pre-configured development environment
@@ -292,11 +308,29 @@ docker exec -it claude-sandbox bash  # Force entry
 ## 💡 Pro Tips
 
 ### **Quick Access Alias**
+
+**For FeNix Users:**
+The `sclaw` function is automatically available and provides the ultimate convenience:
+```bash
+sclaw  # From anywhere - starts container and enters Claude Code
+```
+
+**For Others:**
 Add to your `~/.bashrc` or `~/.zshrc`:
 ```bash
 alias claude-sandbox='docker exec -it claude-sandbox bash -c "cd /workspace && claude"'
 alias claude-logs='docker logs claude-sandbox'
 alias claude-bash='docker exec -it claude-sandbox bash'
+
+# Or create your own 'sclaw' equivalent:
+sclaw() {
+    cd /path/to/docker-claude-sandbox
+    if ! docker ps --format "{{.Names}}" | grep -q "claude-sandbox"; then
+        docker-compose up -d
+        sleep 2
+    fi
+    docker exec -it claude-sandbox bash -c "cd /workspace && claude"
+}
 ```
 
 ### **VS Code Integration**

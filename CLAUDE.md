@@ -28,7 +28,31 @@ This repository creates a lightweight Docker environment optimized specifically 
 
 **Philosophy**: Container includes ONLY what Claude Code requires. Everything else gets installed on-demand with justification.
 
+### Enhanced Welcome Experience
+The container now features a beautiful welcome message that displays when entering:
+```
+╔══════════════════════════════════════════════════════════════════╗
+║    🤖 Claude Code Sandbox Ready!                               ║
+║    🚀 Start Claude Code: claude                                 ║
+║    📦 Need software? Tell Claude why you need it!               ║
+║    ✅ Available: Node.js, Python3, Git, curl, apt, sudo        ║
+╚══════════════════════════════════════════════════════════════════╝
+```
+
 ## Common Development Commands
+
+### Quick Start with FeNix Alias
+For FeNix users, the `sclaw` alias provides instant access:
+```bash
+# From anywhere on your system - starts container and enters Claude Code
+sclaw
+```
+
+The `sclaw` function automatically:
+- Changes to the project directory
+- Starts the container if not running
+- Enters the container and launches Claude Code
+- Shows the beautiful welcome message
 
 ### Container Lifecycle
 ```bash
