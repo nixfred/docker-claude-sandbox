@@ -137,13 +137,15 @@ jobs:
           
           echo "Gitleaks exit code: ${GITLEAKS_EXIT:-0}"
           
-          # Show results if any
-          if [ -f "gitleaks-report.json" ] && [ -s "gitleaks-report.json" ]; then
-            echo "⚠️ Gitleaks found potential secrets:"
-            cat gitleaks-report.json | jq '.[] | {file: .File, secret: .Secret, rule: .RuleID}' || cat gitleaks-report.json
+          # Check exit code first
+          if [ "${GITLEAKS_EXIT:-0}" -ne 0 ]; then
+            echo "⚠️ Gitleaks found potential secrets (exit code: $GITLEAKS_EXIT)"
+            if [ -f "gitleaks-report.json" ]; then
+              cat gitleaks-report.json | jq '.[] | {file: .File, secret: .Secret, rule: .RuleID}' || cat gitleaks-report.json
+            fi
             exit 1
           else
-            echo "✅ No secrets detected"
+            echo "✅ No secrets detected (exit code: 0)"
           fi
 
   dockerfile-scan:
