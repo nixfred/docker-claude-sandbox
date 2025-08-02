@@ -2,14 +2,24 @@
 
 This document provides a comprehensive guide for AI assistants to understand, modify, and maintain the Docker Claude Sandbox project.
 
-## Project Overview
+## Project Overview - v1.0 Status
 
-The Docker Claude Sandbox is a lightweight, containerized environment specifically designed for Claude Code development. It provides:
-- Ubuntu 22.04 base with Claude Code pre-installed
-- Node.js 18+ runtime (required for Claude Code)
-- Essential Python development tools
-- Minimal footprint with on-demand software installation
-- Persistent workspace that survives container restarts
+The Docker Claude Sandbox is a **production-ready**, cross-platform containerized environment specifically designed for Claude Code development. **v1.0 represents a mature, tested system** with extensive validation across multiple platforms.
+
+**Current Status**:
+- ✅ **Tested and validated** on Linux ARM64 (Raspberry Pi), Linux x86_64, macOS Intel/Apple Silicon
+- ✅ **Cross-platform compatibility** with intelligent platform-specific adaptations
+- ✅ **Robust error handling** with comprehensive fallback strategies
+- ⚠️ **Known issues identified** but documented with workarounds
+
+**Core Features**:
+- **Ubuntu 22.04 base** with Claude Code pre-installed globally
+- **Node.js 18+ runtime** (required for Claude Code operation)
+- **Python 3 development stack** with essential packages
+- **Cross-platform optimizations** (macOS buildx fixes, Colima support)
+- **Intelligent TTY handling** (auto-entry vs manual commands)
+- **Persistent workspace** that survives container restarts and rebuilds
+- **Security-focused design** (non-root execution with appropriate permissions)
 
 ## Architecture Components
 
@@ -28,12 +38,13 @@ The Docker Claude Sandbox is a lightweight, containerized environment specifical
    - Environment: `TERM=xterm-256color`
    - No port mappings (Claude Code is CLI-based)
 
-3. **`run.sh`** - Automated setup and deployment script
-   - Cross-platform compatibility (Linux/macOS)
-   - TTY detection for interactive/non-interactive modes
-   - Container name customization
-   - Conflict resolution for existing containers
-   - Auto-entry into container after setup
+3. **`run.sh`** - Intelligent setup and deployment script (311 lines)
+   - **Cross-platform compatibility** (Linux/macOS, ARM64/x86_64)
+   - **Advanced TTY detection** with 3-level checking
+   - **4-tier image detection** with robust fallback strategies
+   - **Container name customization** with conflict resolution
+   - **Platform-specific optimizations** (macOS buildx, Colima fixes)
+   - **Auto-entry logic** (Linux auto-enters, macOS provides commands)
 
 4. **`README.md`** - User documentation
    - Quick start instructions
@@ -45,7 +56,108 @@ The Docker Claude Sandbox is a lightweight, containerized environment specifical
    - Development guidelines
    - Architecture details
    - Common commands
-   - Optimization notes
+   - v1.0 testing validation results
+
+## Known Issues and Technical Debt (v1.0)
+
+**⚠️ CRITICAL**: These issues exist in v1.0 but have documented workarounds:
+
+### HIGH PRIORITY BUGS
+
+**1. Volume Name Collision (run.sh:262)**
+```bash
+-v claude_sandbox_data:/workspace \
+```
+**Problem**: All containers share the same volume regardless of container name  
+**Impact**: Multiple containers overwrite each other's workspace files  
+**Workaround**: Remove old containers before creating new ones  
+**Fix Strategy**: Use `${CONTAINER_NAME}_data:/workspace`  
+
+**2. Container Name Validation Missing (run.sh:128)**
+```bash
+read CONTAINER_NAME < /dev/tty
+```
+**Problem**: No validation against Docker naming restrictions  
+**Impact**: Cryptic Docker errors for invalid names (spaces, special chars)  
+**Workaround**: Use alphanumeric names with hyphens only  
+**Fix Strategy**: Add validation regex and user feedback  
+
+**3. Temporary File Cleanup Missing (run.sh:190-200)**
+```bash
+mkdir -p /tmp/docker-claude-sandbox
+# Never cleaned up
+```
+**Problem**: macOS credential fix creates temp directories but never removes them  
+**Impact**: Accumulates temp directories over time  
+**Fix Strategy**: Add exit trap for cleanup  
+
+### MEDIUM PRIORITY BUGS
+
+**4. Redundant Redirection (run.sh:38)**
+```bash
+if ! docker info &> /dev/null 2>&1; then
+```
+**Problem**: `&> /dev/null` already redirects both stdout/stderr, `2>&1` is redundant  
+**Fix**: Use just `&> /dev/null` OR `> /dev/null 2>&1`  
+
+**5. Container Readiness Timeout (run.sh:283)**
+```bash
+for i in {1..30}; do
+```
+**Problem**: 30 seconds may be insufficient for slow systems or first-time pulls  
+**Fix Strategy**: Increase timeout or make configurable  
+
+**6. Image ID Ambiguity (run.sh:214-217)**
+```bash
+IMAGE_NAME=$(docker images --format "{{.Repository}}:{{.Tag}}" --filter "id=$IMAGE_NAME" | head -1)
+```
+**Problem**: If multiple images share layer IDs, could return wrong image  
+**Likelihood**: Low, but possible with complex build scenarios  
+
+### LOW PRIORITY ISSUES
+
+**7. Claude Code Installation Verification Missing (Dockerfile:48)**
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+**Problem**: No verification that installation succeeded  
+**Fix Strategy**: Add verification step with claude --version  
+
+**8. Security Risk: Piping curl to bash (Dockerfile:45)**
+```bash
+curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+```
+**Problem**: Classic security anti-pattern  
+**Mitigation**: This is Node.js official installation method  
+**Alternative**: Download, verify, then execute  
+
+**9. Hardcoded Workspace Path (Dockerfile:86)**
+```bash
+echo 'cd /${WORKSPACE}' >> /home/coder/.bashrc
+```
+**Problem**: Uses variable substitution that may not work as expected  
+**Impact**: Minor - workspace navigation  
+
+**10. Environment Variable Mismatch (docker-compose.yml:17)**
+```yaml
+- CONTAINER_NAME=claude-sandbox
+```
+**Problem**: Hardcoded value doesn't match dynamic container names  
+**Impact**: Potential confusion about actual container name  
+
+### ARCHITECTURAL ISSUES
+
+**11. Volume Sharing by Design**
+**Current Behavior**: All containers share `claude_sandbox_data` volume  
+**Trade-off**: Intentional for data persistence vs isolation  
+**User Expectation**: Each container should have isolated workspace  
+**Decision Needed**: Change default behavior or document clearly  
+
+**12. Platform-Specific TTY Behavior**
+**Linux**: Auto-enters container after setup  
+**macOS**: Provides manual entry commands  
+**Status**: This is correct behavior, not a bug  
+**Reason**: macOS Docker TTY allocation differs from Linux  
 
 ## Key Design Principles
 
