@@ -1,9 +1,14 @@
-# 🤖 Docker Claude Sandbox v1.2.2
+# 🤖 Docker Claude Sandbox v1.2.3
 
 ![Version](https://img.shields.io/github/v/release/nixfred/docker-claude-sandbox?label=version&color=blue)
+![License](https://img.shields.io/github/license/nixfred/docker-claude-sandbox?color=green)
 ![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS-lightgrey)
 ![Docker](https://img.shields.io/badge/docker-required-blue)
 ![Architecture](https://img.shields.io/badge/arch-ARM64%20%7C%20x86__64-green)
+![Node.js](https://img.shields.io/badge/node.js-20%2B-brightgreen)
+![Docker Pulls](https://img.shields.io/docker/pulls/nixfred/claude-sandbox?color=blue)
+![GitHub Issues](https://img.shields.io/github/issues/nixfred/docker-claude-sandbox?color=red)
+![GitHub Stars](https://img.shields.io/github/stars/nixfred/docker-claude-sandbox?style=social)
 
 **Cross-platform Docker container optimized for Claude Code development**
 
@@ -95,7 +100,7 @@ cd docker-claude-sandbox
 
 ### Version-Pinned Install
 ```bash
-curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.0/run.sh | bash
+curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.2.3/run.sh | bash
 ```
 
 ### Cache-Busting Install (Force Latest)
@@ -107,7 +112,7 @@ curl -fsSL "https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main
 
 ### Core Development Environment
 - 🤖 **Claude Code pre-installed globally** - Run `claude` to start
-- ⚡ **Node.js 18+ runtime** - Required for Claude Code operation
+- ⚡ **Node.js 20+ runtime** - Required for Claude Code operation
 - 🐍 **Python 3 development stack** - Essential packages included
 - 📝 **Git version control** - Ready for repository work
 - 🔧 **Build tools included** - gcc for compiling native packages
@@ -189,7 +194,7 @@ docker logs YOUR_CONTAINER_NAME
 claude
 
 # Check versions
-node --version    # Verify Node.js 18+
+node --version    # Verify Node.js 20+
 python3 --version # Verify Python 3
 git --version     # Verify Git
 
@@ -277,7 +282,7 @@ docker exec -it YOUR_CONTAINER_NAME bash -c "cd /workspace && code ."
 # .github/workflows/test.yml
 - name: Setup Claude Code Environment
   run: |
-    curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.0/run.sh | bash
+    curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.2.3/run.sh | bash
     docker exec claude-sandbox claude --version
 ```
 
@@ -285,7 +290,7 @@ docker exec -it YOUR_CONTAINER_NAME bash -c "cd /workspace && code ."
 
 ### Pre-installed Software
 - **🤖 Claude Code**: Latest version, globally accessible via `claude` command
-- **⚡ Node.js 18+**: Required runtime environment for Claude Code
+- **⚡ Node.js 20+**: Required runtime environment for Claude Code
 - **🐍 Python 3**: Core interpreter with essential development packages
 - **📝 Git**: Version control system for repository management
 - **🌐 curl**: Network tool for downloads and API calls
@@ -357,7 +362,7 @@ docker system prune -f
 **"Input device is not a TTY" error**
 ```bash
 # Use specific commit to bypass CDN cache
-curl -fsSL "https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.0/run.sh" | bash
+curl -fsSL "https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.2.2/run.sh" | bash
 
 # Or clone locally
 git clone https://github.com/nixfred/docker-claude-sandbox.git
@@ -387,7 +392,7 @@ For technical implementation details, see:
 
 ## 🏷️ Version Information
 
-- **Current version**: v1.0
+- **Current version**: v1.2.3
 - **Tested platforms**: Linux ARM64/x86_64, macOS Intel/Apple Silicon  
 - **Docker compatibility**: 20.10+, Buildx optional
 - **Base image**: Ubuntu 22.04 LTS

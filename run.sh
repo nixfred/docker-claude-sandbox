@@ -1,5 +1,5 @@
 #!/bin/bash
-# Docker Claude Sandbox - Portable One-Command Setup v1.2.2
+# Docker Claude Sandbox - Portable One-Command Setup v1.2.3
 # Usage: curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
 
 set -e
@@ -351,7 +351,7 @@ main() {
     # Check if we can actually allocate a TTY (not just if /dev/tty exists)
     if [ -t 0 ] && [ -t 1 ] && [ -c /dev/tty ]; then
         echo -e "${CYAN}Entering container...${NC}"
-        echo -e "${CYAN}Thank you for using Docker Claude Sandbox v1.2.2${NC}"
+        echo -e "${CYAN}Thank you for using Docker Claude Sandbox v1.2.3${NC}"
         echo ""
         exec docker exec -it "$CONTAINER_NAME" bash
     else
@@ -367,7 +367,7 @@ main() {
         echo ""
         echo -e "${GREEN}✨ Your Claude Sandbox is ready for AI-powered development!${NC}"
         echo ""
-        echo -e "${CYAN}Thank you for using Docker Claude Sandbox v1.2.2${NC}"
+        echo -e "${CYAN}Thank you for using Docker Claude Sandbox v1.2.3${NC}"
     fi
 }
 
@@ -379,7 +379,7 @@ case "${1:-}" in
         echo ""
         echo "Features:"
         echo "  ✅ Claude Code pre-installed (run 'claude')"
-        echo "  ✅ Node.js 18+ runtime environment"
+        echo "  ✅ Node.js 20+ runtime environment"
         echo "  ✅ Essential Python development tools"
         echo "  ✅ Git for version control"
         echo "  ✅ Minimal by design - extend through Claude Code"

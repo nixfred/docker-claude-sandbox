@@ -18,7 +18,7 @@ This repository creates a **cross-platform Docker environment** optimized specif
 2. **`Dockerfile`**: Optimized container image (98 lines)
    - **Base**: Ubuntu 22.04 LTS with security updates
    - **Claude Code**: Pre-installed globally via npm
-   - **Runtime**: Node.js 18+ for Claude Code operation
+   - **Runtime**: Node.js 20+ for Claude Code operation
    - **Development**: Python 3 + essential packages + gcc compiler
    - **Security**: Non-root `coder` user with passwordless sudo
    - **UX**: Beautiful welcome banner and optimized shell environment
@@ -44,7 +44,7 @@ This repository creates a **cross-platform Docker environment** optimized specif
 
 ### What's Included (Optimized Core)
 - **Claude Code**: Pre-installed globally - just run `claude`
-- **Node.js 18+**: Required runtime for Claude Code
+- **Node.js 20+**: Required runtime for Claude Code
 - **Python 3 development stack**: Core libraries (requests, pytest, black, flake8, pylint, psutil)
 - **Git**: Version control (essential for Claude Code workflows)
 - **Build tools**: gcc compiler for native package compilation
@@ -224,7 +224,7 @@ The Dockerfile performs these optimized steps:
    # Minimal package set with build tools
    ```
 
-3. **Node.js 18+ Installation** (Lines 43-51):
+3. **Node.js 20+ Installation** (Lines 43-51):
    ```bash
    curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
    npm install -g @anthropic-ai/claude-code
@@ -301,7 +301,7 @@ This welcome banner is configured in the Dockerfile's final RUN command (lines 8
 4. **GitHub release**: Create release with comprehensive notes
 5. **Documentation**: Update all .md files with new features/fixes
 
-## 📋 Outstanding Development Tasks (v1.2.1)
+## 📋 Outstanding Development Tasks (v1.2.2)
 
 ### 🔴 High Priority
 - **Update help text from Node.js 18+ to 20+** - Documentation inconsistency  
@@ -373,7 +373,7 @@ This system has evolved from experimental script to production-quality tool thro
   - **ARM64 specific**: May need longer build times for native compilation
 
 - **Claude Code installation fails**:
-  - **Check**: Node.js 18+ installed successfully (`node --version`)
+  - **Check**: Node.js 20+ installed successfully (`node --version`)
   - **Known issue**: No verification of npm install success
   - **Workaround**: Check build logs for npm errors
 

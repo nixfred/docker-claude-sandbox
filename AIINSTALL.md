@@ -2,9 +2,9 @@
 
 This document provides a comprehensive guide for AI assistants to understand, modify, and maintain the Docker Claude Sandbox project.
 
-## Project Overview - v1.0 Status
+## Project Overview - v1.2.3 Status
 
-The Docker Claude Sandbox is a **production-ready**, cross-platform containerized environment specifically designed for Claude Code development. **v1.0 represents a mature, tested system** with extensive validation across multiple platforms.
+The Docker Claude Sandbox is a **production-ready**, cross-platform containerized environment specifically designed for Claude Code development. **v1.2.3 represents a mature, tested system** with extensive validation across multiple platforms and critical bug fixes.
 
 **Current Status**:
 - ✅ **Tested and validated** on Linux ARM64 (Raspberry Pi), Linux x86_64, macOS Intel/Apple Silicon
@@ -14,7 +14,7 @@ The Docker Claude Sandbox is a **production-ready**, cross-platform containerize
 
 **Core Features**:
 - **Ubuntu 22.04 base** with Claude Code pre-installed globally
-- **Node.js 18+ runtime** (required for Claude Code operation)
+- **Node.js 20+ runtime** (required for Claude Code operation)
 - **Python 3 development stack** with essential packages
 - **Cross-platform optimizations** (macOS buildx fixes, Colima support)
 - **Intelligent TTY handling** (auto-entry vs manual commands)
@@ -58,38 +58,24 @@ The Docker Claude Sandbox is a **production-ready**, cross-platform containerize
    - Common commands
    - v1.0 testing validation results
 
-## Known Issues and Technical Debt (v1.0)
+## Known Issues and Technical Debt (v1.2.3)
 
-**⚠️ CRITICAL**: These issues exist in v1.0 but have documented workarounds:
+**✅ MAJOR FIXES COMPLETED**: Critical issues from v1.0-v1.2.1 have been resolved:
 
-### HIGH PRIORITY BUGS
+### RECENTLY FIXED (v1.2.1)
+- **Volume Collision Bug**: ✅ FIXED - Each container now gets isolated workspace volume
+- **Node.js Compatibility**: ✅ FIXED - Upgraded to Node.js 20+ for npm compatibility  
+- **Documentation Inconsistencies**: ✅ FIXED - All docs now reference Node.js 20+
 
-**1. Volume Name Collision (run.sh:262)**
-```bash
--v claude_sandbox_data:/workspace \
-```
-**Problem**: All containers share the same volume regardless of container name  
-**Impact**: Multiple containers overwrite each other's workspace files  
-**Workaround**: Remove old containers before creating new ones  
-**Fix Strategy**: Use `${CONTAINER_NAME}_data:/workspace`  
+### REMAINING HIGH PRIORITY ITEMS
+- **Help text outdated**: References Node.js 18+ instead of 20+ in some places
+- **Hardcoded timezone**: Uses America/New_York instead of user's timezone  
+- **Container configuration in run.sh**: Should move logic to Dockerfile for portability
 
-**2. Container Name Validation Missing (run.sh:128)**
-```bash
-read CONTAINER_NAME < /dev/tty
-```
-**Problem**: No validation against Docker naming restrictions  
-**Impact**: Cryptic Docker errors for invalid names (spaces, special chars)  
-**Workaround**: Use alphanumeric names with hyphens only  
-**Fix Strategy**: Add validation regex and user feedback  
-
-**3. Temporary File Cleanup Missing (run.sh:190-200)**
-```bash
-mkdir -p /tmp/docker-claude-sandbox
-# Never cleaned up
-```
-**Problem**: macOS credential fix creates temp directories but never removes them  
-**Impact**: Accumulates temp directories over time  
-**Fix Strategy**: Add exit trap for cleanup  
+### MEDIUM PRIORITY ENHANCEMENTS  
+- **No Docker health checks**: Uses 60-second manual wait instead
+- **Missing progress indicators**: Long operations lack user feedback
+- **Redundant downloads**: Script downloads docker-compose.yml but uses docker run  
 
 ### MEDIUM PRIORITY BUGS
 
@@ -125,7 +111,7 @@ npm install -g @anthropic-ai/claude-code
 
 **8. Security Risk: Piping curl to bash (Dockerfile:45)**
 ```bash
-curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
 ```
 **Problem**: Classic security anti-pattern  
 **Mitigation**: This is Node.js official installation method  
@@ -145,13 +131,12 @@ echo 'cd /${WORKSPACE}' >> /home/coder/.bashrc
 **Problem**: Hardcoded value doesn't match dynamic container names  
 **Impact**: Potential confusion about actual container name  
 
-### ARCHITECTURAL ISSUES
+### LEGACY ARCHITECTURAL DECISIONS (Pre-v1.2.1)
 
-**11. Volume Sharing by Design**
-**Current Behavior**: All containers share `claude_sandbox_data` volume  
-**Trade-off**: Intentional for data persistence vs isolation  
-**User Expectation**: Each container should have isolated workspace  
-**Decision Needed**: Change default behavior or document clearly  
+**11. Volume Sharing by Design** - ✅ FIXED in v1.2.1
+**Previous Behavior**: All containers shared `claude_sandbox_data` volume  
+**Fixed**: Each container now gets isolated workspace via `${CONTAINER_NAME}_data` external volumes
+**Impact**: No more data corruption between containers  
 
 **12. Platform-Specific TTY Behavior**
 **Linux**: Auto-enters container after setup  
