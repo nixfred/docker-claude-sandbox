@@ -30,7 +30,7 @@ jobs:
       - name: Validate docker-compose syntax
         run: |
           echo "🔍 Validating docker-compose syntax..."
-          docker-compose config --quiet
+          docker compose config --quiet
           echo "✅ docker-compose.yml syntax valid"
 
   test-linux-platforms:
@@ -81,45 +81,50 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         
+      - name: Create test volume for CI
+        run: |
+          # Create the external volume that docker-compose expects
+          docker volume create claude-sandbox_data
+        
       - name: Test Docker image build
         run: |
           echo "🔍 Testing Docker image build process..."
-          docker-compose build --no-cache
+          docker compose build --no-cache
           echo "✅ Docker build completed successfully"
           
       - name: Verify image contents
         run: |
           echo "🔍 Verifying image contents..."
           # Create a test container to verify Claude Code installation
-          docker-compose up -d --no-deps claude-sandbox
+          docker compose up -d --no-deps claude-sandbox
           
           echo "⏳ Waiting for container to be ready..."
           sleep 30
           
           echo "🔍 Testing Node.js installation..."
-          docker-compose exec -T claude-sandbox node --version
+          docker compose exec -T claude-sandbox node --version
           
           echo "🔍 Testing Python installation..."
-          docker-compose exec -T claude-sandbox python3 --version
+          docker compose exec -T claude-sandbox python3 --version
           
           echo "🔍 Testing Git installation..."
-          docker-compose exec -T claude-sandbox git --version
+          docker compose exec -T claude-sandbox git --version
           
           echo "🔍 Testing Claude Code installation..."
-          docker-compose exec -T claude-sandbox which claude || echo "Claude command not found (expected if npm install failed)"
+          docker compose exec -T claude-sandbox which claude || echo "Claude command not found (expected if npm install failed)"
           
           echo "🔍 Testing container user setup..."
-          docker-compose exec -T claude-sandbox whoami
+          docker compose exec -T claude-sandbox whoami
           
           echo "🔍 Testing workspace directory..."
-          docker-compose exec -T claude-sandbox ls -la /workspace
+          docker compose exec -T claude-sandbox ls -la /workspace
           
           echo "✅ Container verification completed"
           
       - name: Cleanup test container
         if: always()
         run: |
-          docker-compose down -v
+          docker compose down -v
 
   test-macos-compatibility:
     name: macOS Compatibility Test
@@ -175,17 +180,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         
+      - name: Create test volume for CI
+        run: |
+          # Create the external volume that docker-compose expects
+          docker volume create test-ci-container_data
+          docker volume create claude-sandbox_data
+        
       - name: Test container name environment variable
         run: |
           echo "🔍 Testing CONTAINER_NAME environment variable..."
           export CONTAINER_NAME="test-ci-container"
-          docker-compose config | grep -i "$CONTAINER_NAME" || echo "Container name variable test completed"
+          docker compose config | grep -i "$CONTAINER_NAME" || echo "Container name variable test completed"
           
       - name: Test timezone environment variable
         run: |
           echo "🔍 Testing timezone configuration..."
           export TZ="America/New_York"
-          docker-compose config | grep -i "TZ" || echo "Timezone variable test completed"
+          docker compose config | grep -i "TZ" || echo "Timezone variable test completed"
 
   security-scan:
     name: Security Scanning
