@@ -422,16 +422,23 @@ cd docker-claude-sandbox && ./run.sh
 ```
 
 **"no matching manifest for linux/arm/v8" error (ARM64 systems)**
+
+**Recommended: Build locally on ARM64 systems (most reliable)**
 ```bash
-# Use specific ARM64 digest (guaranteed to work on Raspberry Pi)
-docker run -it frednix/claude-sandbox@sha256:5351492c6769956408631f321242c8ae50bee4127169f637174bf3f28020e1e0
+curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
+```
 
-# Alternative: Enable experimental Docker CLI features
+**Alternative: Use Docker Hub with platform workarounds**
+```bash
+# Option 1: Specific ARM64 digest
+docker run -it --rm frednix/claude-sandbox@sha256:5351492c6769956408631f321242c8ae50bee4127169f637174bf3f28020e1e0
+
+# Option 2: Enable experimental Docker CLI features
 export DOCKER_CLI_EXPERIMENTAL=enabled
-docker run -it --platform linux/arm64 frednix/claude-sandbox:latest
+docker run -it --rm --platform linux/arm64 frednix/claude-sandbox:latest
 
-# Alternative: Force platform specification
-docker run -it --platform linux/arm64/v8 frednix/claude-sandbox:latest
+# Option 3: Force platform specification  
+docker run -it --rm --platform linux/arm64/v8 frednix/claude-sandbox:latest
 ```
 
 **Multiple containers sharing workspace**
