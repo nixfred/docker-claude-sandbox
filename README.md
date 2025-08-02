@@ -27,7 +27,7 @@ docker-compose up -d && docker exec -it claude-sandbox bash
 - ✅ **Essential Python stack** - Core libraries for development
 - ✅ **Minimal footprint** - Only includes what Claude Code needs
 - ✅ **Verbose build process** - See exactly what's being installed
-- ✅ **Single port** - Simplified networking (8000 only)
+- ✅ **No ports needed** - Claude Code is CLI-based, no networking required
 
 ---
 
@@ -100,10 +100,10 @@ When you enter the container, you get:
 - **🛡️ Safe Environment**: Completely isolated from your host system
 - **🐍 Essential Python Stack**: Python 3 + pip + requests, pytest, black, flake8, pylint
 - **🔧 Development Tools**: git, vim, nano, mc (midnight commander), screen, tmux
-- **🌐 Network & TCP/IP Tools**: nmap, tcpdump, ssh, telnet, traceroute, ping, wireshark-common, iptables
-- **📊 System Tools**: neofetch, htop, lsof, ps, netstat, build-essential, cmake  
+- **🌐 Essential Network Tools**: curl, wget, ssh, ping (minimal networking tools)  
+- **📊 System Tools**: neofetch, htop, ps, screen, tmux, build-essential, cmake  
 - **💾 Persistent Storage**: Your code survives container restarts in `/workspace`
-- **🔌 Single Port**: 8000 exposed for applications (simplified networking)
+- **🔌 No Ports**: Claude Code is CLI-based - no networking required
 - **📋 Health Monitoring**: Built-in Docker health checks
 
 ## 🏗️ Architecture
@@ -139,17 +139,13 @@ python3 -c "import requests, pytest; print('Essential Python tools ready!')"
 # File management with midnight commander
 mc
 
-# Network scanning
-nmap -sn 192.168.1.0/24
+# Test connectivity
+ping google.com
 
 # Create and test code
 cd /workspace
 nano mycode.py
 python3 mycode.py
-
-# Start a simple web server (if needed)
-python3 -m http.server 8000
-# Access at http://localhost:8000
 ```
 
 ### Claude Code Integration
@@ -180,9 +176,8 @@ python3 -m http.server 8000
    # Run tests
    pytest
    
-   # Network diagnostics
+   # Test connectivity
    ping google.com
-   tcpdump -i any
    ```
 
 ## 🔧 Container Management
@@ -204,20 +199,17 @@ docker volume ls | grep claude        # Check persistent volume
 docker-compose down -v                # Remove container and volume
 ```
 
-## 🌐 Port Access
+## 🌐 No Ports Required
 
-The container exposes one port for simplified networking:
+Claude Code is a CLI tool that doesn't require any port mappings. The container runs in isolation without network services:
 
 ```bash
-# Your services will be available at:
-http://localhost:8000    # Single port for applications
+# Claude Code works entirely through the terminal
+claude-code
 
-# Test port access
-curl http://localhost:8000
-python3 -m http.server 8000  # Start simple server
+# No ports needed - everything is command-line based
+# If you need to test web applications, you can temporarily add ports to docker-compose.yml
 ```
-
-To customize the port, modify the `ports` section in docker-compose.yml.
 
 ## 📊 System Requirements
 

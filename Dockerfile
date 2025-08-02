@@ -3,9 +3,12 @@ FROM ubuntu:22.04
 # Build arguments
 ARG WORKSPACE=workspace
 
-# Prevent interactive prompts
+# Prevent interactive prompts and optimize for container use
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=America/New_York
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV NODE_ENV=production
 
 # Set up locale
 RUN apt-get update && \
@@ -25,27 +28,24 @@ RUN echo "🔄 Updating package lists and system..." && \
     echo "📦 Installing essential tools for Claude Code development..." && \
     apt-get install -y --no-install-recommends \
     # Core utilities
-    curl wget git vim nano tree less htop \
+    git vim nano tree less htop \
     # System info and file manager
     neofetch mc \
     # Build tools  
     build-essential make cmake \
     # Complete Python stack
     python3 python3-pip python3-venv python3-dev python3-setuptools python3-wheel \
-    # Network and TCP/IP tools
-    netcat-openbsd telnet traceroute dnsutils \
-    nmap tcpdump wireshark-common \
-    iptables net-tools iproute2 \
-    ssh openssh-client \
+    # Essential network tools
+    curl wget ssh openssh-client \
     iputils-ping \
     # System tools
-    lsof procps psmisc \
-    # Archive and compression
-    unzip zip tar gzip bzip2 xz-utils \
+    procps \
+    # Archive tools
+    unzip zip tar \
     # Text processing
-    jq grep sed gawk \
+    jq \
     # Additional utilities
-    bc file rsync screen tmux \
+    file screen tmux \
     # Package management
     software-properties-common apt-transport-https ca-certificates \
     && echo "🧹 Cleaning up package cache..." && \
@@ -109,10 +109,10 @@ RUN echo "ℹ️  Setting up help system..." && \
     echo '  echo "  Node.js: node, npm (v18+)"' >> /home/coder/.bashrc && \
     echo '  echo "  Python: python3, pip3, black, flake8, pylint, pytest"' >> /home/coder/.bashrc && \
     echo '  echo "  Editors: vim, nano, mc (midnight commander)"' >> /home/coder/.bashrc && \
-    echo '  echo "  Network: nmap, tcpdump, telnet, traceroute, ping, ssh"' >> /home/coder/.bashrc && \
-    echo '  echo "  System: htop, neofetch, lsof, ps, netstat, screen, tmux"' >> /home/coder/.bashrc && \
-    echo '  echo "  Files: tree, tar, zip, unzip, rsync"' >> /home/coder/.bashrc && \
-    echo '  echo "  Utils: git, curl, wget, jq, bc"' >> /home/coder/.bashrc && \
+    echo '  echo "  Network: curl, wget, ssh, ping"' >> /home/coder/.bashrc && \
+    echo '  echo "  System: htop, neofetch, ps, screen, tmux"' >> /home/coder/.bashrc && \
+    echo '  echo "  Files: tree, tar, zip, unzip"' >> /home/coder/.bashrc && \
+    echo '  echo "  Utils: git, jq, file"' >> /home/coder/.bashrc && \
     echo '}' >> /home/coder/.bashrc
 
 # Health check
