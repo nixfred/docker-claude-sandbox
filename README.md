@@ -1,8 +1,8 @@
 # 🤖 Docker Claude Sandbox
 
-**Lightweight Docker container optimized for Claude Code development with essential toolset**
+**Lightweight Docker container optimized for Claude Code development**
 
-## ⚡ TLDR Quick Start
+## ⚡ Quick Start
 
 **Option 1: One command (downloads everything)**
 ```bash
@@ -18,94 +18,22 @@ sclaw
 **Option 3: Clone and run**
 ```bash
 git clone https://github.com/nixfred/docker-claude-sandbox.git
-cd docker-claude-sandbox && docker-compose up -d && docker exec -it claude-sandbox bash
-```
-
-**Option 4: Use setup script (asks for container name)**
-```bash
-git clone https://github.com/nixfred/docker-claude-sandbox.git
 cd docker-claude-sandbox && ./run.sh
 ```
 
-**Option 5: Direct docker-compose (most portable)**
-```bash
-curl -O https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/{docker-compose.yml,Dockerfile}
-docker-compose up -d && docker exec -it claude-sandbox bash
-```
+**What you get:** Ubuntu 22.04 + **Claude Code pre-installed** + Node.js 18+ + Essential Python tools + Persistent `/workspace`
 
-**What you get:** Ubuntu 22.04 + **Claude Code installed globally** + Node.js 18+ + Essential Python tools + Git + Network utilities + Persistent `/workspace`
-
-## ✨ **OPTIMIZED FOR CLAUDE CODE**
+## ✨ Features
 
 **This container is specifically designed for Claude Code:**
-- ✅ **Claude Code pre-installed globally** - Just run `claude-code` to start
+- ✅ **Claude Code pre-installed globally** - Just run `claude` to start
 - ✅ **Node.js 18+** - Required runtime for Claude Code
-- ✅ **Essential Python stack** - Core libraries for development
+- ✅ **Essential Python stack** - Core libraries for development (requests, pytest, black, flake8, pylint)
 - ✅ **Minimal footprint** - Only includes what Claude Code needs
-- ✅ **Verbose build process** - See exactly what's being installed
-- ✅ **No ports needed** - Claude Code is CLI-based, no networking required
+- ✅ **No ports needed** - Claude Code is CLI-based
 
----
+## 🎯 Welcome Experience
 
-## 🚀 Quick Start
-
-That's it! The setup will:
-- ✅ **Claude Code ready** - Pre-installed and ready to use
-- ✅ **Portable configuration** - Standard docker-compose.yml approach
-- ✅ **Essential Python stack** - Development tools without bloat
-- ✅ **Network & system tools** - ssh, curl, git, and more
-- ✅ **Self-contained environment** - No external dependencies
-- ✅ **Security hardened** - Latest updates, non-root user
-- ✅ **Verbose build process** - See every installation step
-
-## 📁 Multiple Ways to Use
-
-### Option 1: With Setup Script (Recommended)
-```bash
-git clone https://github.com/nixfred/docker-claude-sandbox.git
-cd docker-claude-sandbox
-./run.sh
-```
-**Benefits:**
-- Always prompts for custom container name (default: claude-sandbox)
-- Works with both local and remote execution (`curl ... | bash`)
-- Handles existing container conflicts with interactive prompts
-- Automatically enters container and starts Claude Code
-
-### Option 2: Direct Docker Compose
-```bash
-git clone https://github.com/nixfred/docker-claude-sandbox.git
-cd docker-claude-sandbox
-docker-compose up -d
-docker exec -it claude-sandbox bash
-```
-
-### Option 3: Download and Compose
-```bash
-curl -O https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/docker-compose.yml
-curl -O https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/Dockerfile
-docker-compose up -d
-```
-
-## ✨ Key Features
-
-### 🛡️ **Claude Code Optimized Environment**
-- **Claude Code pre-installed globally** - Ready to use immediately
-- **Node.js 18+** - Required runtime environment
-- Ubuntu 22.04 with latest security updates
-- Essential Python stack (requests, pytest, black, flake8, pylint)
-- Network tools (nmap, tcpdump, ssh, telnet, traceroute)
-- System tools (neofetch, mc, htop, screen, tmux)
-- Non-root `coder` user with sudo access
-
-### 📊 **Portable Configuration**
-- Standard docker-compose.yml for maximum portability
-- No complex setup scripts required
-- Version-controlled configuration
-- Easy customization of ports and volumes
-- CI/CD friendly
-
-### 🤖 **Claude Code Ready**
 When you enter the container, you get a beautiful welcome message:
 ```
 ╔══════════════════════════════════════════════════════════════════╗
@@ -116,213 +44,60 @@ When you enter the container, you get a beautiful welcome message:
 ╚══════════════════════════════════════════════════════════════════╝
 ```
 
-Features:
-- **Claude Code installed globally** - Just run `claude`
-- **Beautiful welcome experience** - Clear instructions and available tools
-- **Interactive software installation** - Ask Claude to install what you need with explanations
-- Node.js 18+ runtime for Claude Code requirements
-- Persistent `/workspace` directory for your code
-- Pre-configured development environment
+## 🚀 Usage
 
-## 🎯 Essential Toolset for Claude Code
+### Quick Access with FeNix
+```bash
+sclaw  # From anywhere - starts container and enters Claude Code
+```
 
-- **🤖 Claude Code**: Pre-installed globally - just run `claude` to start
-- **⚡ Node.js 18+**: Required runtime environment for Claude Code
-- **🛡️ Safe Environment**: Completely isolated from your host system
-- **🐍 Essential Python Stack**: Python 3 + pip + requests, pytest, black, flake8, pylint
-- **🔧 Development Tools**: git (version control only)
-- **🌐 Network Tools**: curl (for downloads only)  
-- **💾 Persistent Storage**: Your code survives container restarts in `/workspace`
-- **🔌 No Ports**: Claude Code is CLI-based - no networking required
+### Manual Access
+```bash
+# Enter container and start Claude Code
+docker exec -it claude-sandbox bash -c "cd /workspace && claude"
 
-## 🏗️ Architecture
-
-### 📦 **Portable Design**
-- Standard docker-compose.yml with all configuration
-- Self-contained Dockerfile with comprehensive toolset  
-- Optional run.sh for convenience (downloads compose files)
-- No external dependencies or complex setup
-
-### 🔧 **Container Features**
-- Ubuntu 22.04 base with security updates
-- Non-root `coder` user with passwordless sudo
-- Persistent `/workspace` volume for code storage
-- Fixed container name `claude-sandbox` for consistency
-- Built-in help system and neofetch display
-
-## 📖 Usage Examples
+# Or just enter container
+docker exec -it claude-sandbox bash
+```
 
 ### Inside the Container
 ```bash
 # Start Claude Code
 claude
 
-# Just run Claude Code - that's it!
-# Everything else is handled through Claude Code conversation
-
-# Test Node.js and Python environment
-node --version
-python3 -c "import requests, pytest; print('Essential Python tools ready!')"
-
-# Test basic connectivity
-curl -s https://httpbin.org/ip
-
-# Create and test code - ask Claude to install editor first!
+# Your workspace persists between sessions
 cd /workspace
-# Ask Claude: "Install nano because I need to edit files"
-# Then: nano mycode.py && python3 mycode.py
+
+# Ask Claude to install tools as needed:
+# "Install vim because I need to edit files"
+# "Install ssh because I need to clone repos" 
+# "Install htop because I need to monitor processes"
 ```
-
-### Claude Code Integration
-1. **Setup script automatically starts Claude Code**:
-   - Run `./run.sh` or use the one-liner and Claude Code starts automatically
-   - No manual steps needed - goes straight to Claude Code interface
-
-2. **Manual access if needed**:
-   ```bash
-   docker exec -it claude-sandbox bash -c "cd /workspace && claude"
-   ```
-
-3. **Create and test code safely in your workspace**:
-   ```bash
-   # Your workspace persists between sessions
-   cd /workspace
-   nano my_script.py
-   python3 my_script.py
-   ```
-
-4. **Ask Claude to install tools as needed**:
-   ```bash
-   # Example requests:
-   # "Install vim because I need to edit files"
-   # "Install ssh because I need to clone private repos" 
-   # "Install htop because I need to monitor processes"
-   
-   # Python tools are pre-installed:
-   black my_script.py  # Format code
-   pytest              # Run tests
-   ```
 
 ## 🔧 Container Management
 
 ```bash
-# Standard docker-compose commands
-docker-compose up -d          # Start container
-docker-compose down           # Stop and remove container
-docker-compose logs           # View logs
-docker-compose build --no-cache  # Rebuild container
+# Start container
+docker-compose up -d
 
-# Container access and status (replace 'claude-sandbox' with your container name)
-docker exec -it claude-sandbox bash   # Enter container (default name)
-docker exec -it your-name bash        # Enter container (custom name)
-docker ps | grep claude               # Check status
-docker logs your-container-name       # View container logs
+# Stop container
+docker-compose down
 
-# Volume management
-docker volume ls | grep claude        # Check persistent volume
-docker-compose down -v                # Remove container and volume
+# View logs
+docker-compose logs
+
+# Rebuild container
+docker-compose build --no-cache
 ```
 
-### Container Naming
-The setup script (`./run.sh`) now always asks for a container name, even when run via `curl | bash`:
-```
-🐳 Container Configuration
-===============================
-
-Container name [claude-sandbox]: your-custom-name
-```
-- Press **Enter** for default name `claude-sandbox`
-- Type custom name for multiple projects (e.g., `project1-claude`, `testing-env`)
-- Works correctly with both local execution (`./run.sh`) and remote execution (`curl ... | bash`)
-- Handles existing container conflicts automatically with interactive prompts
-
-## 🌐 No Ports Required
-
-Claude Code is a CLI tool that doesn't require any port mappings. The container runs in isolation without network services:
-
-```bash
-# Claude Code works entirely through the terminal
-claude
-
-# No ports needed - everything is command-line based
-# If you need to test web applications, you can temporarily add ports to docker-compose.yml
-```
-
-## 📊 System Requirements
-
-- **Docker** installed and running
-- **4GB+ RAM** (recommended for larger projects)
-- **2GB+ disk space** (for container and examples)
-
-**Tested on:**
-- ✅ Linux (Ubuntu, Debian, CentOS, Arch)
-- ✅ macOS (Intel & Apple Silicon)
-- ✅ Windows (with Docker Desktop)
-- ✅ Raspberry Pi (ARM64)
-
-## 🎯 Perfect For
-
-- **Claude Code development** with pre-installed runtime and tools
-- **Safe code testing** without affecting your host system
-- **Learning new frameworks** in a clean, isolated environment  
-- **Quick prototyping** with no setup hassle
-- **Code review** of AI-generated code
-- **Teaching/workshops** with consistent, reproducible environments
-- **Cross-platform development** with guaranteed consistency
-
-## 🚨 Troubleshooting
-
-### **Docker Issues**
-```bash
-# Docker not found?
-# Install: https://docs.docker.com/get-docker/
-
-# Permission denied?
-sudo usermod -aG docker $USER
-# Then log out and back in
-
-# Container won't start?
-docker system prune  # Clean up
-./run.sh --help      # Check options
-```
-
-### **Port Conflicts**
-The V2 smart detection should handle this automatically, but if you still have issues:
-```bash
-# Check what's using ports
-lsof -i :8000
-netstat -tulpn | grep :8000
-
-# Use different ports manually
-# When prompted, enter: 8080,3001,8888
-```
-
-### **Container Access Issues**
-```bash
-# Can't enter container?
-docker ps  # Check if running
-docker logs claude-sandbox  # Check logs
-docker exec -it claude-sandbox bash  # Force entry
-```
-
-## 💡 Pro Tips
-
-### **Quick Access Alias**
+## 💡 Quick Access Alias
 
 **For FeNix Users:**
-The `sclaw` function is automatically available and provides the ultimate convenience:
-```bash
-sclaw  # From anywhere - starts container and enters Claude Code
-```
+The `sclaw` function is automatically available.
 
 **For Others:**
-Add to your `~/.bashrc` or `~/.zshrc`:
+Add to your `~/.bashrc`:
 ```bash
-alias claude-sandbox='docker exec -it claude-sandbox bash -c "cd /workspace && claude"'
-alias claude-logs='docker logs claude-sandbox'
-alias claude-bash='docker exec -it claude-sandbox bash'
-
-# Or create your own 'sclaw' equivalent:
 sclaw() {
     cd /path/to/docker-claude-sandbox
     if ! docker ps --format "{{.Names}}" | grep -q "claude-sandbox"; then
@@ -333,73 +108,48 @@ sclaw() {
 }
 ```
 
-### **VS Code Integration**
-Install the "Dev Containers" extension and attach to the running container for a full IDE experience.
+## 📋 What's Included
 
-### **File Sharing**
+- **Claude Code**: Pre-installed globally
+- **Node.js 18+**: Required runtime
+- **Python 3**: With essential packages (requests, pytest, black, flake8, pylint)
+- **Git**: Version control
+- **curl**: For downloads
+- **apt & sudo**: For installing additional software through Claude
+
+## 🎯 Perfect For
+
+- **Claude Code development** with pre-installed runtime
+- **Safe code testing** without affecting your host system
+- **Learning and prototyping** in an isolated environment
+- **Consistent development** across different machines
+
+## 🚨 Troubleshooting
+
 ```bash
-# Copy files to container
-docker cp myfile.py claude-sandbox:/workspace/
+# Container won't start?
+docker system prune -f
 
-# Copy files from container  
-docker cp claude-sandbox:/workspace/output.txt ./
+# Can't enter container?
+docker ps  # Check if running
+docker logs claude-sandbox  # Check logs
+
+# Rebuild from scratch
+docker-compose down -v
+docker-compose build --no-cache
+docker-compose up -d
 ```
-
-## 🤝 Contributing
-
-Found a bug? Have an idea? 
-
-1. **Fork** the repository
-2. **Create** a feature branch
-3. **Test** with `./run.sh`
-4. **Submit** a pull request
 
 ## 📄 License
 
-MIT License - Use it however you want!
+MIT License
 
-## 🆘 Support
+---
 
-- **Issues**: [GitHub Issues](https://github.com/nixfred/docker-claude-sandbox/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/nixfred/docker-claude-sandbox/discussions)
-- **Documentation**: This README + inline help (`help` command in container)
-
-## 🎉 Quick Test
-
-Ready to try it? Run this and be coding in 2 minutes:
+**Ready to try it?**
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
 ```
 
-**Example session:**
-```bash
-🤖 Docker Claude Sandbox V2
-🔍 Scanning for available ports...
-✓ Found available ports: 8001 8002 8003
-
-Container name [claude-sandbox]: ⏎
-Workspace directory [workspace]: ⏎  
-Ports to expose [8001,8002,8003]: ⏎
-Auto-start container? [Y/n]: ⏎
-
-🏗️ Building optimized Docker image...
-🚀 Starting enhanced container...
-🎉 Setup complete!
-
-# You're now inside the container with:
-# - Python 3 + popular packages
-# - Node.js + development tools  
-# - Persistent /workspace directory
-# - Port forwarding configured
-# - Claude AI integration guide
-
-coder@claude-sandbox:/workspace$ help
-# Shows comprehensive guide...
-```
-
----
-
-**Happy coding! 🚀** 
-
-*Built for testing Claude AI code safely, but perfect for any development project.*
+*Built specifically for running Claude Code safely in an isolated environment.*

@@ -228,14 +228,16 @@ main() {
     
     # Always try to enter the container and start Claude Code
     if [ -c /dev/tty ]; then
+        echo -e "${CYAN}🚀 Launching Claude Code in container...${NC}"
+        echo ""
         # Start Claude Code automatically in the container
         docker exec -it "$CONTAINER_NAME" bash -c "cd /workspace && claude"
     else
         echo -e "${YELLOW}Container is ready! Access with:${NC}"
-        echo "  docker exec -it $CONTAINER_NAME bash"
+        echo "  docker exec -it $CONTAINER_NAME bash -c \"cd /workspace && claude\""
         echo ""
-        echo -e "${CYAN}Or create an alias and start Claude:${NC}"
-        echo "  alias claude-sandbox='docker exec -it $CONTAINER_NAME bash -c \"cd /workspace && claude\"'"
+        echo -e "${CYAN}Quick alias for future use:${NC}"
+        echo "  alias sclaw='docker exec -it $CONTAINER_NAME bash -c \"cd /workspace && claude\"'"
     fi
 }
 
@@ -268,7 +270,7 @@ case "${1:-}" in
         echo ""
         echo "Or use docker-compose directly:"
         echo "  docker-compose up -d"
-        echo "  docker exec -it claude-sandbox bash"
+        echo "  docker exec -it claude-sandbox bash -c \"cd /workspace && claude\""
         exit 0
         ;;
     *)
