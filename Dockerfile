@@ -90,15 +90,13 @@ ENV HOME=/home/coder
 
 # Set up shell environment with welcome message
 RUN echo 'export PS1="\[\033[0;32m\]\u@claude-sandbox\[\033[00m\]:\[\033[0;34m\]\w\[\033[00m\]\$ "' >> /home/coder/.bashrc && \
-    echo 'cd /${WORKSPACE}' >> /home/coder/.bashrc && \
+    echo 'cd /workspace' >> /home/coder/.bashrc && \
     echo '' >> /home/coder/.bashrc && \
     echo 'echo ""' >> /home/coder/.bashrc && \
-    echo 'echo "    ╔══════════════════════════════════════════════════════════════════╗"' >> /home/coder/.bashrc && \
-    echo 'echo "    ║    🤖 Claude Code Sandbox Ready!                                ║"' >> /home/coder/.bashrc && \
-    echo 'echo "    ║    🚀 Start Claude Code: claude                                 ║"' >> /home/coder/.bashrc && \
-    echo 'echo "    ║    📦 Need software? Tell Claude why you need it!               ║"' >> /home/coder/.bashrc && \
-    echo 'echo "    ║    ✅ Available: Node.js, Python3, Git, curl, apt, sudo        ║"' >> /home/coder/.bashrc && \
-    echo 'echo "    ╚══════════════════════════════════════════════════════════════════╝"' >> /home/coder/.bashrc && \
+    echo 'echo "Claude Code Sandbox Ready!"' >> /home/coder/.bashrc && \
+    echo 'echo "Start Claude Code: claude"' >> /home/coder/.bashrc && \
+    echo 'echo "Need software? Tell Claude why you need it!"' >> /home/coder/.bashrc && \
+    echo 'echo "Available: Node.js, Python3, Git, curl, apt, sudo"' >> /home/coder/.bashrc && \
     echo 'echo ""' >> /home/coder/.bashrc
 
 
