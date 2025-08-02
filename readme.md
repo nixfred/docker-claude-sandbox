@@ -29,6 +29,7 @@ docker run -it frednix/claude-sandbox:latest
 
 **ARM64 Systems (Raspberry Pi, Apple Silicon):**
 ```bash
+docker pull frednix/claude-sandbox:latest
 docker run -it --platform linux/arm64 frednix/claude-sandbox:latest
 ```
 
@@ -122,11 +123,13 @@ docker run -it frednix/claude-sandbox:latest
 
 **ARM64 Systems (if auto-detection fails):**
 ```bash
+docker pull frednix/claude-sandbox:latest
 docker run -it --platform linux/arm64 frednix/claude-sandbox:latest
 ```
 
 **x86_64 Systems (if auto-detection fails):**
 ```bash
+docker pull frednix/claude-sandbox:latest
 docker run -it --platform linux/amd64 frednix/claude-sandbox:latest
 ```
 
