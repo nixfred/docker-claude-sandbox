@@ -7,7 +7,7 @@ This document provides a comprehensive guide for AI assistants to understand, mo
 The Docker Claude Sandbox is a **production-ready**, cross-platform containerized environment specifically designed for Claude Code development. **v1.2.3 represents a mature, tested system** with extensive validation across multiple platforms and critical bug fixes.
 
 **Current Status**:
-- ✅ **Tested and validated** on Linux ARM64 (Raspberry Pi), Linux x86_64, macOS Intel/Apple Silicon
+- ✅ **Tested and validated** on Linux ARM64 (Raspberry Pi), Linux x86_64, macOS Apple Silicon
 - ✅ **Cross-platform compatibility** with intelligent platform-specific adaptations
 - ✅ **Robust error handling** with comprehensive fallback strategies
 - ⚠️ **Known issues identified** but documented with workarounds

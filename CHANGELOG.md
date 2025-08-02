@@ -97,7 +97,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cross-platform Docker environment for Claude Code development
 - Ubuntu 22.04 base with Claude Code pre-installed
 - Intelligent setup script with platform-specific optimizations
-- Support for Linux ARM64/x86_64 and macOS Intel/Apple Silicon
+- Support for Linux ARM64/x86_64 and macOS Apple Silicon (Intel should work but untested)
 - TTY intelligence for auto-entry vs manual commands
 - Persistent workspace with volume mounting
 - Non-root security model with `coder` user
@@ -109,7 +109,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ✅ Ubuntu 22.04 x86_64
 - ✅ Linux Mint Intel x86_64
 - ✅ Ubuntu in Parallels (Virtual machine)
-- ✅ macOS Intel (Docker Desktop + Colima)
+- 🟡 macOS Intel (Should work - Docker Desktop + Colima compatibility)
 - ✅ macOS Apple Silicon
 - ✅ All major Linux distributions (Debian, Fedora, Arch)
 

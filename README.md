@@ -32,7 +32,7 @@ curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/
 - ✅ **Arch/Manjaro** (pacman package manager)
 
 ### macOS Environments  
-- ✅ **macOS Intel** (Docker Desktop + Colima compatibility)
+- 🟡 **macOS Intel** (Should work - Docker Desktop + Colima compatibility)
 - ✅ **macOS Apple Silicon** (Native ARM64 support)
 
 ### Virtualization & Containers
@@ -44,7 +44,9 @@ curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/
 - ✅ **ARM64/aarch64** (Raspberry Pi, Apple Silicon)
 - ✅ **x86_64/amd64** (Intel/AMD processors)
 
-All combinations tested with Node.js 20, Claude Code installation, and container functionality.
+**Legend**: ✅ Tested and confirmed working | 🟡 Should work but untested
+
+All ✅ combinations tested with Node.js 20, Claude Code installation, and container functionality.
 
 ## 📋 System Requirements
 
@@ -393,7 +395,7 @@ For technical implementation details, see:
 ## 🏷️ Version Information
 
 - **Current version**: v1.2.3
-- **Tested platforms**: Linux ARM64/x86_64, macOS Intel/Apple Silicon  
+- **Tested platforms**: Linux ARM64/x86_64, macOS Apple Silicon (Intel untested)  
 - **Docker compatibility**: 20.10+, Buildx optional
 - **Base image**: Ubuntu 22.04 LTS
 
