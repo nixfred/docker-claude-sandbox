@@ -9,13 +9,7 @@
 curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
 ```
 
-**Option 2: FeNix Users - Ultimate Convenience**
-```bash
-# If you have FeNix, just run this from anywhere:
-sclaw
-```
-
-**Option 3: Clone and run**
+**Option 2: Clone and run**
 ```bash
 git clone https://github.com/nixfred/docker-claude-sandbox.git
 cd docker-claude-sandbox && ./run.sh
@@ -46,12 +40,7 @@ When you enter the container, you get a beautiful welcome message:
 
 ## 🚀 Usage
 
-### Quick Access with FeNix
-```bash
-sclaw  # From anywhere - starts container and enters Claude Code
-```
-
-### Manual Access
+### Access the Container
 ```bash
 # Enter container and start Claude Code
 docker exec -it claude-sandbox bash -c "cd /workspace && claude"
@@ -92,13 +81,9 @@ docker-compose build --no-cache
 
 ## 💡 Quick Access Alias
 
-**For FeNix Users:**
-The `sclaw` function is automatically available.
-
-**For Others:**
-Add to your `~/.bashrc`:
+Add this function to your `~/.bashrc` for quick access:
 ```bash
-sclaw() {
+claude-sandbox() {
     cd /path/to/docker-claude-sandbox
     if ! docker ps --format "{{.Names}}" | grep -q "claude-sandbox"; then
         docker-compose up -d
