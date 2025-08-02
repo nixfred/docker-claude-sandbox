@@ -228,11 +228,20 @@ main() {
     # Wait a moment for container to be fully ready
     sleep 2
     
-    echo -e "${GREEN}✅ Container ready! Entering container...${NC}"
+    echo -e "${GREEN}✅ Container ready!${NC}"
     echo ""
     
-    # Enter the container and start bash (which will show welcome message)
-    exec docker exec -it "$CONTAINER_NAME" bash
+    # Only auto-enter if we have a real TTY (not piped)
+    if [ -t 0 ] && [ -t 1 ]; then
+        echo -e "${CYAN}Entering container...${NC}"
+        exec docker exec -it "$CONTAINER_NAME" bash
+    else
+        echo -e "${YELLOW}To enter the container, run:${NC}"
+        echo "  docker exec -it $CONTAINER_NAME bash"
+        echo ""
+        echo -e "${YELLOW}To start Claude Code directly:${NC}"
+        echo "  docker exec -it $CONTAINER_NAME bash -c 'cd /workspace && claude'"
+    fi
 }
 
 # Handle command line arguments
