@@ -1,4 +1,4 @@
-# 🤖 Docker Claude Sandbox v1.4.0
+# 🤖 Docker Claude Sandbox v1.4.1
 
 ![CI](https://img.shields.io/github/actions/workflow/status/nixfred/docker-claude-sandbox/ci.yml?branch=main&label=CI&color=brightgreen)
 ![Docker Build](https://img.shields.io/github/actions/workflow/status/nixfred/docker-claude-sandbox/docker-build.yml?branch=main&label=Docker%20Build&color=blue)
@@ -126,7 +126,7 @@ cd docker-claude-sandbox
 
 ### Version-Pinned Install
 ```bash
-curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.4.0/run.sh | bash
+curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.4.1/run.sh | bash
 ```
 
 ### Cache-Busting Install (Force Latest)
@@ -317,7 +317,7 @@ docker exec -it YOUR_CONTAINER_NAME bash -c "cd /workspace && code ."
 # .github/workflows/test.yml
 - name: Setup Claude Code Environment
   run: |
-    curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.4.0/run.sh | bash
+    curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.4.1/run.sh | bash
     docker exec claude-sandbox claude --version
 ```
 
@@ -401,7 +401,7 @@ docker system prune -f
 **"Input device is not a TTY" error**
 ```bash
 # Use specific commit to bypass CDN cache
-curl -fsSL "https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.4.0/run.sh" | bash
+curl -fsSL "https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.4.1/run.sh" | bash
 
 # Or clone locally
 git clone https://github.com/nixfred/docker-claude-sandbox.git
@@ -431,7 +431,7 @@ For technical implementation details, see:
 
 ## 🏷️ Version Information
 
-- **Current version**: v1.4.0
+- **Current version**: v1.4.1
 - **Quality assurance**: ✅ All features passing automated CI/CD testing
 - **Tested platforms**: Linux ARM64/x86_64, macOS Apple Silicon (Intel untested)  
 - **Docker compatibility**: 20.10+, Buildx optional

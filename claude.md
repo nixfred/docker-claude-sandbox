@@ -2,9 +2,9 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Architecture Overview - v1.4.0 Production
+## Architecture Overview - v1.4.1 Production
 
-This repository creates a **cross-platform Docker environment** optimized specifically for Claude Code development. After extensive testing and refinement, **v1.4.0 represents a production-grade system** with intelligent platform adaptation and **comprehensive automated testing validation**.
+This repository creates a **cross-platform Docker environment** optimized specifically for Claude Code development. After extensive testing and refinement, **v1.4.1 represents a production-grade system** with intelligent platform adaptation and **comprehensive automated testing validation**.
 
 ### Core Components
 

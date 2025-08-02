@@ -2,9 +2,9 @@
 
 This document provides a comprehensive guide for AI assistants to understand, develop, modify, and maintain the Docker Claude Sandbox project from first principles.
 
-## Project Overview - v1.4.0 Status
+## Project Overview - v1.4.1 Status
 
-The Docker Claude Sandbox is a **production-ready**, cross-platform containerized environment specifically designed for Claude Code development. **v1.4.0 represents a mature, tested system** with extensive validation across multiple platforms and critical bug fixes.
+The Docker Claude Sandbox is a **production-ready**, cross-platform containerized environment specifically designed for Claude Code development. **v1.4.1 represents a mature, tested system** with extensive validation across multiple platforms and critical bug fixes.
 
 **🏆 Quality Assurance**: All features are automatically validated through comprehensive CI/CD pipeline with multi-platform testing and security scanning.
 
