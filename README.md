@@ -12,6 +12,10 @@ curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/
 git clone https://github.com/nixfred/docker-claude-sandbox.git
 cd docker-claude-sandbox && docker-compose up -d && docker exec -it claude-sandbox bash
 
+# Option 2b: Use setup script (asks for container name)
+git clone https://github.com/nixfred/docker-claude-sandbox.git
+cd docker-claude-sandbox && ./run.sh
+
 # Option 3: Direct docker-compose (most portable)
 curl -O https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/{docker-compose.yml,Dockerfile}
 docker-compose up -d && docker exec -it claude-sandbox bash
@@ -44,19 +48,23 @@ That's it! The setup will:
 
 ## 📁 Multiple Ways to Use
 
-### Option 1: Direct Docker Compose (Recommended)
+### Option 1: With Setup Script (Recommended)
+```bash
+git clone https://github.com/nixfred/docker-claude-sandbox.git
+cd docker-claude-sandbox
+./run.sh
+```
+**Benefits:**
+- Asks for custom container name (default: claude-sandbox)
+- Handles existing container conflicts
+- Automatically enters container when ready
+
+### Option 2: Direct Docker Compose
 ```bash
 git clone https://github.com/nixfred/docker-claude-sandbox.git
 cd docker-claude-sandbox
 docker-compose up -d
 docker exec -it claude-sandbox bash
-```
-
-### Option 2: With Setup Script
-```bash
-git clone https://github.com/nixfred/docker-claude-sandbox.git
-cd docker-claude-sandbox
-./run.sh
 ```
 
 ### Option 3: Download and Compose
@@ -183,15 +191,28 @@ docker-compose down           # Stop and remove container
 docker-compose logs           # View logs
 docker-compose build --no-cache  # Rebuild container
 
-# Container access and status
-docker exec -it claude-sandbox bash   # Enter container
-docker ps | grep claude-sandbox       # Check status
-docker logs claude-sandbox            # View container logs
+# Container access and status (replace 'claude-sandbox' with your container name)
+docker exec -it claude-sandbox bash   # Enter container (default name)
+docker exec -it your-name bash        # Enter container (custom name)
+docker ps | grep claude               # Check status
+docker logs your-container-name       # View container logs
 
 # Volume management
 docker volume ls | grep claude        # Check persistent volume
 docker-compose down -v                # Remove container and volume
 ```
+
+### Container Naming
+The setup script (`./run.sh`) asks for a container name:
+```
+🐳 Container Configuration
+===============================
+
+Container name [claude-sandbox]: your-custom-name
+```
+- Press **Enter** for default name `claude-sandbox`
+- Type custom name for multiple projects (e.g., `project1-claude`, `testing-env`)
+- Handles existing container conflicts automatically
 
 ## 🌐 No Ports Required
 

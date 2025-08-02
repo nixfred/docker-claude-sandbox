@@ -32,23 +32,34 @@ This repository creates a lightweight Docker environment optimized specifically 
 
 ### Container Lifecycle
 ```bash
-# Build and start (most common)
+# Recommended: Use setup script (asks for container name)
+./run.sh
+
+# Or manual setup
 docker-compose up -d
 
 # Rebuild after Dockerfile changes
 docker-compose build --no-cache && docker-compose up -d
 
-# Enter running container
-docker exec -it claude-sandbox bash
+# Enter running container (replace with your container name)
+docker exec -it claude-sandbox bash  # Default name
+docker exec -it your-name bash       # Custom name
 
 # View logs and status
 docker-compose logs
-docker ps | grep claude-sandbox
+docker ps | grep claude
 
 # Stop and cleanup
 docker-compose down
 docker system prune -f  # Remove unused images
 ```
+
+### Container Naming
+The `./run.sh` script provides container name customization:
+- Interactive prompt: `Container name [claude-sandbox]: `
+- Default: `claude-sandbox` (just press Enter)
+- Custom names: `project1-claude`, `testing-env`, etc.
+- Automatic conflict resolution for existing containers
 
 ### Testing Changes
 ```bash
