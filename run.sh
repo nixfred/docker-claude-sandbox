@@ -1,5 +1,5 @@
 #!/bin/bash
-# Docker Claude Sandbox - Portable One-Command Setup v1.2.4
+# Docker Claude Sandbox - Portable One-Command Setup v1.2.5
 # Usage: curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
 
 set -e
@@ -114,19 +114,23 @@ download_config() {
     
     echo -e "${CYAN}📥 Downloading portable configuration...${NC}"
     
-    # Download docker-compose.yml
+    # Download docker-compose.yml with progress
+    echo -e "${BLUE}    📄 Downloading docker-compose.yml...${NC}"
     if ! curl -fsSL "$base_url/docker-compose.yml" -o docker-compose.yml; then
         echo -e "${RED}❌ Failed to download docker-compose.yml${NC}"
         exit 1
     fi
+    echo -e "${GREEN}    ✅ docker-compose.yml downloaded${NC}"
     
-    # Download Dockerfile
+    # Download Dockerfile with progress
+    echo -e "${BLUE}    📄 Downloading Dockerfile...${NC}"
     if ! curl -fsSL "$base_url/Dockerfile" -o Dockerfile; then
         echo -e "${RED}❌ Failed to download Dockerfile${NC}"
         exit 1
     fi
+    echo -e "${GREEN}    ✅ Dockerfile downloaded${NC}"
     
-    echo -e "${GREEN}✓ Configuration files downloaded${NC}"
+    echo -e "${GREEN}✓ All configuration files ready${NC}"
 }
 
 # Setup project directory (simplified)
@@ -224,6 +228,8 @@ main() {
     fi
     
     echo -e "${CYAN}🏗️  Building Claude Sandbox container...${NC}"
+    echo -e "${YELLOW}    This may take 2-5 minutes on first build (downloading Ubuntu + Node.js + Claude Code)${NC}"
+    echo ""
     
     # macOS/Colima compatibility fixes
     if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -259,7 +265,31 @@ main() {
     USER_TZ=$(timedatectl show --property=Timezone --value 2>/dev/null || echo "UTC")
     echo -e "${CYAN}🌍 Using timezone: $USER_TZ${NC}"
     
-    CONTAINER_NAME="$CONTAINER_NAME" TZ="$USER_TZ" docker-compose build || exit 1
+    echo -e "${CYAN}🔨 Starting build process...${NC}"
+    
+    # Build with progress indicators
+    if CONTAINER_NAME="$CONTAINER_NAME" TZ="$USER_TZ" docker-compose build --progress=plain 2>&1 | \
+        while IFS= read -r line; do
+            # Show key build stages with progress indicators
+            if [[ "$line" =~ "Step "[0-9]+/[0-9]+ ]]; then
+                echo -e "${BLUE}    📋 $line${NC}"
+            elif [[ "$line" =~ "Installing Node.js" ]]; then
+                echo -e "${GREEN}    ⚡ Installing Node.js runtime...${NC}"
+            elif [[ "$line" =~ "Installing Claude Code" ]] || [[ "$line" =~ "@anthropic-ai/claude-code" ]]; then
+                echo -e "${GREEN}    🤖 Installing Claude Code globally...${NC}"
+            elif [[ "$line" =~ "Installing.*Python" ]]; then
+                echo -e "${GREEN}    🐍 Setting up Python development environment...${NC}"
+            elif [[ "$line" =~ "Successfully built" ]] || [[ "$line" =~ "Successfully tagged" ]]; then
+                echo -e "${GREEN}    ✅ $line${NC}"
+            elif [[ "$line" =~ "ERROR" ]] || [[ "$line" =~ "failed" ]]; then
+                echo -e "${RED}    ❌ $line${NC}"
+            fi
+        done; then
+        echo -e "${GREEN}✅ Container build completed successfully!${NC}"
+    else
+        echo -e "${RED}❌ Container build failed${NC}"
+        exit 1
+    fi
     
     echo -e "${CYAN}🚀 Starting Claude Sandbox...${NC}"
     
@@ -336,19 +366,24 @@ main() {
     echo -e "${CYAN}🚀 Entering Claude Sandbox...${NC}"
     echo ""
     
-    # Wait for container to be ready (proper readiness check)
+    # Wait for container to be ready with progress indicator
     echo -e "${CYAN}⏳ Waiting for container to be ready...${NC}"
+    local progress_chars="/-\\|"
     for i in {1..60}; do
         if docker exec "$CONTAINER_NAME" echo "ready" >/dev/null 2>&1; then
-            echo -e "${GREEN}✅ Container ready!${NC}"
+            echo -e "\r${GREEN}✅ Container ready after ${i} seconds!${NC}"
             break
         fi
         if [ $i -eq 60 ]; then
-            echo -e "${RED}❌ Container failed to become ready after 60 seconds${NC}"
+            echo -e "\r${RED}❌ Container failed to become ready after 60 seconds${NC}"
             echo -e "${YELLOW}You can still try to enter manually:${NC}"
             echo "  docker exec -it $CONTAINER_NAME bash"
             exit 1
         fi
+        # Show spinning progress indicator
+        local char_index=$((i % 4))
+        local progress_char="${progress_chars:$char_index:1}"
+        printf "\r${BLUE}    ${progress_char} Checking container readiness... (${i}/60s)${NC}"
         sleep 1
     done
     echo ""
@@ -357,7 +392,7 @@ main() {
     # Check if we can actually allocate a TTY (not just if /dev/tty exists)
     if [ -t 0 ] && [ -t 1 ] && [ -c /dev/tty ]; then
         echo -e "${CYAN}Entering container...${NC}"
-        echo -e "${CYAN}Thank you for using Docker Claude Sandbox v1.2.4${NC}"
+        echo -e "${CYAN}Thank you for using Docker Claude Sandbox v1.2.5${NC}"
         echo ""
         exec docker exec -it "$CONTAINER_NAME" bash
     else
@@ -373,7 +408,7 @@ main() {
         echo ""
         echo -e "${GREEN}✨ Your Claude Sandbox is ready for AI-powered development!${NC}"
         echo ""
-        echo -e "${CYAN}Thank you for using Docker Claude Sandbox v1.2.4${NC}"
+        echo -e "${CYAN}Thank you for using Docker Claude Sandbox v1.2.5${NC}"
     fi
 }
 

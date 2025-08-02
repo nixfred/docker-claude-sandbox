@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v1.2.5] - 2024-12-XX
+
+### Added
+- Comprehensive progress indicators for all long operations
+- Visual feedback during Docker builds with step-by-step progress
+- Spinning progress indicator for container readiness checks
+- Download progress for configuration files
+- Time-based readiness feedback (shows seconds elapsed)
+
+### Changed
+- Enhanced user experience during build process
+- Build output now shows key stages with emoji indicators
+- Container readiness check displays spinning progress with timer
+- Download operations provide clear step-by-step feedback
+
+### Fixed
+- No more silent periods during long Docker builds
+- Users now see clear progress during 2-5 minute build times
+- Eliminated confusion about whether build process is stuck
+
 ## [v1.2.4] - 2024-12-XX
 
 ### Added
@@ -153,6 +173,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **v1.2.2**: Documentation consistency and professionalization
 - **v1.2.3**: GitHub professionalization with license, issue templates, badges
 - **v1.2.4**: Timezone detection, filename modernization, portability improvements
+- **v1.2.5**: Comprehensive progress indicators and enhanced user experience
 
 ## Contributing
 

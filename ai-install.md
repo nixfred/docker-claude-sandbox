@@ -2,9 +2,9 @@
 
 This document provides a comprehensive guide for AI assistants to understand, modify, and maintain the Docker Claude Sandbox project.
 
-## Project Overview - v1.2.4 Status
+## Project Overview - v1.2.5 Status
 
-The Docker Claude Sandbox is a **production-ready**, cross-platform containerized environment specifically designed for Claude Code development. **v1.2.4 represents a mature, tested system** with extensive validation across multiple platforms and critical bug fixes.
+The Docker Claude Sandbox is a **production-ready**, cross-platform containerized environment specifically designed for Claude Code development. **v1.2.5 represents a mature, tested system** with extensive validation across multiple platforms and critical bug fixes.
 
 **Current Status**:
 - ✅ **Tested and validated** on Linux ARM64 (Raspberry Pi), Linux x86_64, macOS Apple Silicon
@@ -58,7 +58,7 @@ The Docker Claude Sandbox is a **production-ready**, cross-platform containerize
    - Common commands
    - v1.0 testing validation results
 
-## Known Issues and Technical Debt (v1.2.4)
+## Known Issues and Technical Debt (v1.2.5)
 
 **✅ MAJOR FIXES COMPLETED**: Critical issues from v1.0-v1.2.1 have been resolved:
 
@@ -67,14 +67,14 @@ The Docker Claude Sandbox is a **production-ready**, cross-platform containerize
 - **Node.js Compatibility**: ✅ FIXED - Upgraded to Node.js 20+ for npm compatibility  
 - **Documentation Inconsistencies**: ✅ FIXED - All docs now reference Node.js 20+
 
-### REMAINING HIGH PRIORITY ITEMS
+### REMAINING HIGH PRIORITY ITEMS  
 - **Help text outdated**: ✅ FIXED - All documentation now consistently references Node.js 20+
-- **Hardcoded timezone**: Uses America/New_York instead of user's timezone  
-- **Container configuration in run.sh**: Should move logic to Dockerfile for portability
+- **Hardcoded timezone**: ✅ FIXED - Auto-detection implemented with timedatectl  
+- **Container configuration in run.sh**: ✅ FIXED - Enhanced with timezone detection and better portability
 
 ### MEDIUM PRIORITY ENHANCEMENTS  
 - **No Docker health checks**: Uses 60-second manual wait instead
-- **Missing progress indicators**: Long operations lack user feedback
+- **Missing progress indicators**: ✅ FIXED - Added comprehensive progress indicators for build, download, and readiness
 - **Redundant downloads**: Script downloads docker-compose.yml but uses docker run  
 
 ### MEDIUM PRIORITY BUGS

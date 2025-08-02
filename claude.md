@@ -301,18 +301,18 @@ This welcome banner is configured in the Dockerfile's final RUN command (lines 8
 4. **GitHub release**: Create release with comprehensive notes
 5. **Documentation**: Update all .md files with new features/fixes
 
-## 📋 Outstanding Development Tasks (v1.2.2)
+## 📋 Outstanding Development Tasks (v1.2.5)
 
 ### 🔴 High Priority
 - **Update help text from Node.js 18+ to 20+** - ✅ COMPLETED - All documentation now consistently references Node.js 20+  
-- **Move container configuration logic to Dockerfile** - Improve portability
-- **Add timezone detection/configuration** - Better international user experience
+- **Move container configuration logic to Dockerfile** - ✅ COMPLETED - Enhanced with timezone detection
+- **Add timezone detection/configuration** - ✅ COMPLETED - Auto-detects user timezone with timedatectl
 
 ### 🟡 Medium Priority  
 - **Remove redundant docker-compose.yml download** - Script uses docker run instead
 - **Add Docker health checks** - Replace 60-second manual wait  
 - **Add container name validation feedback** - Real-time input validation
-- **Add progress indicators** - Better UX during long operations
+- **Add progress indicators** - ✅ COMPLETED - Added comprehensive progress indicators with emojis and spinners
 - **Create self-contained Dockerfile** - No external downloads needed
 
 ### 🟢 Low Priority
