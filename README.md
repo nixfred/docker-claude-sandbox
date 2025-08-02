@@ -6,7 +6,7 @@
 
 **Option 1: One command (downloads everything)**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
+curl -fsSL "https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh?$(date +%s)" | bash
 ```
 
 **Option 2: FeNix Users - Ultimate Convenience**
@@ -149,7 +149,7 @@ MIT License
 **Ready to try it?**
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
+curl -fsSL "https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh?$(date +%s)" | bash
 ```
 
 *Built specifically for running Claude Code safely in an isolated environment.*
