@@ -290,7 +290,7 @@ interactive_setup() {
             exit 0
         fi
     else
-        # Non-interactive mode (curl | bash)
+        # Non-interactive mode (curl | bash) - Force GitHub Update
         echo -e "${YELLOW}🚀 Non-interactive mode detected - using smart defaults${NC}"
         echo ""
         
