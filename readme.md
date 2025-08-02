@@ -1,4 +1,4 @@
-# 🤖 Docker Claude Sandbox v1.2.8
+# 🤖 Docker Claude Sandbox v1.2.9
 
 ![CI](https://img.shields.io/github/actions/workflow/status/nixfred/docker-claude-sandbox/ci.yml?branch=main&label=CI&color=brightgreen)
 ![Version](https://img.shields.io/github/v/release/nixfred/docker-claude-sandbox?label=version&color=blue)
@@ -103,7 +103,7 @@ cd docker-claude-sandbox
 
 ### Version-Pinned Install
 ```bash
-curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.2.8/run.sh | bash
+curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.2.9/run.sh | bash
 ```
 
 ### Cache-Busting Install (Force Latest)
@@ -128,7 +128,7 @@ curl -fsSL "https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main
 
 ### User Experience Excellence
 - 🎨 **Beautiful welcome banner** - Clear usage instructions
-- 📂 **Persistent workspace** - `/workspace` survives container restarts
+- 📂 **Persistent workspace** - `/workspace` survives container restarts, rebuilds, and system reboots
 - 🏷️ **Custom container names** - User-defined container naming
 - 🔄 **Intelligent image detection** - Handles all Docker naming patterns
 - 🛡️ **Non-root security** - Runs as `coder` user with sudo access
@@ -201,9 +201,13 @@ node --version    # Verify Node.js 20+
 python3 --version # Verify Python 3
 git --version     # Verify Git
 
-# Persistent workspace
+# Persistent workspace - your data is SAFE!
 cd /workspace
-# All files here survive container restarts!
+# All files here survive:
+# - Container restarts and stops
+# - Docker image rebuilds  
+# - System reboots and crashes
+# - Container removal (data persists in named volume)
 
 # Install additional software through Claude:
 # "Install vim because I need to edit configuration files"
@@ -285,7 +289,7 @@ docker exec -it YOUR_CONTAINER_NAME bash -c "cd /workspace && code ."
 # .github/workflows/test.yml
 - name: Setup Claude Code Environment
   run: |
-    curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.2.8/run.sh | bash
+    curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.2.9/run.sh | bash
     docker exec claude-sandbox claude --version
 ```
 
@@ -395,7 +399,7 @@ For technical implementation details, see:
 
 ## 🏷️ Version Information
 
-- **Current version**: v1.2.8
+- **Current version**: v1.2.9
 - **Tested platforms**: Linux ARM64/x86_64, macOS Apple Silicon (Intel untested)  
 - **Docker compatibility**: 20.10+, Buildx optional
 - **Base image**: Ubuntu 22.04 LTS

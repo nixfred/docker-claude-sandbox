@@ -7,13 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v1.2.9] - 2024-12-XX
+
+### Enhanced
+- **Environment customization** - ✅ COMPLETED - Auto-detects local timezone using timedatectl
+- **Workspace persistence** - Enhanced documentation clarity for `/workspace` data safety
+- **User experience** - No user prompts needed - automatic timezone detection and fixed workspace path
+
+### Documentation
+- **Workspace persistence** - Clarified that `/workspace` survives container restarts, rebuilds, and system reboots
+- **Data safety** - Enhanced explanation that user files (*.md, code, data) persist through all operations
+- **Environment variables** - Documented automatic timezone detection and fixed workspace path strategy
+- **GitHub CI explanation** - Added comprehensive explanation of how GitHub Actions CI works
+
+### Fixed
+- **Issue status accuracy** - Environment customization marked as ✅ IMPLEMENTED in contributing.md
+- **Feature documentation** - Better explanation of workspace persistence and data safety guarantees
+
+## [v1.2.8] - 2024-12-XX
+
 ### Added
 - **GitHub Actions CI workflow** - Comprehensive cross-platform testing automation
 - **Multi-job testing matrix** - Linux, macOS, Docker builds, security scanning
 - **Automated validation** - Bash syntax, docker-compose validation, build testing
 - **CI status badge** - Real-time build status visibility in README
 
-## [v1.2.8] - 2024-12-XX
+## [v1.2.7] - 2024-12-XX
 
 ### Fixed
 - **Critical documentation accuracy audit** - Fixed major inconsistencies across all files

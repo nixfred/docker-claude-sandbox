@@ -43,7 +43,7 @@ docker-compose build --no-cache  # Test build process
 - **No CI/CD pipeline** - ✅ FIXED - Added comprehensive GitHub Actions workflow with multi-platform testing
 
 ### 🟢 Low Priority Enhancements
-- **No environment customization** - Could allow custom TIMEZONE, WORKSPACE_PATH
+- **Environment customization** - ✅ IMPLEMENTED - Auto-detects local timezone, uses fixed `/workspace` path
 - **No resource limits** - Containers can consume unlimited CPU/memory
 - **Package versions unpinned** - Could cause reproducibility issues
 
@@ -79,9 +79,9 @@ Please include:
 
 ### Versioning (SemVer)
 Every commit must update version in 3 locations:
-1. `run.sh` line 2: `# Docker Claude Sandbox - Portable One-Command Setup v1.2.8`
-2. `run.sh` thank you messages: `Thank you for using Docker Claude Sandbox v1.2.8` (2 locations)
-3. `readme.md` line 1: `# 🤖 Docker Claude Sandbox v1.2.8`
+1. `run.sh` line 2: `# Docker Claude Sandbox - Portable One-Command Setup v1.2.9`
+2. `run.sh` thank you messages: `Thank you for using Docker Claude Sandbox v1.2.9` (2 locations)
+3. `readme.md` line 1: `# 🤖 Docker Claude Sandbox v1.2.9`
 
 **Version Format**: `vMAJOR.MINOR.PATCH`
 - **MAJOR**: Breaking changes affecting existing users
