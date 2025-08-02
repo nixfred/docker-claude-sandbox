@@ -304,7 +304,7 @@ This welcome banner is configured in the Dockerfile's final RUN command (lines 8
 ## 📋 Outstanding Development Tasks (v1.2.2)
 
 ### 🔴 High Priority
-- **Update help text from Node.js 18+ to 20+** - Documentation inconsistency  
+- **Update help text from Node.js 18+ to 20+** - ✅ COMPLETED - All documentation now consistently references Node.js 20+  
 - **Move container configuration logic to Dockerfile** - Improve portability
 - **Add timezone detection/configuration** - Better international user experience
 

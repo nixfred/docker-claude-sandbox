@@ -29,7 +29,7 @@ docker-compose build --no-cache  # Test build process
 ## 📋 Current Known Issues & Development Tasks
 
 ### 🔴 High Priority Issues
-- **Help text outdated** - References Node.js 18+ instead of 20+
+- **Help text outdated** - ✅ FIXED - All documentation now references Node.js 20+
 - **Container configuration in run.sh** - Should move logic to Dockerfile for better portability
 - **Hardcoded timezone** - Uses America/New_York instead of user's timezone
 

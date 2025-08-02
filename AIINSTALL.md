@@ -68,7 +68,7 @@ The Docker Claude Sandbox is a **production-ready**, cross-platform containerize
 - **Documentation Inconsistencies**: ✅ FIXED - All docs now reference Node.js 20+
 
 ### REMAINING HIGH PRIORITY ITEMS
-- **Help text outdated**: References Node.js 18+ instead of 20+ in some places
+- **Help text outdated**: ✅ FIXED - All documentation now consistently references Node.js 20+
 - **Hardcoded timezone**: Uses America/New_York instead of user's timezone  
 - **Container configuration in run.sh**: Should move logic to Dockerfile for portability
 
