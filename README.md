@@ -99,12 +99,11 @@ When you enter the container, you get:
 - **⚡ Node.js 18+**: Required runtime environment for Claude Code
 - **🛡️ Safe Environment**: Completely isolated from your host system
 - **🐍 Essential Python Stack**: Python 3 + pip + requests, pytest, black, flake8, pylint
-- **🔧 Development Tools**: git, vim, nano, mc (midnight commander), screen, tmux
+- **🔧 Development Tools**: git, vim, nano, mc (midnight commander), tmux
 - **🌐 Essential Network Tools**: curl, wget, ssh, ping (minimal networking tools)  
-- **📊 System Tools**: neofetch, htop, ps, screen, tmux, build-essential, cmake  
+- **📊 System Tools**: htop, ps, tmux  
 - **💾 Persistent Storage**: Your code survives container restarts in `/workspace`
 - **🔌 No Ports**: Claude Code is CLI-based - no networking required
-- **📋 Health Monitoring**: Built-in Docker health checks
 
 ## 🏗️ Architecture
 
@@ -128,8 +127,7 @@ When you enter the container, you get:
 # Start Claude Code
 claude-code
 
-# Show system info and available tools
-neofetch
+# Show available tools
 help
 
 # Test Node.js and Python environment

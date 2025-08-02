@@ -29,10 +29,8 @@ RUN echo "🔄 Updating package lists and system..." && \
     apt-get install -y --no-install-recommends \
     # Core utilities
     git vim nano tree less htop \
-    # System info and file manager
-    neofetch mc \
-    # Build tools  
-    build-essential make cmake \
+    # File manager
+    mc \
     # Complete Python stack
     python3 python3-pip python3-venv python3-dev python3-setuptools python3-wheel \
     # Essential network tools
@@ -45,7 +43,7 @@ RUN echo "🔄 Updating package lists and system..." && \
     # Text processing
     jq \
     # Additional utilities
-    file screen tmux \
+    file tmux \
     # Package management
     software-properties-common apt-transport-https ca-certificates \
     && echo "🧹 Cleaning up package cache..." && \
@@ -97,7 +95,6 @@ ENV HOME=/home/coder
 # Enhanced bashrc with neofetch and help system
 RUN echo "🎨 Setting up enhanced shell environment..." && \
     echo 'export PS1="\[\033[0;32m\]\u@claude-sandbox\[\033[00m\]:\[\033[0;34m\]\w\[\033[00m\]\$ "' >> /home/coder/.bashrc && \
-    echo 'neofetch' >> /home/coder/.bashrc && \
     echo 'cd /${WORKSPACE}' >> /home/coder/.bashrc && \
     echo 'echo "🤖 Claude Code sandbox ready! Use '\''claude-code'\'' to start. Type '\''help'\'' for tools."' >> /home/coder/.bashrc
 
@@ -110,13 +107,10 @@ RUN echo "ℹ️  Setting up help system..." && \
     echo '  echo "  Python: python3, pip3, black, flake8, pylint, pytest"' >> /home/coder/.bashrc && \
     echo '  echo "  Editors: vim, nano, mc (midnight commander)"' >> /home/coder/.bashrc && \
     echo '  echo "  Network: curl, wget, ssh, ping"' >> /home/coder/.bashrc && \
-    echo '  echo "  System: htop, neofetch, ps, screen, tmux"' >> /home/coder/.bashrc && \
+    echo '  echo "  System: htop, ps, tmux"' >> /home/coder/.bashrc && \
     echo '  echo "  Files: tree, tar, zip, unzip"' >> /home/coder/.bashrc && \
     echo '  echo "  Utils: git, jq, file"' >> /home/coder/.bashrc && \
     echo '}' >> /home/coder/.bashrc
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD python3 --version || exit 1
 
 CMD ["/bin/bash"]

@@ -15,7 +15,7 @@ This repository creates a lightweight Docker environment optimized specifically 
 - **Claude Code**: Pre-installed globally - just run `claude-code`
 - **Node.js 18+**: Required runtime for Claude Code
 - **Essential Python stack**: Core libraries without bloat (requests, pytest, black, flake8, pylint)
-- **Development tools**: git, vim, nano, mc, screen, tmux
+- **Development tools**: git, vim, nano, mc, tmux
 - **Network utilities**: ssh, curl, wget, ping (minimal essential tools)
 - **Verbose build process**: See exactly what's being installed during build
 
@@ -84,7 +84,6 @@ cd /tmp/test && docker-compose up -d
 - **Port mapping**: None required (Claude Code is CLI-based)
 - **Volume persistence**: `claude_sandbox_data` volume for `/workspace`
 - **Build args**: `WORKSPACE` variable controls internal directory name
-- **Health checks**: Python availability check every 30s
 - **Claude Code**: Globally installed during build process
 
 ## Optimized for Claude Code
@@ -94,8 +93,12 @@ cd /tmp/test && docker-compose up -d
 - Removed all port mappings (Claude Code is CLI-based)
 - Removed unnecessary Python packages (matplotlib, seaborn, jupyter)
 - Removed unnecessary network tools (nmap, tcpdump, wireshark, iptables)
+- Removed unnecessary health checks and monitoring
+- Removed heavy build tools (build-essential, make, cmake)
+- Removed custom networks and restart policies
+- Removed neofetch (just eye candy) and screen (tmux is sufficient)
 - Added verbose build output to show installation progress
-- Focused on minimal essential tools Claude Code actually needs
+- Focused on absolutely minimal essential tools Claude Code needs
 - Added container optimization environment variables
 
 ## Essential Commands for Claude Code
@@ -121,7 +124,7 @@ ls /workspace      # Check persistent workspace
 # - Git for version control
 # - Network tools (curl, wget, ssh, ping)
 # - Text editors (vim, nano, mc)
-# - System utilities (htop, ps, screen, tmux)
+# - System utilities (htop, ps, tmux)
 ```
 
 ## Troubleshooting

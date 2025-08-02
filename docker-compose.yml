@@ -17,20 +17,6 @@ services:
     environment:
       - TERM=xterm-256color
       - CONTAINER_NAME=claude-sandbox
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "python3", "--version"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-    networks:
-      - claude_network
-
 volumes:
   claude_sandbox_data:
     driver: local
-
-networks:
-  claude_network:
-    driver: bridge
