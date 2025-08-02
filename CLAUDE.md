@@ -301,14 +301,69 @@ This welcome banner is configured in the Dockerfile's final RUN command (lines 8
 4. **GitHub release**: Create release with comprehensive notes
 5. **Documentation**: Update all .md files with new features/fixes
 
-### Known Technical Debt
-- Volume sharing issue (high priority fix needed)
-- Container name validation missing
-- Claude Code installation verification
-- Temporary file cleanup on macOS
-- Hardcoded paths in shell configuration
+## 📋 Outstanding Development Tasks (v1.2.1)
 
-This system has evolved from experimental script to production-quality tool through extensive testing and refinement.
+### 🔴 High Priority
+- **Update help text from Node.js 18+ to 20+** - Documentation inconsistency  
+- **Move container configuration logic to Dockerfile** - Improve portability
+- **Add timezone detection/configuration** - Better international user experience
+
+### 🟡 Medium Priority  
+- **Remove redundant docker-compose.yml download** - Script uses docker run instead
+- **Add Docker health checks** - Replace 60-second manual wait  
+- **Add container name validation feedback** - Real-time input validation
+- **Add progress indicators** - Better UX during long operations
+- **Create self-contained Dockerfile** - No external downloads needed
+
+### 🟢 Low Priority
+- **Environment variable customization** - User-configurable settings (TIMEZONE, WORKSPACE_PATH)
+- **Container resource limits** - Prevent resource exhaustion  
+- **Package version pinning** - Reproducible builds
+
+### 🎯 v1.3.0 Goal: "Self-Contained & Bulletproof"
+Transform into a standalone Docker image that works without external scripts or dependencies.
+
+## 🔧 Issues Fixed & Solutions
+
+### v1.2.1 - Volume Collision Bug (CRITICAL)
+**Problem**: Multiple containers shared the same workspace volume, causing data corruption.
+- Container 'myproject' → claude_sandbox_data (shared!)
+- Container 'test123' → claude_sandbox_data (shared!)
+
+**Root Cause**: 
+- `run.sh` line 314: Created volume `${CONTAINER_NAME}_data`  
+- `docker-compose.yml` line 14: Hardcoded `claude_sandbox_data`
+- Mismatch caused all containers to use hardcoded volume
+
+**Solution Implemented**:
+1. **docker-compose.yml**: Changed to external volumes with dynamic naming:
+   ```yaml
+   volumes:
+     claude_sandbox_data:
+       external: true
+       name: ${CONTAINER_NAME:-claude-sandbox}_data
+   ```
+2. **run.sh**: Added CONTAINER_NAME environment variable to all docker-compose commands:
+   ```bash
+   CONTAINER_NAME="$CONTAINER_NAME" docker-compose build
+   ```
+
+**Testing**: Verified with multiple container names - each gets isolated volume.
+
+**Impact**: ✅ Eliminates data corruption between containers
+
+### v1.2.0 - Node.js Compatibility 
+**Problem**: npm version conflicts with Node.js 18
+**Solution**: Upgraded Dockerfile to Node.js 20
+**Impact**: ✅ Compatible with latest npm versions
+
+### v1.1.x - User Experience Improvements
+- **Simplified welcome message**: Removed Unicode issues
+- **One-command Claude access**: `docker exec -it CONTAINER claude`  
+- **SemVer versioning**: Professional version tracking
+- **Cross-platform testing**: Validated on Mint, Parallels, ARM64, x86_64
+
+This system has evolved from experimental script to production-quality tool through extensive testing and systematic issue resolution.
 
 ## Troubleshooting Guide (v1.0)
 
