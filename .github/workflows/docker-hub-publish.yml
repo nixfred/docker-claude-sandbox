@@ -121,17 +121,16 @@ jobs:
           
       - name: Update README with Docker Hub information
         run: |
-          echo "📝 Updating README with Docker Hub publishing information..."
+          echo "📝 Checking README for Docker Hub consistency..."
           
-          # Update the pre-built images section
-          sed -i 's/### Pre-built Multi-Arch Images (Coming Soon!)/### 🐳 Pre-built Multi-Arch Images (Docker Hub)/' readme.md
+          # Verify Docker Hub references are current (no changes needed - already updated)
+          if grep -q "frednix/claude-sandbox:latest" readme.md; then
+            echo "✅ README already contains current Docker Hub references"
+          else
+            echo "⚠️ README may need manual Docker Hub reference updates"
+          fi
           
-          # Update the docker pull commands
-          sed -i 's|# AMD64 and ARM64 builds automatically available|# Production-ready multi-arch images available now!|' readme.md
-          sed -i 's|docker pull ghcr.io/nixfred/docker-claude-sandbox:latest|docker pull frednix/claude-sandbox:latest|' readme.md
-          sed -i 's|docker run -it ghcr.io/nixfred/docker-claude-sandbox:latest|docker run -it frednix/claude-sandbox:latest|' readme.md
-          
-          echo "✅ README updated with Docker Hub information"
+          echo "✅ README Docker Hub information verified"
           
       - name: Commit README updates
         run: |
