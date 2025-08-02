@@ -1,5 +1,9 @@
 # 🤖 Docker Claude Sandbox
 
+![Version](https://img.shields.io/github/v/release/nixfred/docker-claude-sandbox?label=version&color=blue)
+![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS-lightgrey)
+![Docker](https://img.shields.io/badge/docker-required-blue)
+
 **Lightweight Docker container optimized for Claude Code development**
 
 ## 📋 Requirements
