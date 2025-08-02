@@ -121,10 +121,16 @@ select_project_directory() {
                 PROJECT_DIR="$suggested_dir"
                 if [ ! -d "$PROJECT_DIR" ]; then
                     echo -e "${YELLOW}Creating directory: $PROJECT_DIR${NC}"
-                    mkdir -p "$PROJECT_DIR"
+                    if ! mkdir -p "$PROJECT_DIR"; then
+                        echo -e "${RED}❌ Failed to create directory: $PROJECT_DIR${NC}"
+                        exit 1
+                    fi
                 fi
                 echo -e "${GREEN}✓ Using recommended directory: $PROJECT_DIR${NC}"
-                cd "$PROJECT_DIR"
+                if ! cd "$PROJECT_DIR"; then
+                    echo -e "${RED}❌ Failed to enter directory: $PROJECT_DIR${NC}"
+                    exit 1
+                fi
                 ;;
             3)
                 read -p "Enter custom directory path: " CUSTOM_DIR
@@ -135,20 +141,32 @@ select_project_directory() {
                     PROJECT_DIR="$CUSTOM_DIR"
                     if [ ! -d "$PROJECT_DIR" ]; then
                         echo -e "${YELLOW}Creating directory: $PROJECT_DIR${NC}"
-                        mkdir -p "$PROJECT_DIR"
+                        if ! mkdir -p "$PROJECT_DIR"; then
+                            echo -e "${RED}❌ Failed to create directory: $PROJECT_DIR${NC}"
+                            exit 1
+                        fi
                     fi
                     echo -e "${GREEN}✓ Using custom directory: $PROJECT_DIR${NC}"
-                    cd "$PROJECT_DIR"
+                    if ! cd "$PROJECT_DIR"; then
+                        echo -e "${RED}❌ Failed to enter directory: $PROJECT_DIR${NC}"
+                        exit 1
+                    fi
                 fi
                 ;;
             *)
                 PROJECT_DIR="$suggested_dir"
                 if [ ! -d "$PROJECT_DIR" ]; then
                     echo -e "${YELLOW}Creating directory: $PROJECT_DIR${NC}"
-                    mkdir -p "$PROJECT_DIR"
+                    if ! mkdir -p "$PROJECT_DIR"; then
+                        echo -e "${RED}❌ Failed to create directory: $PROJECT_DIR${NC}"
+                        exit 1
+                    fi
                 fi
                 echo -e "${GREEN}✓ Using recommended directory: $PROJECT_DIR${NC}"
-                cd "$PROJECT_DIR"
+                if ! cd "$PROJECT_DIR"; then
+                    echo -e "${RED}❌ Failed to enter directory: $PROJECT_DIR${NC}"
+                    exit 1
+                fi
                 ;;
         esac
     else
@@ -156,10 +174,16 @@ select_project_directory() {
         PROJECT_DIR="$suggested_dir"
         if [ ! -d "$PROJECT_DIR" ]; then
             echo -e "${YELLOW}Creating recommended directory: $PROJECT_DIR${NC}"
-            mkdir -p "$PROJECT_DIR"
+            if ! mkdir -p "$PROJECT_DIR"; then
+                echo -e "${RED}❌ Failed to create directory: $PROJECT_DIR${NC}"
+                exit 1
+            fi
         fi
         echo -e "${GREEN}✓ Using recommended directory: $PROJECT_DIR${NC}"
-        cd "$PROJECT_DIR"
+        if ! cd "$PROJECT_DIR"; then
+            echo -e "${RED}❌ Failed to enter directory: $PROJECT_DIR${NC}"
+            exit 1
+        fi
     fi
     
     echo ""
@@ -283,17 +307,28 @@ main() {
     echo "  Status: $(docker ps --format "{{.Status}}" --filter "name=$CONTAINER_NAME")"
     echo ""
     echo -e "${CYAN}📋 Quick Commands:${NC}"
-    echo "  docker exec -it $CONTAINER_NAME bash  # Enter container"
-    echo "  docker-compose logs                   # View logs"
-    echo "  docker-compose down                   # Stop container"
+    echo "  docker exec -it $CONTAINER_NAME bash           # Enter container"
+    echo "  docker logs $CONTAINER_NAME                    # View logs"
+    echo "  docker rm -f $CONTAINER_NAME                   # Stop and remove container"
     echo ""
     echo -e "${CYAN}🚀 Entering Claude Sandbox...${NC}"
     echo ""
     
-    # Wait a moment for container to be fully ready
-    sleep 2
-    
-    echo -e "${GREEN}✅ Container ready!${NC}"
+    # Wait for container to be ready (proper readiness check)
+    echo -e "${CYAN}⏳ Waiting for container to be ready...${NC}"
+    for i in {1..30}; do
+        if docker exec "$CONTAINER_NAME" echo "ready" >/dev/null 2>&1; then
+            echo -e "${GREEN}✅ Container ready!${NC}"
+            break
+        fi
+        if [ $i -eq 30 ]; then
+            echo -e "${RED}❌ Container failed to become ready after 30 seconds${NC}"
+            echo -e "${YELLOW}You can still try to enter manually:${NC}"
+            echo "  docker exec -it $CONTAINER_NAME bash"
+            exit 1
+        fi
+        sleep 1
+    done
     echo ""
     
     # Auto-enter container if TTY is available (same logic as container naming)
