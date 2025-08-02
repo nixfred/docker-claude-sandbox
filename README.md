@@ -368,6 +368,6 @@ coder@claude-sandbox:/workspace$ help
 
 ---
 
-**Happy coding! 🚀**
+**Happy coding! 🚀** 
 
 *Built for testing Claude AI code safely, but perfect for any development project.*

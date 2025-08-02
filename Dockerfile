@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-# Build arguments
+# Build arguments 
 ARG WORKSPACE=workspace
 
 # Prevent interactive prompts and optimize for container use
