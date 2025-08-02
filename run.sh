@@ -301,13 +301,22 @@ main() {
         echo -e "${CYAN}Entering container...${NC}"
         exec docker exec -it "$CONTAINER_NAME" bash
     else
-        echo -e "${YELLOW}Container is ready! To enter the container, run:${NC}"
-        echo "  docker exec -it $CONTAINER_NAME bash"
         echo ""
-        echo -e "${YELLOW}To start Claude Code directly:${NC}"
-        echo "  docker exec -it $CONTAINER_NAME bash -c 'cd /workspace && claude'"
+        echo -e "${GREEN}🎉 SUCCESS! Claude Sandbox is ready!${NC}"
         echo ""
-        echo -e "${GREEN}✨ Your Claude Sandbox is ready to use!${NC}"
+        echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+        echo -e "${CYAN}🚀 START CLAUDE CODE NOW:${NC}"
+        echo ""
+        echo -e "${YELLOW}  docker exec -it $CONTAINER_NAME bash -c 'cd /workspace && claude'${NC}"
+        echo ""
+        echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+        echo ""
+        echo -e "${GREEN}Other commands:${NC}"
+        echo -e "  ${BLUE}Enter container shell:${NC} docker exec -it $CONTAINER_NAME bash"
+        echo -e "  ${BLUE}View container logs:${NC}   docker logs $CONTAINER_NAME"
+        echo -e "  ${BLUE}Stop container:${NC}        docker stop $CONTAINER_NAME"
+        echo ""
+        echo -e "${GREEN}✨ Your Claude Sandbox is ready for AI-powered development!${NC}"
     fi
 }
 
