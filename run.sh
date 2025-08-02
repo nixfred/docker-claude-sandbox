@@ -41,6 +41,27 @@ check_requirements() {
     fi
     
     echo -e "${GREEN}✓ Docker is ready${NC}"
+    
+    # Check for docker-compose
+    if ! command -v docker-compose &> /dev/null; then
+        echo -e "${RED}❌ docker-compose not found${NC}"
+        echo ""
+        echo "Install docker-compose with one of these methods:"
+        echo ""
+        echo "Option 1 - Using apt (Debian/Ubuntu):"
+        echo "  sudo apt update && sudo apt install -y docker-compose"
+        echo ""
+        echo "Option 2 - Using pip:"
+        echo "  sudo pip3 install docker-compose"
+        echo ""
+        echo "Option 3 - Direct download (latest version):"
+        echo "  sudo curl -L \"https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose"
+        echo "  sudo chmod +x /usr/local/bin/docker-compose"
+        echo ""
+        exit 1
+    fi
+    
+    echo -e "${GREEN}✓ docker-compose is ready${NC}"
 }
 
 # Download portable configuration files
