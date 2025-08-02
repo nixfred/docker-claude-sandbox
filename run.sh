@@ -1,5 +1,5 @@
 #!/bin/bash
-# Docker Claude Sandbox - Portable One-Command Setup v1.1.2
+# Docker Claude Sandbox - Portable One-Command Setup v1.1.3
 # Usage: curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
 
 set -e
@@ -351,7 +351,7 @@ main() {
     # Check if we can actually allocate a TTY (not just if /dev/tty exists)
     if [ -t 0 ] && [ -t 1 ] && [ -c /dev/tty ]; then
         echo -e "${CYAN}Entering container...${NC}"
-        echo -e "${CYAN}Thank you for using Docker Claude Sandbox v1.1.2${NC}"
+        echo -e "${CYAN}Thank you for using Docker Claude Sandbox v1.1.3${NC}"
         echo ""
         exec docker exec -it "$CONTAINER_NAME" bash
     else
@@ -365,14 +365,9 @@ main() {
         echo ""
         echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
         echo ""
-        echo -e "${GREEN}Other commands:${NC}"
-        echo -e "  ${BLUE}Enter container shell:${NC} docker exec -it $CONTAINER_NAME bash"
-        echo -e "  ${BLUE}View container logs:${NC}   docker logs $CONTAINER_NAME"
-        echo -e "  ${BLUE}Stop container:${NC}        docker stop $CONTAINER_NAME"
-        echo ""
         echo -e "${GREEN}✨ Your Claude Sandbox is ready for AI-powered development!${NC}"
         echo ""
-        echo -e "${CYAN}Thank you for using Docker Claude Sandbox v1.1.2${NC}"
+        echo -e "${CYAN}Thank you for using Docker Claude Sandbox v1.1.3${NC}"
     fi
 }
 
