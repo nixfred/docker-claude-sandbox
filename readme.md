@@ -26,9 +26,14 @@
 docker run -it --rm frednix/claude-sandbox:latest
 ```
 
-**ARM64 Systems (Raspberry Pi, Apple Silicon):**
+**ARM64 Systems (Apple Silicon - works, Raspberry Pi - see troubleshooting):**
 ```bash
 docker run -it --rm --platform linux/arm64 frednix/claude-sandbox:latest
+```
+
+**⚠️ Raspberry Pi users:** Docker Hub images may exit immediately due to platform detection issues. Use local build instead:
+```bash
+curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
 ```
 
 **If you need persistent containers (optional):**
@@ -124,7 +129,7 @@ For the latest Docker Engine: https://docs.docker.com/engine/install/
 docker run -it --rm frednix/claude-sandbox:latest
 ```
 
-**ARM64 Systems (if auto-detection fails):**
+**ARM64 Systems (Apple Silicon - works, Raspberry Pi - may fail):**
 ```bash
 docker run -it --rm --platform linux/arm64 frednix/claude-sandbox:latest
 ```
@@ -470,26 +475,26 @@ cd docker-claude-sandbox && ./run.sh
 
 **"no matching manifest for linux/arm/v8" error (ARM64 systems)**
 
-**Recommended for ARM64: Build locally (most reliable for Raspberry Pi)**
+**⚠️ Known Issue: Docker Hub ARM64 images have platform detection problems on Raspberry Pi (linux/arm/v8 vs linux/arm64 mismatch)**
+
+**✅ RECOMMENDED SOLUTION: Build locally (100% reliable for Raspberry Pi)**
 ```bash
 curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
-# This creates a working local container you can access with: docker exec -it CONTAINER_NAME bash
+# This creates a working local container that will actually open properly
 ```
 
-**Alternative: Docker Hub (may have platform detection issues on some ARM64 systems)**
+**Docker Hub attempts (likely to fail on Raspberry Pi):**
 ```bash
-# Try these in order until one works:
-
-# Option 1: Standard command
+# These commands typically exit immediately on Raspberry Pi due to platform mismatch:
 docker run -it --rm --platform linux/arm64 frednix/claude-sandbox:latest
+# Container exits with code 159 (platform detection failure)
 
-# Option 2: Enable experimental features first
+# If you want to try anyway:
 export DOCKER_CLI_EXPERIMENTAL=enabled
 docker run -it --rm --platform linux/arm64 frednix/claude-sandbox:latest
-
-# Option 3: If containers exit immediately, build locally instead
-curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
 ```
+
+**Why this happens:** Raspberry Pi reports as `linux/arm/v8` but Docker Hub images are built for `linux/arm64`. Local builds work because they adapt to the actual platform.
 
 **Multiple containers sharing workspace**
 - ⚠️ **Known behavior**: All containers currently share the same workspace volume
