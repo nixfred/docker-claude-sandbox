@@ -1,15 +1,20 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository. 
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Architecture Overview
 
-This repository creates a lightweight Docker environment optimized specifically for Claude Code development. The core architecture consists of:
+This repository creates a lightweight Docker environment optimized specifically for Claude Code development. The system uses a three-file architecture for maximum portability:
 
-- **`Dockerfile`**: Ubuntu 22.04 base with Claude Code pre-installed + Node.js 18+ + essential tools
-- **`docker-compose.yml`**: Container orchestration with no port mappings (Claude Code is CLI-based)
-- **`run.sh`**: Optional setup script for automated deployment
-- **Persistent workspace**: `/workspace` directory survives container restarts
+- **`Dockerfile`**: Multi-stage Ubuntu 22.04 build with Claude Code + Node.js 18+ + minimal Python stack
+- **`docker-compose.yml`**: Container orchestration with persistent volumes and TTY support 
+- **`run.sh`**: Interactive setup script with container naming, conflict resolution, and automatic entry
+
+### Key Architectural Decisions
+- **No port mappings**: Claude Code is purely CLI-based, eliminating networking complexity
+- **Persistent `/workspace` volume**: Survives container restarts and rebuilds
+- **Non-root `coder` user**: Security-hardened with passwordless sudo access
+- **Minimal dependency philosophy**: Only essential tools included, everything else installed on-demand
 
 ### What's Included (MINIMAL by Design)
 - **Claude Code**: Pre-installed globally - just run `claude`
@@ -39,22 +44,21 @@ The container now features a beautiful welcome message that displays when enteri
 ╚══════════════════════════════════════════════════════════════════╝
 ```
 
-## Common Development Commands
+## Essential Development Commands
 
-### Quick Start with FeNix Alias
-For FeNix users, the `sclaw` alias provides instant access:
+### Primary Entry Points
 ```bash
-# From anywhere on your system - starts container and enters Claude Code
+# Recommended: Interactive setup with container naming
+./run.sh
+
+# One-liner remote deployment (for testing/demos)
+curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
+
+# FeNix users: Ultimate convenience (if available)
 sclaw
 ```
 
-The `sclaw` function automatically:
-- Changes to the project directory
-- Starts the container if not running
-- Enters the container and launches Claude Code
-- Shows the beautiful welcome message
-
-### Container Lifecycle
+### Container Lifecycle Management
 ```bash
 # Recommended: Use setup script (auto-starts Claude Code, prompts for container name)
 ./run.sh
@@ -186,17 +190,58 @@ ls /workspace      # Check persistent workspace (CLAUDE.md files persist here!)
 - **Build failures**: Use `docker-compose build --no-cache` to force clean build
 - **Interactive prompts not working**: Script now uses `/dev/tty` redirection to ensure prompts work with `curl | bash`
 
+### Critical Run.sh Behavior
+The `run.sh` script handles several complex scenarios:
+- **Container naming conflicts**: Interactive prompts with conflict resolution
+- **TTY detection**: Uses `exec docker exec -it` to properly enter container after setup
+- **Remote execution compatibility**: Works with both local `./run.sh` and `curl | bash` patterns
+- **Automatic container entry**: User ends up inside container ready to run `claude`
+
 ### Development Testing
 ```bash
-# Test in clean environment
-docker-compose down -v  # Remove volumes too
-docker system prune -f  # Clean images
-docker-compose up -d    # Fresh build
+# Test complete rebuild cycle
+docker-compose down -v && docker system prune -f && docker-compose build --no-cache && docker-compose up -d
 
-# Verify essential functionality
-docker exec claude-sandbox claude --version  # Verify Claude Code
-docker exec claude-sandbox node --version         # Verify Node.js
-docker exec claude-sandbox python3 -c "print('Python OK')"
-docker exec claude-sandbox git --version
-docker exec claude-sandbox curl -s http://httpbin.org/ip
+# Verify core functionality inside container
+docker exec -it claude-sandbox bash -c "
+  claude --version && 
+  node --version && 
+  python3 -c 'import requests; print(\"Python stack OK\")' &&
+  git --version &&
+  echo 'All systems operational'"
+
+# Test run.sh script end-to-end
+rm -rf /tmp/claude-test && git clone . /tmp/claude-test && cd /tmp/claude-test && ./run.sh
 ```
+
+## Container Welcome System
+
+The container features an enhanced bashrc that provides immediate orientation:
+- **Beautiful ASCII welcome message** with clear instructions
+- **Available tools summary** (Node.js, Python3, Git, curl, apt, sudo)
+- **Software installation guidance** encouraging Claude Code interaction
+- **Automatic workspace navigation** to `/workspace` on entry
+
+This eliminates the common "what do I do now?" moment when entering containers.
+
+## Important Implementation Notes
+
+### Docker Compose Configuration
+- Container name defaults to `claude-sandbox` but `run.sh` allows customization
+- Volume `claude_sandbox_data` persists `/workspace` across container lifecycle
+- `stdin_open: true` and `tty: true` essential for Claude Code interactive functionality
+
+### Run.sh Script Architecture
+The script follows a fail-safe pattern:
+1. Environment validation (Docker availability)
+2. Configuration file handling (local vs. remote)
+3. Interactive container naming with conflict resolution
+4. Container lifecycle management
+5. **Critical**: `exec docker exec -it` to transfer control to container
+
+### Dockerfile Multi-Stage Philosophy
+- **Stage 1**: System updates and locale configuration
+- **Stage 2**: Essential package installation (git, curl, Python stack)
+- **Stage 3**: Node.js 18+ and Claude Code global installation
+- **Stage 4**: User creation and workspace preparation
+- **Stage 5**: Welcome message configuration in bashrc
