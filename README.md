@@ -64,7 +64,7 @@ cd docker-claude-sandbox
 - Always prompts for custom container name (default: claude-sandbox)
 - Works with both local and remote execution (`curl ... | bash`)
 - Handles existing container conflicts with interactive prompts
-- Automatically enters container when ready
+- Automatically enters container and starts Claude Code
 
 ### Option 2: Direct Docker Compose
 ```bash
@@ -158,15 +158,13 @@ cd /workspace
 ```
 
 ### Claude Code Integration
-1. **Enter the container**:
-   ```bash
-   docker exec -it claude-sandbox bash
-   ```
+1. **Setup script automatically starts Claude Code**:
+   - Run `./run.sh` or use the one-liner and Claude Code starts automatically
+   - No manual steps needed - goes straight to Claude Code interface
 
-2. **Start Claude Code**:
+2. **Manual access if needed**:
    ```bash
-   # Claude Code is pre-installed globally
-   claude
+   docker exec -it claude-sandbox bash -c "cd /workspace && claude"
    ```
 
 3. **Create and test code safely in your workspace**:
@@ -296,9 +294,9 @@ docker exec -it claude-sandbox bash  # Force entry
 ### **Quick Access Alias**
 Add to your `~/.bashrc` or `~/.zshrc`:
 ```bash
-alias claude='docker exec -it claude-sandbox bash'
+alias claude-sandbox='docker exec -it claude-sandbox bash -c "cd /workspace && claude"'
 alias claude-logs='docker logs claude-sandbox'
-alias claude-ports='docker port claude-sandbox'
+alias claude-bash='docker exec -it claude-sandbox bash'
 ```
 
 ### **VS Code Integration**

@@ -32,7 +32,7 @@ This repository creates a lightweight Docker environment optimized specifically 
 
 ### Container Lifecycle
 ```bash
-# Recommended: Use setup script (always prompts for container name, works with curl | bash)
+# Recommended: Use setup script (auto-starts Claude Code, prompts for container name)
 ./run.sh
 
 # Or manual setup
@@ -41,7 +41,11 @@ docker-compose up -d
 # Rebuild after Dockerfile changes
 docker-compose build --no-cache && docker-compose up -d
 
-# Enter running container (replace with your container name)
+# Enter running container and start Claude Code
+docker exec -it claude-sandbox bash -c "cd /workspace && claude"  # Default name
+docker exec -it your-name bash -c "cd /workspace && claude"        # Custom name
+
+# Or just enter bash if needed
 docker exec -it claude-sandbox bash  # Default name
 docker exec -it your-name bash       # Custom name
 
@@ -126,11 +130,11 @@ cd /tmp/test && docker-compose up -d
 ## Essential Commands for Claude Code
 
 ```bash
-# Quick start for Claude Code usage
-docker-compose up -d && docker exec -it claude-sandbox bash
+# Quick start for Claude Code usage (auto-starts Claude Code)
+./run.sh
 
-# Start Claude Code (pre-installed globally)
-claude
+# Or manual container entry with Claude Code start
+docker-compose up -d && docker exec -it claude-sandbox bash -c "cd /workspace && claude"
 
 # Inside container - verify environment
 node --version     # Verify Node.js 18+ available
