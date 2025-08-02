@@ -222,27 +222,35 @@ main() {
         IMAGE_NAME=$(docker-compose config 2>/dev/null | grep 'image:' | awk '{print $2}' | head -1)
     fi
     
-    # Final fallback: construct from directory name
+    # Final fallback: look for any claude-sandbox image
     if [ -z "$IMAGE_NAME" ]; then
-        DIR_NAME=$(basename "$PWD")
-        IMAGE_NAME="${DIR_NAME}_claude-sandbox:latest"
-        echo -e "${YELLOW}   Using fallback image name: $IMAGE_NAME${NC}"
-    else
-        echo -e "${GREEN}   Detected image name: $IMAGE_NAME${NC}"
-    fi
-    
-    # Verify the image actually exists
-    if ! docker image inspect "$IMAGE_NAME" >/dev/null 2>&1; then
-        echo -e "${YELLOW}   Image not found, searching for similar images...${NC}"
-        # Look for any image with claude-sandbox in the name
+        echo -e "${YELLOW}   Searching for built claude-sandbox images...${NC}"
+        # Look for any image with claude-sandbox in the name (handles both _ and - naming)
         FOUND_IMAGE=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep claude-sandbox | head -1)
         if [ -n "$FOUND_IMAGE" ]; then
             IMAGE_NAME="$FOUND_IMAGE"
             echo -e "${GREEN}   Found image: $IMAGE_NAME${NC}"
         else
-            echo -e "${RED}❌ No suitable image found. Build may have failed.${NC}"
-            exit 1
+            # Last resort: try common naming patterns
+            DIR_NAME=$(basename "$PWD")
+            for pattern in "${DIR_NAME}_claude-sandbox:latest" "${DIR_NAME}-claude-sandbox:latest" "claude-sandbox:latest"; do
+                if docker image inspect "$pattern" >/dev/null 2>&1; then
+                    IMAGE_NAME="$pattern"
+                    echo -e "${GREEN}   Found image with pattern: $IMAGE_NAME${NC}"
+                    break
+                fi
+            done
         fi
+    else
+        echo -e "${GREEN}   Detected image name: $IMAGE_NAME${NC}"
+    fi
+    
+    # Final verification
+    if [ -z "$IMAGE_NAME" ] || ! docker image inspect "$IMAGE_NAME" >/dev/null 2>&1; then
+        echo -e "${RED}❌ No suitable claude-sandbox image found.${NC}"
+        echo -e "${YELLOW}Available images:${NC}"
+        docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.CreatedAt}}" | head -10
+        exit 1
     fi
     
     # Use docker run with custom name instead of docker-compose up
