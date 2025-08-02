@@ -123,18 +123,27 @@ jobs:
         run: |
           echo "🔍 Scanning for secrets and sensitive data..."
           
-          # Install gitleaks
-          wget -q https://github.com/zricethezav/gitleaks/releases/latest/download/gitleaks_linux_x64.tar.gz
-          tar -xzf gitleaks_linux_x64.tar.gz
-          chmod +x gitleaks
+          # Test configuration first
+          echo "Testing gitleaks configuration..."
           
-          # Scan repository for secrets using our configuration
-          ./gitleaks detect --source . --config .gitleaks.toml --verbose --no-git --report-format json --report-path gitleaks-report.json
+          # Use Docker version for consistency with local testing
+          docker run --rm -v $(pwd):/workspace zricethezav/gitleaks:latest detect \
+            --source /workspace \
+            --config /workspace/.gitleaks.toml \
+            --verbose \
+            --no-git \
+            --report-format json \
+            --report-path /workspace/gitleaks-report.json || GITLEAKS_EXIT=$?
           
-          # Show results
-          if [ -f "gitleaks-report.json" ]; then
-            echo "Gitleaks scan completed. Results:"
+          echo "Gitleaks exit code: ${GITLEAKS_EXIT:-0}"
+          
+          # Show results if any
+          if [ -f "gitleaks-report.json" ] && [ -s "gitleaks-report.json" ]; then
+            echo "⚠️ Gitleaks found potential secrets:"
             cat gitleaks-report.json | jq '.[] | {file: .File, secret: .Secret, rule: .RuleID}' || cat gitleaks-report.json
+            exit 1
+          else
+            echo "✅ No secrets detected"
           fi
 
   dockerfile-scan:
