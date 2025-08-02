@@ -41,20 +41,12 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          
       - name: Extract metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: |
             ${{ env.DOCKERHUB_REPOSITORY }}
-            ${{ env.GHCR_REPOSITORY }}
           tags: |
             type=ref,event=tag
             type=semver,pattern={{version}}
@@ -74,9 +66,9 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           
-      - name: Test published images
+      - name: Test published Docker Hub images
         run: |
-          echo "🔍 Testing published Docker Hub image..."
+          echo "🔍 Testing published Docker Hub images..."
           
           # Test AMD64 image from Docker Hub
           docker run --rm --platform linux/amd64 ${{ env.DOCKERHUB_REPOSITORY }}:latest node --version
@@ -86,7 +78,7 @@ jobs:
           docker run --rm --platform linux/arm64 ${{ env.DOCKERHUB_REPOSITORY }}:latest node --version
           docker run --rm --platform linux/arm64 ${{ env.DOCKERHUB_REPOSITORY }}:latest python3 --version
           
-          echo "✅ Multi-arch images published and tested successfully"
+          echo "✅ Docker Hub multi-arch images published and tested successfully"
           
       - name: Generate Docker Hub summary
         run: |
@@ -96,17 +88,12 @@ jobs:
           echo "| Repository | Tag | Platforms |" >> $GITHUB_STEP_SUMMARY
           echo "|------------|-----|-----------|" >> $GITHUB_STEP_SUMMARY
           echo "| **Docker Hub** | [\`${{ env.DOCKERHUB_REPOSITORY }}:latest\`](https://hub.docker.com/r/${{ env.DOCKERHUB_REPOSITORY }}) | linux/amd64, linux/arm64 |" >> $GITHUB_STEP_SUMMARY
-          echo "| **GitHub Registry** | [\`${{ env.GHCR_REPOSITORY }}:latest\`](https://github.com/nixfred/docker-claude-sandbox/pkgs/container/docker-claude-sandbox) | linux/amd64, linux/arm64 |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 🚀 Quick Start Commands" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
-          echo "# Docker Hub (Recommended)" >> $GITHUB_STEP_SUMMARY
+          echo "# Docker Hub" >> $GITHUB_STEP_SUMMARY
           echo "docker pull ${{ env.DOCKERHUB_REPOSITORY }}:latest" >> $GITHUB_STEP_SUMMARY
           echo "docker run -it ${{ env.DOCKERHUB_REPOSITORY }}:latest" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "# GitHub Container Registry" >> $GITHUB_STEP_SUMMARY
-          echo "docker pull ${{ env.GHCR_REPOSITORY }}:latest" >> $GITHUB_STEP_SUMMARY
-          echo "docker run -it ${{ env.GHCR_REPOSITORY }}:latest" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 📊 Build Details" >> $GITHUB_STEP_SUMMARY
