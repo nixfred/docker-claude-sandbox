@@ -226,19 +226,14 @@ main() {
     # Wait a moment for container to be fully ready
     sleep 2
     
-    # Always try to enter the container and start Claude Code
-    if [ -c /dev/tty ]; then
-        echo -e "${CYAN}🚀 Launching Claude Code in container...${NC}"
-        echo ""
-        # Start Claude Code automatically in the container
-        docker exec -it "$CONTAINER_NAME" bash -c "cd /workspace && claude"
-    else
-        echo -e "${YELLOW}Container is ready! Access with:${NC}"
-        echo "  docker exec -it $CONTAINER_NAME bash -c \"cd /workspace && claude\""
-        echo ""
-        echo -e "${CYAN}Quick alias for future use:${NC}"
-        echo "  alias sclaw='docker exec -it $CONTAINER_NAME bash -c \"cd /workspace && claude\"'"
-    fi
+    # Show instructions and try to launch
+    echo -e "${GREEN}✅ Container ready! To start Claude Code:${NC}"
+    echo "  docker exec -it $CONTAINER_NAME bash -c \"cd /workspace && claude\""
+    echo ""
+    
+    # Try to launch automatically - use exec to replace current process
+    echo -e "${CYAN}🚀 Launching Claude Code...${NC}"
+    exec docker exec -it "$CONTAINER_NAME" bash -c "cd /workspace && claude"
 }
 
 # Handle command line arguments
