@@ -1,5 +1,5 @@
 #!/bin/bash
-# Docker Claude Sandbox - Portable One-Command Setup v1.3.0
+# Docker Claude Sandbox - Portable One-Command Setup v1.3.1
 # Usage: curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
 
 set -e
@@ -340,10 +340,14 @@ main() {
     fi
     
     # Use docker run with custom name instead of docker-compose up
+    # Resource limits: 2GB RAM, 2 CPU cores (reasonable for development)
     docker run -d \
         --name "$CONTAINER_NAME" \
         --hostname claude-sandbox \
         -it \
+        --memory="2g" \
+        --memory-swap="2g" \
+        --cpus="2.0" \
         --workdir /workspace \
         -v "${CONTAINER_NAME}_data:/workspace" \
         -e TERM=xterm-256color \
@@ -392,7 +396,7 @@ main() {
     # Check if we can actually allocate a TTY (not just if /dev/tty exists)
     if [ -t 0 ] && [ -t 1 ] && [ -c /dev/tty ]; then
         echo -e "${CYAN}Entering container...${NC}"
-        echo -e "${CYAN}Thank you for using Docker Claude Sandbox v1.3.0${NC}"
+        echo -e "${CYAN}Thank you for using Docker Claude Sandbox v1.3.1${NC}"
         echo ""
         exec docker exec -it "$CONTAINER_NAME" bash
     else
@@ -408,7 +412,7 @@ main() {
         echo ""
         echo -e "${GREEN}✨ Your Claude Sandbox is ready for AI-powered development!${NC}"
         echo ""
-        echo -e "${CYAN}Thank you for using Docker Claude Sandbox v1.3.0${NC}"
+        echo -e "${CYAN}Thank you for using Docker Claude Sandbox v1.3.1${NC}"
     fi
 }
 

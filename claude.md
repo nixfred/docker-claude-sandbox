@@ -2,9 +2,9 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Architecture Overview - v1.3.0 Production
+## Architecture Overview - v1.3.1 Production
 
-This repository creates a **cross-platform Docker environment** optimized specifically for Claude Code development. After extensive testing and refinement, **v1.3.0 represents a production-grade system** with intelligent platform adaptation and **comprehensive automated testing validation**.
+This repository creates a **cross-platform Docker environment** optimized specifically for Claude Code development. After extensive testing and refinement, **v1.3.1 represents a production-grade system** with intelligent platform adaptation and **comprehensive automated testing validation**.
 
 ### Core Components
 
@@ -442,10 +442,11 @@ This system has evolved from experimental script to production-quality tool thro
    - **Impact**: Each container gets isolated workspace volume
    - **Implementation**: Lines 339-349 in docker-compose.yml, CONTAINER_NAME env var in run.sh
 
-2. **Container Name Validation Missing** (Line 128 in run.sh)
-   - No validation of user input against Docker naming restrictions
-   - **Impact**: Could cause cryptic Docker errors for invalid names
-   - **Workaround**: Use alphanumeric names with hyphens only
+2. **✅ FIXED: Container Name Validation** (Implemented in run.sh)
+   - **Solution**: Real-time validation with helpful error messages
+   - **Validates**: Must start with letter/number, only allows a-z, A-Z, 0-9, -, _, .
+   - **Length check**: Maximum 63 characters per Docker requirements
+   - **User experience**: Clear error messages guide users to valid names
 
 **MEDIUM PRIORITY**:
 3. **✅ FIXED: Temporary File Cleanup** (Lines 7-15 in run.sh)
@@ -465,6 +466,10 @@ This system has evolved from experimental script to production-quality tool thro
    - `npm install -g @anthropic-ai/claude-code` has no success verification
 7. **Security Risk**: `curl | bash` pattern in Node.js installation
 8. **Hardcoded Paths**: Some bashrc configurations use literal paths
+9. **✅ FIXED: Resource Limits** (Implemented in run.sh and docker-compose.yml)
+   - **Solution**: Containers limited to 2GB RAM and 2 CPU cores
+   - **Protection**: Prevents runaway containers from consuming all system resources
+   - **Reasonable defaults**: Sufficient for development workloads
 
 ### Platform-Specific Behavior (Expected)
 - **Linux**: Auto-enters container after setup

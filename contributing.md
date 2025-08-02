@@ -34,9 +34,9 @@ docker-compose build --no-cache  # Test build process
 - **Hardcoded timezone** - ✅ FIXED - Auto-detects user timezone with timedatectl fallback to UTC
 
 ### 🟡 Medium Priority Issues  
-- **Redundant docker-compose download** - Script downloads but uses `docker run` instead
+- **Docker-compose usage** - ✅ PROPERLY USED - For building (docker-compose build) and image detection
 - **Manual container readiness** - Uses 60-second spinning wait instead of proper Docker health checks
-- **No input validation feedback** - Container name validation could be more user-friendly
+- **Input validation feedback** - ✅ FIXED - Container name validation with clear error messages
 - **Missing progress indicators** - ✅ FIXED - Added comprehensive progress indicators with emojis and spinners
 - **No security documentation** - ✅ FIXED - Added comprehensive SECURITY.md with vulnerability reporting
 - **No PR template** - ✅ FIXED - Added detailed .github/PULL_REQUEST_TEMPLATE.md
@@ -44,7 +44,7 @@ docker-compose build --no-cache  # Test build process
 
 ### 🟢 Low Priority Enhancements
 - **Environment customization** - ✅ IMPLEMENTED - Auto-detects local timezone, uses fixed `/workspace` path
-- **No resource limits** - Containers can consume unlimited CPU/memory
+- **Resource limits** - ✅ FIXED - Containers limited to 2GB RAM and 2 CPU cores for safety
 - **Package versions unpinned** - Could cause reproducibility issues
 
 ### 🎯 v1.3.0 Roadmap: "Self-Contained & Bulletproof"
@@ -79,9 +79,9 @@ Please include:
 
 ### Versioning (SemVer)
 Every commit must update version in 3 locations:
-1. `run.sh` line 2: `# Docker Claude Sandbox - Portable One-Command Setup v1.3.0`
-2. `run.sh` thank you messages: `Thank you for using Docker Claude Sandbox v1.3.0` (2 locations)
-3. `readme.md` line 1: `# 🤖 Docker Claude Sandbox v1.3.0`
+1. `run.sh` line 2: `# Docker Claude Sandbox - Portable One-Command Setup v1.3.1`
+2. `run.sh` thank you messages: `Thank you for using Docker Claude Sandbox v1.3.1` (2 locations)
+3. `readme.md` line 1: `# 🤖 Docker Claude Sandbox v1.3.1`
 
 **Version Format**: `vMAJOR.MINOR.PATCH`
 - **MAJOR**: Breaking changes affecting existing users

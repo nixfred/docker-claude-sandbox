@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v1.3.1] - 2024-12-XX
+
+### Added
+- **Container resource limits** - ✅ IMPLEMENTED - Prevents runaway containers from consuming all system resources
+- **Memory limit**: 2GB RAM (with swap limit to prevent OOM bypass)
+- **CPU limit**: 2.0 cores (reasonable for development workloads)
+- **Safety by default**: Protects host system from resource exhaustion
+
+### Fixed
+- **Container name validation** - ✅ Already implemented but now properly documented
+- **Docker-compose usage** - Clarified it's properly used for building and image detection (not redundant)
+
+### Documentation
+- **Fixed issues status** - Updated claude.md and contributing.md to reflect actually fixed features
+- **Resource protection** - Added to readme.md developer-friendly features
+- **Issue tracking accuracy** - Multiple "pending" issues were actually already fixed
+
 ## [v1.3.0] - 2024-12-XX
 
 ### Added

@@ -1,4 +1,4 @@
-# 🤖 Docker Claude Sandbox v1.3.0
+# 🤖 Docker Claude Sandbox v1.3.1
 
 ![CI](https://img.shields.io/github/actions/workflow/status/nixfred/docker-claude-sandbox/ci.yml?branch=main&label=CI&color=brightgreen)
 ![Version](https://img.shields.io/github/v/release/nixfred/docker-claude-sandbox?label=version&color=blue)
@@ -105,7 +105,7 @@ cd docker-claude-sandbox
 
 ### Version-Pinned Install
 ```bash
-curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.3.0/run.sh | bash
+curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.3.1/run.sh | bash
 ```
 
 ### Cache-Busting Install (Force Latest)
@@ -141,6 +141,7 @@ curl -fsSL "https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main
 - 🧹 **Easy cleanup** - Simple container removal and reset
 - 📚 **Comprehensive docs** - Including AI assistant integration guide
 - ✅ **Automated testing** - Continuous integration validates every change across platforms
+- 🛡️ **Resource protection** - Containers limited to 2GB RAM and 2 CPU cores to prevent system overload
 
 ## 🎯 Welcome Experience
 
@@ -292,7 +293,7 @@ docker exec -it YOUR_CONTAINER_NAME bash -c "cd /workspace && code ."
 # .github/workflows/test.yml
 - name: Setup Claude Code Environment
   run: |
-    curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.3.0/run.sh | bash
+    curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.3.1/run.sh | bash
     docker exec claude-sandbox claude --version
 ```
 
@@ -402,7 +403,7 @@ For technical implementation details, see:
 
 ## 🏷️ Version Information
 
-- **Current version**: v1.3.0
+- **Current version**: v1.3.1
 - **Quality assurance**: ✅ All features passing automated CI/CD testing
 - **Tested platforms**: Linux ARM64/x86_64, macOS Apple Silicon (Intel untested)  
 - **Docker compatibility**: 20.10+, Buildx optional
