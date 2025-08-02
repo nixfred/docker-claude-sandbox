@@ -1,5 +1,5 @@
 #!/bin/bash
-# Docker Claude Sandbox - Portable One-Command Setup 
+# Docker Claude Sandbox - Portable One-Command Setup v2.0
 # Usage: curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
 
 set -e
@@ -232,7 +232,6 @@ main() {
     echo ""
     
     # Enter the container and start bash (which will show welcome message)
-    echo -e "${YELLOW}DEBUG: About to exec docker exec -it $CONTAINER_NAME bash${NC}"
     exec docker exec -it "$CONTAINER_NAME" bash
 }
 
