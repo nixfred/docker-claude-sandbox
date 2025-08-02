@@ -140,6 +140,31 @@ select_project_directory() {
     echo ""
 }
 
+# Ask for container name
+ask_container_name() {
+    echo -e "${CYAN}🐳 Container Configuration${NC}"
+    echo "==============================="
+    echo ""
+    
+    if [ -t 0 ]; then
+        # Interactive mode
+        read -p "Container name [claude-sandbox]: " CONTAINER_NAME
+        CONTAINER_NAME=${CONTAINER_NAME:-claude-sandbox}
+    else
+        # Non-interactive mode
+        CONTAINER_NAME="claude-sandbox"
+    fi
+    
+    echo -e "${GREEN}✓ Container name: $CONTAINER_NAME${NC}"
+    echo ""
+    
+    # Update docker-compose.yml with the chosen name
+    if [ -f "docker-compose.yml" ]; then
+        sed -i.bak "s/container_name: claude-sandbox/container_name: $CONTAINER_NAME/" docker-compose.yml
+        rm docker-compose.yml.bak 2>/dev/null || true
+    fi
+}
+
 # Main execution
 main() {
     show_banner
@@ -153,6 +178,8 @@ main() {
         download_config
     fi
     
+    ask_container_name
+    
     echo -e "${CYAN}🏗️  Building Claude Sandbox container...${NC}"
     docker-compose build || exit 1
     
@@ -162,20 +189,14 @@ main() {
     echo -e "${GREEN}🎉 Claude Sandbox Setup Complete!${NC}"
     echo ""
     echo -e "${CYAN}📊 Container Information:${NC}"
-    echo "  Container Name: claude-sandbox"
-    echo "  Working Directory: /workspace"
-    echo "  Available Ports: 8000, 8001, 8002"
-    echo "  Status: $(docker ps --format "{{.Status}}" --filter "name=claude-sandbox")"
-    echo ""
-    echo -e "${YELLOW}🌐 Access your services:${NC}"
-    echo "  http://localhost:8000"
-    echo "  http://localhost:8001" 
-    echo "  http://localhost:8002"
+    echo "  Container Name: $CONTAINER_NAME"
+    echo "  Working Directory: /workspace (persists across restarts)"
+    echo "  Status: $(docker ps --format "{{.Status}}" --filter "name=$CONTAINER_NAME")"
     echo ""
     echo -e "${CYAN}📋 Quick Commands:${NC}"
-    echo "  docker exec -it claude-sandbox bash  # Enter container"
-    echo "  docker-compose logs                  # View logs"
-    echo "  docker-compose down                  # Stop container"
+    echo "  docker exec -it $CONTAINER_NAME bash  # Enter container"
+    echo "  docker-compose logs                   # View logs"
+    echo "  docker-compose down                   # Stop container"
     echo ""
     echo -e "${CYAN}🚀 Entering Claude Sandbox...${NC}"
     echo ""
@@ -185,13 +206,13 @@ main() {
     
     # Enter the container with proper TTY handling
     if [ -t 0 ] && [ -t 1 ]; then
-        docker exec -it claude-sandbox bash
+        docker exec -it "$CONTAINER_NAME" bash
     else
         echo -e "${YELLOW}Container is ready! Access with:${NC}"
-        echo "  docker exec -it claude-sandbox bash"
+        echo "  docker exec -it $CONTAINER_NAME bash"
         echo ""
         echo -e "${CYAN}Or create an alias:${NC}"
-        echo "  alias claude='docker exec -it claude-sandbox bash'"
+        echo "  alias claude='docker exec -it $CONTAINER_NAME bash'"
     fi
 }
 
@@ -202,11 +223,12 @@ case "${1:-}" in
         echo "Docker Claude Sandbox - Portable Setup"
         echo ""
         echo "Features:"
-        echo "  ✅ Self-contained Ubuntu environment"
-        echo "  ✅ Complete Python ecosystem"
-        echo "  ✅ Network and TCP/IP tools (nmap, tcpdump, etc.)"
-        echo "  ✅ Development tools (git, vim, mc, etc.)"
-        echo "  ✅ Portable docker-compose configuration"
+        echo "  ✅ Claude Code pre-installed (run 'claude')"
+        echo "  ✅ Node.js 18+ runtime environment"
+        echo "  ✅ Essential Python development tools"
+        echo "  ✅ Git for version control"
+        echo "  ✅ Minimal by design - extend through Claude Code"
+        echo "  ✅ Persistent /workspace for CLAUDE.md files"
         echo ""
         echo "Usage: $0 [options]"
         echo ""
