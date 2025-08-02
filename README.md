@@ -7,6 +7,14 @@
 
 **Cross-platform Docker container optimized for Claude Code development**
 
+## 🚀 Quick Install
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
+```
+
+**What you get:** Ubuntu 22.04 + **Claude Code pre-installed** + Node.js 20+ + Python 3 + Git + Persistent workspace
+
 Tested and validated on:
 - ✅ **Linux ARM64** (Raspberry Pi)
 - ✅ **Linux x86_64** (Standard servers)  
@@ -56,12 +64,7 @@ For the latest Docker Engine: https://docs.docker.com/engine/install/
 
 **Note:** After installation, log out and back in or run `newgrp docker` to apply group membership.
 
-## ⚡ Quick Start
-
-### One-Command Install (Recommended)
-```bash
-curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
-```
+## 🛠️ Alternative Installation Methods
 
 ### Git Clone Method
 ```bash
@@ -75,7 +78,10 @@ cd docker-claude-sandbox
 curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.0/run.sh | bash
 ```
 
-**What you get:** Ubuntu 22.04 + **Claude Code pre-installed** + Node.js 18+ + Python 3 + Git + Persistent workspace
+### Cache-Busting Install (Force Latest)
+```bash
+curl -fsSL "https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh?$(date +%s)" | bash
+```
 
 ## ✨ Features
 
