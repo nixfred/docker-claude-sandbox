@@ -226,15 +226,16 @@ main() {
     # Wait a moment for container to be fully ready
     sleep 2
     
-    # Enter the container with proper TTY handling
-    if [ -t 0 ] && [ -t 1 ]; then
-        docker exec -it "$CONTAINER_NAME" bash
+    # Always try to enter the container and start Claude Code
+    if [ -c /dev/tty ]; then
+        # Start Claude Code automatically in the container
+        docker exec -it "$CONTAINER_NAME" bash -c "cd /workspace && claude"
     else
         echo -e "${YELLOW}Container is ready! Access with:${NC}"
         echo "  docker exec -it $CONTAINER_NAME bash"
         echo ""
-        echo -e "${CYAN}Or create an alias:${NC}"
-        echo "  alias claude='docker exec -it $CONTAINER_NAME bash'"
+        echo -e "${CYAN}Or create an alias and start Claude:${NC}"
+        echo "  alias claude-sandbox='docker exec -it $CONTAINER_NAME bash -c \"cd /workspace && claude\"'"
     fi
 }
 
