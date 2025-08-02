@@ -33,7 +33,7 @@ RUN echo "🔄 Updating package lists and system..." && \
     curl ca-certificates \
     # Python stack
     python3 python3-pip python3-venv python3-dev python3-setuptools python3-wheel \
-    # Build tools for ARM/Python packages
+    # Build tools for compiling Python packages
     gcc \
     && echo "🧹 Cleaning up package cache..." && \
     apt-get autoremove -y && \
