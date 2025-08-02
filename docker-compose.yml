@@ -15,6 +15,7 @@ services:
     environment:
       - TERM=xterm-256color
       - CONTAINER_NAME=claude-sandbox
+      - TZ=${TZ:-UTC}
 volumes:
   claude_sandbox_data:
     external: true

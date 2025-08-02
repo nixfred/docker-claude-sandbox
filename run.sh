@@ -255,7 +255,11 @@ main() {
         fi
     fi
     
-    CONTAINER_NAME="$CONTAINER_NAME" docker-compose build || exit 1
+    # Detect user's timezone for better international experience
+    USER_TZ=$(timedatectl show --property=Timezone --value 2>/dev/null || echo "UTC")
+    echo -e "${CYAN}🌍 Using timezone: $USER_TZ${NC}"
+    
+    CONTAINER_NAME="$CONTAINER_NAME" TZ="$USER_TZ" docker-compose build || exit 1
     
     echo -e "${CYAN}🚀 Starting Claude Sandbox...${NC}"
     
@@ -313,6 +317,7 @@ main() {
         --workdir /workspace \
         -v "${CONTAINER_NAME}_data:/workspace" \
         -e TERM=xterm-256color \
+        -e TZ="$USER_TZ" \
         "$IMAGE_NAME" || exit 1
     
     echo -e "${GREEN}🎉 Claude Sandbox Setup Complete!${NC}"
@@ -320,6 +325,7 @@ main() {
     echo -e "${CYAN}📊 Container Information:${NC}"
     echo "  Container Name: $CONTAINER_NAME"
     echo "  Working Directory: /workspace (persists across restarts)"
+    echo "  Timezone: $USER_TZ"
     echo "  Status: $(docker ps --format "{{.Status}}" --filter "name=$CONTAINER_NAME")"
     echo ""
     echo -e "${CYAN}📋 Quick Commands:${NC}"

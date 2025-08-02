@@ -5,7 +5,7 @@ ARG WORKSPACE=workspace
 
 # Prevent interactive prompts and optimize for container use
 ENV DEBIAN_FRONTEND=noninteractive
-ENV TZ=America/New_York
+ENV TZ=${TZ:-UTC}
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV NODE_ENV=production
