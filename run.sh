@@ -226,14 +226,11 @@ main() {
     # Wait a moment for container to be fully ready
     sleep 2
     
-    # Show instructions and try to launch
-    echo -e "${GREEN}✅ Container ready! To start Claude Code:${NC}"
-    echo "  docker exec -it $CONTAINER_NAME bash -c \"cd /workspace && claude\""
+    echo -e "${GREEN}✅ Container ready! To start Claude Code, run:${NC}"
+    echo -e "${YELLOW}  docker exec -it $CONTAINER_NAME bash -c \"cd /workspace && claude\"${NC}"
     echo ""
-    
-    # Try to launch automatically - use exec to replace current process
-    echo -e "${CYAN}🚀 Launching Claude Code...${NC}"
-    exec docker exec -it "$CONTAINER_NAME" bash -c "cd /workspace && claude"
+    echo -e "${CYAN}💡 Or use the sclaw alias (if you have FeNix):${NC}"
+    echo -e "${YELLOW}  sclaw${NC}"
 }
 
 # Handle command line arguments
