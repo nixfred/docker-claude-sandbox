@@ -209,14 +209,40 @@ main() {
     
     # Get the actual built image name dynamically
     echo -e "${CYAN}🔍 Detecting built image name...${NC}"
-    IMAGE_NAME=$(docker-compose config 2>/dev/null | grep 'image:' | awk '{print $2}' | head -1 2>/dev/null)
+    
+    # First try to get from docker-compose images command
+    IMAGE_NAME=$(docker-compose images -q claude-sandbox 2>/dev/null | head -1)
+    if [ -n "$IMAGE_NAME" ]; then
+        # Convert image ID to actual name
+        IMAGE_NAME=$(docker images --format "{{.Repository}}:{{.Tag}}" --filter "id=$IMAGE_NAME" | head -1)
+    fi
+    
+    # If that didn't work, try docker-compose config
     if [ -z "$IMAGE_NAME" ]; then
-        # Fallback: construct from directory name
+        IMAGE_NAME=$(docker-compose config 2>/dev/null | grep 'image:' | awk '{print $2}' | head -1)
+    fi
+    
+    # Final fallback: construct from directory name
+    if [ -z "$IMAGE_NAME" ]; then
         DIR_NAME=$(basename "$PWD")
         IMAGE_NAME="${DIR_NAME}_claude-sandbox:latest"
         echo -e "${YELLOW}   Using fallback image name: $IMAGE_NAME${NC}"
     else
         echo -e "${GREEN}   Detected image name: $IMAGE_NAME${NC}"
+    fi
+    
+    # Verify the image actually exists
+    if ! docker image inspect "$IMAGE_NAME" >/dev/null 2>&1; then
+        echo -e "${YELLOW}   Image not found, searching for similar images...${NC}"
+        # Look for any image with claude-sandbox in the name
+        FOUND_IMAGE=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep claude-sandbox | head -1)
+        if [ -n "$FOUND_IMAGE" ]; then
+            IMAGE_NAME="$FOUND_IMAGE"
+            echo -e "${GREEN}   Found image: $IMAGE_NAME${NC}"
+        else
+            echo -e "${RED}❌ No suitable image found. Build may have failed.${NC}"
+            exit 1
+        fi
     fi
     
     # Use docker run with custom name instead of docker-compose up
