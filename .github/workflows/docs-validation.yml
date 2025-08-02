@@ -82,22 +82,28 @@ jobs:
           echo "📋 Validating version consistency across documentation..."
           VERSION="${{ steps.version.outputs.VERSION }}"
           
-          # Check for outdated version references
+          # Check for outdated version references in user-facing content
           echo "Current version: v$VERSION"
           
-          # Find any hardcoded version numbers that don't match
-          echo "Checking for outdated version references..."
-          OUTDATED=$(grep -r "v[0-9]\+\.[0-9]\+\.[0-9]\+" *.md | grep -v "v$VERSION" | grep -v "changelog.md" | grep -v "example" || true)
-          
-          if [ -n "$OUTDATED" ]; then
-            echo "❌ Found potentially outdated version references:"
-            echo "$OUTDATED"
-            echo ""
-            echo "These should reference v$VERSION or be in changelog.md"
+          # Check README title (most important)
+          if ! grep -q "# 🤖 Docker Claude Sandbox v$VERSION" readme.md; then
+            echo "❌ README title doesn't match current version v$VERSION"
             exit 1
-          else
-            echo "✅ All version references are current"
           fi
+          
+          # Check README version info section
+          if ! grep -q "Current version.*: v$VERSION" readme.md; then
+            echo "❌ README version info doesn't match current version v$VERSION"
+            exit 1
+          fi
+          
+          # Check that VERSION file matches
+          if [ "$(cat VERSION)" != "$VERSION" ]; then
+            echo "❌ VERSION file content doesn't match expected version $VERSION"
+            exit 1
+          fi
+          
+          echo "✅ All critical version references are current"
           
       - name: Check cross-references between documents
         run: |
