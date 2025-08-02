@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v1.3.3] - 2024-12-XX
+
+### Added
+- **Centralized version management** - ✅ IMPLEMENTED - Single VERSION file controls all version references
+- **VERSION file** - Contains single source of truth for version number
+- **Automated version updates** - scripts/update-version.sh updates all files automatically
+- **Makefile** - Simplifies common development tasks (build, test, release)
+- **GitHub Actions release workflow** - Automated release creation with VERSION file integration
+
+### Changed
+- **run.sh** - Now reads version dynamically from VERSION file or remote URL
+- **Documentation workflow** - No more manual version updates across multiple files
+- **Release process** - Simplified to single command: `make release VERSION=x.x.x`
+
+### Developer Experience
+- **One command releases** - `make release VERSION=1.3.4` does everything
+- **Version consistency** - Impossible to have mismatched versions across files
+- **Automated GitHub releases** - Created automatically when tags are pushed
+- **Professional workflows** - Industry-standard version management
+
 ## [v1.3.2] - 2024-12-XX
 
 ### Added

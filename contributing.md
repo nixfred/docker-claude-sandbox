@@ -77,11 +77,34 @@ Please include:
 - **Documentation**: Update readme.md and claude.md for significant changes
 - **Testing**: Test on multiple platforms (Linux ARM64/x86_64, macOS)
 
-### Versioning (SemVer)
-Every commit must update version in 3 locations:
-1. `run.sh` line 2: `# Docker Claude Sandbox - Portable One-Command Setup v1.3.1`
-2. `run.sh` thank you messages: `Thank you for using Docker Claude Sandbox v1.3.1` (2 locations)
-3. `readme.md` line 1: `# 🤖 Docker Claude Sandbox v1.3.1`
+### Centralized Version Management ✅ IMPLEMENTED
+All version numbers are now managed centrally through the `VERSION` file!
+
+**Single Source of Truth:**
+- VERSION file contains: `1.3.3`
+- All documentation automatically references this version
+- No more manual updates across multiple files
+
+**To create a new release:**
+```bash
+# Automated method (recommended)
+make release VERSION=1.3.4
+
+# Manual method
+echo "1.3.4" > VERSION
+./scripts/update-version.sh
+git add -A && git commit -m "🚀 Release v1.3.4"
+git tag v1.3.4
+git push && git push --tags
+```
+
+**How it works:**
+- `VERSION` file = single source of truth
+- `scripts/update-version.sh` = updates all files automatically
+- `run.sh` = reads version dynamically from file or remote URL
+- `Makefile` = simplifies release workflow with one command
+- `GitHub Actions` = creates releases automatically when tags are pushed
+- **Result**: Version consistency guaranteed, no more manual updates!
 
 **Version Format**: `vMAJOR.MINOR.PATCH`
 - **MAJOR**: Breaking changes affecting existing users
