@@ -259,7 +259,7 @@ main() {
         --hostname claude-sandbox \
         -it \
         --workdir /workspace \
-        -v claude_sandbox_data:/workspace \
+        -v "${CONTAINER_NAME}_data:/workspace" \
         -e TERM=xterm-256color \
         "$IMAGE_NAME" || exit 1
     
