@@ -1,0 +1,154 @@
+name: Docker Hub Publishing
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to publish (e.g., v1.4.0)'
+        required: true
+        default: 'v1.4.0'
+        type: string
+
+env:
+  DOCKERHUB_REPOSITORY: frednix/claude-sandbox
+  GHCR_REPOSITORY: ghcr.io/nixfred/docker-claude-sandbox
+
+jobs:
+  publish-to-docker-hub:
+    name: Build and Push to Docker Hub
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Get version from VERSION file
+        id: version
+        run: echo "VERSION=$(cat VERSION)" >> $GITHUB_OUTPUT
+        
+      - name: Set up QEMU for multi-arch builds
+        uses: docker/setup-qemu-action@v3
+        
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ env.DOCKERHUB_REPOSITORY }}
+            ${{ env.GHCR_REPOSITORY }}
+          tags: |
+            type=ref,event=tag
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=v${{ steps.version.outputs.VERSION }}
+            
+      - name: Build and push multi-arch Docker images
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          
+      - name: Test published images
+        run: |
+          echo "🔍 Testing published Docker Hub image..."
+          
+          # Test AMD64 image from Docker Hub
+          docker run --rm --platform linux/amd64 ${{ env.DOCKERHUB_REPOSITORY }}:latest node --version
+          docker run --rm --platform linux/amd64 ${{ env.DOCKERHUB_REPOSITORY }}:latest python3 --version
+          
+          # Test ARM64 image from Docker Hub  
+          docker run --rm --platform linux/arm64 ${{ env.DOCKERHUB_REPOSITORY }}:latest node --version
+          docker run --rm --platform linux/arm64 ${{ env.DOCKERHUB_REPOSITORY }}:latest python3 --version
+          
+          echo "✅ Multi-arch images published and tested successfully"
+          
+      - name: Generate Docker Hub summary
+        run: |
+          echo "## 🐳 Docker Hub Publishing Complete!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📦 Published Images" >> $GITHUB_STEP_SUMMARY
+          echo "| Repository | Tag | Platforms |" >> $GITHUB_STEP_SUMMARY
+          echo "|------------|-----|-----------|" >> $GITHUB_STEP_SUMMARY
+          echo "| **Docker Hub** | [\`${{ env.DOCKERHUB_REPOSITORY }}:latest\`](https://hub.docker.com/r/${{ env.DOCKERHUB_REPOSITORY }}) | linux/amd64, linux/arm64 |" >> $GITHUB_STEP_SUMMARY
+          echo "| **GitHub Registry** | [\`${{ env.GHCR_REPOSITORY }}:latest\`](https://github.com/nixfred/docker-claude-sandbox/pkgs/container/docker-claude-sandbox) | linux/amd64, linux/arm64 |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🚀 Quick Start Commands" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+          echo "# Docker Hub (Recommended)" >> $GITHUB_STEP_SUMMARY
+          echo "docker pull ${{ env.DOCKERHUB_REPOSITORY }}:latest" >> $GITHUB_STEP_SUMMARY
+          echo "docker run -it ${{ env.DOCKERHUB_REPOSITORY }}:latest" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "# GitHub Container Registry" >> $GITHUB_STEP_SUMMARY
+          echo "docker pull ${{ env.GHCR_REPOSITORY }}:latest" >> $GITHUB_STEP_SUMMARY
+          echo "docker run -it ${{ env.GHCR_REPOSITORY }}:latest" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📊 Build Details" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version**: v${{ steps.version.outputs.VERSION }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Platforms**: linux/amd64, linux/arm64" >> $GITHUB_STEP_SUMMARY
+          echo "- **Base Image**: Ubuntu 22.04 LTS" >> $GITHUB_STEP_SUMMARY
+          echo "- **Node.js**: 20+" >> $GITHUB_STEP_SUMMARY
+          echo "- **Python**: 3.10+" >> $GITHUB_STEP_SUMMARY
+          echo "- **Claude Code**: Latest version pre-installed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🎉 **Users can now \`docker pull\` and start using Claude Code immediately!**" >> $GITHUB_STEP_SUMMARY
+
+  update-readme:
+    name: Update README with Docker Hub Links
+    runs-on: ubuntu-latest
+    needs: publish-to-docker-hub
+    if: success()
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Update README with Docker Hub information
+        run: |
+          echo "📝 Updating README with Docker Hub publishing information..."
+          
+          # Update the pre-built images section
+          sed -i 's/### Pre-built Multi-Arch Images (Coming Soon!)/### 🐳 Pre-built Multi-Arch Images (Docker Hub)/' readme.md
+          
+          # Update the docker pull commands
+          sed -i 's|# AMD64 and ARM64 builds automatically available|# Production-ready multi-arch images available now!|' readme.md
+          sed -i 's|docker pull ghcr.io/nixfred/docker-claude-sandbox:latest|docker pull frednix/claude-sandbox:latest|' readme.md
+          sed -i 's|docker run -it ghcr.io/nixfred/docker-claude-sandbox:latest|docker run -it frednix/claude-sandbox:latest|' readme.md
+          
+          echo "✅ README updated with Docker Hub information"
+          
+      - name: Commit README updates
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add readme.md
+          git commit -m "📦 Update README with Docker Hub publishing links" || exit 0
+          git push
