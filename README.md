@@ -2,11 +2,26 @@
 
 **Portable Docker container for safely testing Claude Code with comprehensive toolset**
 
-## 🚀 Quick Start
+## ⚡ TLDR Quick Start
 
 ```bash
+# Option 1: One command (downloads everything)
 curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
+
+# Option 2: Clone and run
+git clone https://github.com/nixfred/docker-claude-sandbox.git
+cd docker-claude-sandbox && docker-compose up -d && docker exec -it claude-sandbox bash
+
+# Option 3: Direct docker-compose (most portable)
+curl -O https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/{docker-compose.yml,Dockerfile}
+docker-compose up -d && docker exec -it claude-sandbox bash
 ```
+
+**What you get:** Ubuntu 22.04 + Complete Python stack + Network tools (nmap, tcpdump, ssh) + System tools (neofetch, mc, git) + Persistent `/workspace`
+
+---
+
+## 🚀 Quick Start
 
 That's it! The setup will:
 - ✅ **Portable configuration** - Standard docker-compose.yml approach

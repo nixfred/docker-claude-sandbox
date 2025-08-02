@@ -2,6 +2,21 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## ⚡ TLDR
+
+**Quick Commands:**
+```bash
+# Start container
+docker-compose up -d && docker exec -it claude-sandbox bash
+
+# Or one-liner setup
+curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
+```
+
+**Container includes:** Complete Python stack, network tools (nmap, tcpdump, ssh), system tools (neofetch, mc, git), persistent `/workspace`
+
+---
+
 ## Overview
 
 This is a portable Docker container setup that creates a comprehensive Ubuntu environment with all tools needed for Claude Code to function effectively. The system uses a standard docker-compose configuration for maximum portability and can be deployed with a single command or used directly with docker-compose.
