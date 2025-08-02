@@ -160,12 +160,6 @@ ask_container_name() {
     
     echo -e "${GREEN}✓ Container name: $CONTAINER_NAME${NC}"
     echo ""
-    
-    # Update docker-compose.yml with the chosen name
-    if [ -f "docker-compose.yml" ]; then
-        sed -i.bak "s/container_name: .*/container_name: $CONTAINER_NAME/" docker-compose.yml
-        rm docker-compose.yml.bak 2>/dev/null || true
-    fi
 }
 
 # Main execution
@@ -206,7 +200,15 @@ main() {
     docker-compose build || exit 1
     
     echo -e "${CYAN}🚀 Starting Claude Sandbox...${NC}"
-    docker-compose up -d || exit 1
+    # Use docker run with custom name instead of docker-compose up
+    docker run -d \
+        --name "$CONTAINER_NAME" \
+        --hostname claude-sandbox \
+        -it \
+        --workdir /workspace \
+        -v claude_sandbox_data:/workspace \
+        -e TERM=xterm-256color \
+        docker-claude-sandbox_claude-sandbox || exit 1
     
     echo -e "${GREEN}🎉 Claude Sandbox Setup Complete!${NC}"
     echo ""
