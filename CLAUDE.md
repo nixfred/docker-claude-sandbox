@@ -247,10 +247,25 @@ This welcome banner is configured in the Dockerfile's final RUN command (lines 8
 - **Security**: Maintain non-root execution, validate user inputs
 - **Documentation**: Keep inline comments and help text current
 
+### Versioning System (Semantic Versioning)
+**CRITICAL**: Every commit must increment version and update 3 locations:
+
+**Version Format**: `vMAJOR.MINOR.PATCH` (e.g., v1.1.1 → v1.1.2)
+- **MAJOR**: Breaking changes that affect existing users
+- **MINOR**: New features (backward compatible)  
+- **PATCH**: Bug fixes, small improvements, documentation updates
+
+**Required Updates on EVERY Commit**:
+1. **`run.sh` line 2**: `# Docker Claude Sandbox - Portable One-Command Setup v1.1.1`
+2. **`run.sh` thank you messages**: `Thank you for using Docker Claude Sandbox v1.1.1` (2 locations)
+3. **`README.md` line 1**: `# 🤖 Docker Claude Sandbox v1.1.1`
+
+**Purpose**: Version tracking helps identify which code version users ran (critical for debugging cache issues).
+
 ### Release Process
 1. **Local testing**: Validate on multiple platforms
-2. **Version bump**: Update run.sh header version
-3. **Git tag**: Create annotated tag with changelog
+2. **Version bump**: Increment SemVer in all 3 locations above
+3. **Git tag**: Create annotated tag matching version (e.g., `git tag -a v1.1.2`)
 4. **GitHub release**: Create release with comprehensive notes
 5. **Documentation**: Update all .md files with new features/fixes
 
