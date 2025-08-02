@@ -95,13 +95,12 @@ When you enter the container, you get:
 
 ## 🎯 Essential Toolset for Claude Code
 
-- **🤖 Claude Code**: Pre-installed globally - just run `claude-code` to start
+- **🤖 Claude Code**: Pre-installed globally - just run `claude` to start
 - **⚡ Node.js 18+**: Required runtime environment for Claude Code
 - **🛡️ Safe Environment**: Completely isolated from your host system
 - **🐍 Essential Python Stack**: Python 3 + pip + requests, pytest, black, flake8, pylint
-- **🔧 Development Tools**: git, vim, nano, mc (midnight commander), tmux
-- **🌐 Essential Network Tools**: curl, wget, ssh, ping (minimal networking tools)  
-- **📊 System Tools**: htop, ps, tmux  
+- **🔧 Development Tools**: git, vim, nano (essential editors only)
+- **🌐 Network Tools**: curl, wget, ssh, ping (for git and package management)  
 - **💾 Persistent Storage**: Your code survives container restarts in `/workspace`
 - **🔌 No Ports**: Claude Code is CLI-based - no networking required
 
@@ -125,7 +124,7 @@ When you enter the container, you get:
 ### Inside the Container
 ```bash
 # Start Claude Code
-claude-code
+claude
 
 # Show available tools
 help
@@ -133,9 +132,6 @@ help
 # Test Node.js and Python environment
 node --version
 python3 -c "import requests, pytest; print('Essential Python tools ready!')"
-
-# File management with midnight commander
-mc
 
 # Test connectivity
 ping google.com
@@ -155,7 +151,7 @@ python3 mycode.py
 2. **Start Claude Code**:
    ```bash
    # Claude Code is pre-installed globally
-   claude-code
+   claude
    ```
 
 3. **Create and test code safely in your workspace**:
@@ -203,7 +199,7 @@ Claude Code is a CLI tool that doesn't require any port mappings. The container 
 
 ```bash
 # Claude Code works entirely through the terminal
-claude-code
+claude
 
 # No ports needed - everything is command-line based
 # If you need to test web applications, you can temporarily add ports to docker-compose.yml

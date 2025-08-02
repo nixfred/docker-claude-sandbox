@@ -12,10 +12,10 @@ This repository creates a lightweight Docker environment optimized specifically 
 - **Persistent workspace**: `/workspace` directory survives container restarts
 
 ### What's Included
-- **Claude Code**: Pre-installed globally - just run `claude-code`
+- **Claude Code**: Pre-installed globally - just run `claude`
 - **Node.js 18+**: Required runtime for Claude Code
 - **Essential Python stack**: Core libraries without bloat (requests, pytest, black, flake8, pylint)
-- **Development tools**: git, vim, nano, mc, tmux
+- **Development tools**: git, vim, nano (minimal essential editors)
 - **Network utilities**: ssh, curl, wget, ping (minimal essential tools)
 - **Verbose build process**: See exactly what's being installed during build
 
@@ -108,7 +108,7 @@ cd /tmp/test && docker-compose up -d
 docker-compose up -d && docker exec -it claude-sandbox bash
 
 # Start Claude Code (pre-installed globally)
-claude-code
+claude
 
 # Inside container - verify environment
 node --version     # Verify Node.js 18+ available
@@ -123,8 +123,7 @@ ls /workspace      # Check persistent workspace
 # - Python 3 with essential packages (requests, pytest, black, flake8, pylint)
 # - Git for version control
 # - Network tools (curl, wget, ssh, ping)
-# - Text editors (vim, nano, mc)
-# - System utilities (htop, ps, tmux)
+# - Text editors (vim, nano)
 ```
 
 ## Troubleshooting
@@ -144,7 +143,7 @@ docker system prune -f  # Clean images
 docker-compose up -d    # Fresh build
 
 # Verify essential functionality
-docker exec claude-sandbox claude-code --version  # Verify Claude Code
+docker exec claude-sandbox claude --version  # Verify Claude Code
 docker exec claude-sandbox node --version         # Verify Node.js
 docker exec claude-sandbox python3 -c "print('Python OK')"
 docker exec claude-sandbox git --version
