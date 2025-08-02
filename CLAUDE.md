@@ -2,184 +2,128 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## ⚡ TLDR
+## Architecture Overview
 
-**Quick Commands:**
+This repository creates a portable Docker sandbox environment for Claude Code operations. The core architecture consists of:
+
+- **`Dockerfile`**: Ubuntu 22.04 base with comprehensive toolset installation
+- **`docker-compose.yml`**: Container orchestration with volume/network configuration  
+- **`run.sh`**: Optional setup script for automated deployment
+- **Persistent workspace**: `/workspace` directory survives container restarts
+
+## Common Development Commands
+
+### Container Lifecycle
 ```bash
-# Start container
+# Build and start (most common)
+docker-compose up -d
+
+# Rebuild after Dockerfile changes
+docker-compose build --no-cache && docker-compose up -d
+
+# Enter running container
+docker exec -it claude-sandbox bash
+
+# View logs and status
+docker-compose logs
+docker ps | grep claude-sandbox
+
+# Stop and cleanup
+docker-compose down
+docker system prune -f  # Remove unused images
+```
+
+### Testing Changes
+```bash
+# Test different port configurations
+# Edit docker-compose.yml ports section, then:
+docker-compose down && docker-compose up -d
+
+# Test Dockerfile modifications
+docker-compose build --no-cache
+
+# Validate docker-compose syntax
+docker-compose config
+```
+
+### Repository Management
+```bash
+# Update documentation after changes
+git add CLAUDE.md README.md && git commit -m "docs: update"
+
+# Test end-to-end deployment
+git clone https://github.com/nixfred/docker-claude-sandbox.git /tmp/test
+cd /tmp/test && docker-compose up -d
+```
+
+## Development Workflow
+
+### Modifying the Container
+1. Edit `Dockerfile` to add/remove packages or configuration
+2. Update `docker-compose.yml` if networking/volume changes needed
+3. Test with `docker-compose build --no-cache && docker-compose up -d`
+4. Update documentation in both `CLAUDE.md` and `README.md`
+5. Commit changes and test with fresh clone
+
+### Container Architecture Details
+- **Base**: Ubuntu 22.04 with security updates (`apt upgrade -y`)
+- **User**: Non-root `coder` with passwordless sudo
+- **Workspace**: Persistent `/workspace` via Docker volume
+- **Networking**: Bridge network with configurable port mappings
+- **Security**: Isolated from host, latest security patches applied
+
+### Key Configuration Points
+- **Port mappings**: Currently 8000, 8001, 8002 (configurable in docker-compose.yml)
+- **Volume persistence**: `claude_sandbox_data` volume for `/workspace`
+- **Build args**: `WORKSPACE` variable controls internal directory name
+- **Health checks**: Python availability check every 30s
+
+## Current State Notes
+
+⚠️ **Known Issues**: 
+- Container includes web development tools that may not be needed for Claude Code
+- Multiple port mappings when Claude Code may only need specific ports
+- Some Python packages (matplotlib, seaborn) may be excessive for core needs
+
+The container is currently comprehensive but may benefit from simplification based on actual Claude Code requirements.
+
+## Essential Commands for Claude Code
+
+```bash
+# Quick start for Claude Code usage
 docker-compose up -d && docker exec -it claude-sandbox bash
 
-# Or one-liner setup
-curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
+# Inside container - test Claude Code environment
+python3 --version  # Verify Python available
+git --version      # Verify git available  
+curl --version     # Verify network tools
+ls /workspace      # Check persistent workspace
+
+# Container includes these Claude Code essentials:
+# - Python 3 with pip, venv, dev tools
+# - Git for version control
+# - Network tools (curl, wget, ssh)
+# - Text editors (vim, nano)
+# - System utilities (htop, lsof, ps)
 ```
 
-**Container includes:** Essential tools for Claude Code: Python, git, network tools (ssh, curl), system utilities, persistent `/workspace`
+## Troubleshooting
 
-## 🚧 **REFACTORING IN PROGRESS**
+### Common Issues
+- **Port conflicts**: Change port mappings in docker-compose.yml if 8000-8002 are in use
+- **Permission issues**: Container runs as `coder` user with sudo access
+- **Volume persistence**: Files in `/workspace` persist, other locations don't
+- **Build failures**: Use `docker-compose build --no-cache` to force clean build
 
-**Current Issues Being Fixed:**
-- Remove unnecessary web server code and examples 
-- Strip out excessive Python packages not needed for Claude Code
-- Remove unnecessary port mappings
-- Add verbose build explanations for each step
-- Research what Claude Code actually needs
-- Simplify to core purpose: clean Ubuntu + Claude Code tools
-
-**Todo List:**
-1. Remove web server examples and HTTP server code
-2. Remove unnecessary port mappings (currently has 3 ports)
-3. Add verbose build output explaining each step to user
-4. Verify security updates (apt update && apt upgrade -y)
-5. Research if Claude Code auto-installs/starts on container boot
-6. Remove excessive Python packages (matplotlib, seaborn, jupyter, etc.)
-7. Simplify to core purpose: Ubuntu + tools for Claude Code only
-8. Research what ports/services Claude Code actually needs
-9. Update all documentation to reflect simplified approach
-10. Commit clean, simplified version
-
----
-
-## Overview
-
-This is a portable Docker container setup that creates a comprehensive Ubuntu environment with all tools needed for Claude Code to function effectively. The system uses a standard docker-compose configuration for maximum portability and can be deployed with a single command or used directly with docker-compose.
-
-## Architecture
-
-### Core Purpose
-- Boot a clean Ubuntu 22.04 Docker container
-- Install complete Python ecosystem and common TCP/IP tools
-- Provide isolated environment for safe code execution
-- Portable docker-compose configuration for easy deployment
-
-### Portable Design
-The system is built around three core files:
-- **`docker-compose.yml`**: Complete container orchestration with all settings
-- **`Dockerfile`**: Self-contained Ubuntu environment with comprehensive toolset
-- **`run.sh`**: Optional convenience script for setup and deployment
-
-### Complete Toolset Installed
-
-#### Core System Tools
-- **System utilities**: curl, wget, git, vim, nano, tree, htop, neofetch
-- **File manager**: mc (midnight commander)
-- **Build tools**: build-essential, make, cmake
-- **Terminal tools**: screen, tmux
-
-#### Complete Python Stack
-- **Python**: python3, pip3, venv, setuptools, wheel
-- **Core libraries**: requests, urllib3, certifi
-- **Data science**: pandas, numpy, matplotlib, seaborn
-- **Development tools**: pytest, black, flake8, pylint
-- **Utilities**: pyyaml, json5, toml, psutil
-
-#### Network and TCP/IP Tools
-- **Network scanning**: nmap
-- **Traffic analysis**: tcpdump, wireshark-common
-- **Network utilities**: netcat, telnet, traceroute, ping
-- **Network config**: iptables, net-tools, iproute2
-- **SSH tools**: ssh, openssh-client
-- **DNS tools**: dnsutils
-
-#### System and File Tools
-- **Process tools**: lsof, procps, psmisc
-- **Archive tools**: unzip, zip, tar, gzip, bzip2, xz-utils
-- **Text processing**: jq, grep, sed, gawk
-- **File utilities**: rsync, file, bc
-
-## Common Commands
-
-### Quick Setup
+### Development Testing
 ```bash
-# One-command setup (downloads and runs)
-curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
+# Test in clean environment
+docker-compose down -v  # Remove volumes too
+docker system prune -f  # Clean images
+docker-compose up -d    # Fresh build
 
-# Local setup with run script
-./run.sh
+# Verify essential functionality
+docker exec claude-sandbox python3 -c "print('Python OK')"
+docker exec claude-sandbox git --version
+docker exec claude-sandbox curl -s http://httpbin.org/ip
 ```
-
-### Direct Docker Compose Usage
-```bash
-# Clone repository
-git clone https://github.com/nixfred/docker-claude-sandbox.git
-cd docker-claude-sandbox
-
-# Build and start
-docker-compose up -d
-
-# Enter container
-docker exec -it claude-sandbox bash
-```
-
-### Container Management
-```bash
-# Enter container (shows neofetch on entry)
-docker exec -it claude-sandbox bash
-
-# Check status and logs
-docker ps | grep claude-sandbox
-docker-compose logs
-
-# Start/stop/rebuild
-docker-compose up -d
-docker-compose down
-docker-compose build --no-cache
-```
-
-### Inside Container
-```bash
-# Show available tools
-help
-
-# System information
-neofetch
-
-# File management
-mc                    # Midnight Commander
-tree /workspace      # Directory structure
-
-# Network tools
-nmap -sn 192.168.1.0/24    # Network scan
-ping google.com            # Connectivity test
-tcpdump -i any            # Traffic monitoring
-```
-
-## Development Notes
-
-### Container Configuration
-- Based on Ubuntu 22.04 with security updates
-- Non-root `coder` user with passwordless sudo privileges
-- Persistent `/workspace` directory via Docker volume `claude_sandbox_data`
-- Fixed container name `claude-sandbox` for consistency
-- Standard ports 8000, 8001, 8002 exposed
-- Automatic neofetch display on login
-
-### Portable Design Benefits
-- **Standard docker-compose.yml**: Can be used directly without run script
-- **No external dependencies**: All configuration embedded in compose file
-- **Version controlled**: All settings tracked in repository
-- **Easy customization**: Modify docker-compose.yml for custom ports/volumes
-- **CI/CD friendly**: Standard Docker workflow
-
-### Security Features
-- Non-root user execution with sudo access
-- Latest security updates applied during build
-- Isolated from host system
-- Comprehensive networking tools for security testing
-- Persistent workspace separate from container filesystem
-
-### Deployment Options
-
-#### Option 1: One-Command Setup
-Uses run.sh script that downloads docker-compose.yml and Dockerfile automatically.
-
-#### Option 2: Direct Clone and Compose
-```bash
-git clone https://github.com/nixfred/docker-claude-sandbox.git
-cd docker-claude-sandbox
-docker-compose up -d
-```
-
-#### Option 3: Manual Download
-Download docker-compose.yml and Dockerfile manually, then run `docker-compose up -d`.
-
-The container includes a built-in help system accessible with the `help` command that lists all available tools and their purposes.
