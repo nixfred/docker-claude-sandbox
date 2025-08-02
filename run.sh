@@ -225,11 +225,28 @@ main() {
     
     echo -e "${CYAN}🏗️  Building Claude Sandbox container...${NC}"
     
-    # macOS/Colima buildx compatibility fix
+    # macOS/Colima compatibility fixes
     if [[ "$OSTYPE" == "darwin"* ]]; then
-        echo -e "${YELLOW}🍎 Detected macOS - applying buildx compatibility fix...${NC}"
+        echo -e "${YELLOW}🍎 Detected macOS - applying compatibility fixes...${NC}"
         export DOCKER_BUILDKIT=0
         export COMPOSE_DOCKER_CLI_BUILD=0
+        
+        # Fix credential helper issue with Colima
+        if command -v colima >/dev/null 2>&1 && ! command -v docker-credential-desktop >/dev/null 2>&1; then
+            echo -e "${YELLOW}   Disabling Docker Desktop credential helper for Colima...${NC}"
+            export DOCKER_CONFIG_PATH="$HOME/.docker/config.json"
+            if [ -f "$DOCKER_CONFIG_PATH" ]; then
+                # Temporarily disable credential helpers
+                if grep -q "credsStore" "$DOCKER_CONFIG_PATH" 2>/dev/null; then
+                    echo -e "${YELLOW}   Creating temporary Docker config without credential store...${NC}"
+                    mkdir -p /tmp/docker-claude-sandbox
+                    jq 'del(.credsStore)' "$DOCKER_CONFIG_PATH" > /tmp/docker-claude-sandbox/config.json 2>/dev/null || \
+                    grep -v '"credsStore"' "$DOCKER_CONFIG_PATH" > /tmp/docker-claude-sandbox/config.json 2>/dev/null || \
+                    echo '{}' > /tmp/docker-claude-sandbox/config.json
+                    export DOCKER_CONFIG=/tmp/docker-claude-sandbox
+                fi
+            fi
+        fi
     fi
     
     docker-compose build || exit 1
