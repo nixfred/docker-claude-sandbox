@@ -19,10 +19,11 @@
 
 ## 🚀 Quick Install
 
-### Option 1: Docker Hub (Fastest) 
+### Option 1: Docker Hub (Setup Required)
 ```bash
-docker pull frednix/claude-sandbox:latest
-docker run -it frednix/claude-sandbox:latest
+# Docker Hub repository needs manual creation first
+# See DOCKER_HUB_SETUP.md for setup instructions
+# Will be: docker pull frednix/claude-sandbox:latest
 ```
 
 ### Option 2: Build from Source
@@ -105,15 +106,15 @@ For the latest Docker Engine: https://docs.docker.com/engine/install/
 
 ## 🛠️ Alternative Installation Methods
 
-### 🐳 Pre-built Multi-Arch Images (Docker Hub)
+### 🐳 Pre-built Multi-Arch Images (GitHub Container Registry)
 ```bash
-# Production-ready multi-arch images available now!
-docker pull frednix/claude-sandbox:latest
-docker run -it frednix/claude-sandbox:latest
-
-# Alternative: GitHub Container Registry
+# Multi-arch builds available via GitHub Container Registry
 docker pull ghcr.io/nixfred/docker-claude-sandbox:latest
 docker run -it ghcr.io/nixfred/docker-claude-sandbox:latest
+
+# Docker Hub (Setting up - will be available soon)
+# docker pull frednix/claude-sandbox:latest
+# docker run -it frednix/claude-sandbox:latest
 ```
 
 ### Git Clone Method
@@ -362,6 +363,10 @@ docker exec -it YOUR_CONTAINER_NAME bash -c "cd /workspace && code ."
 - **🎓 Workshop preparation** - Pre-configured environment for events
 
 ## 🚨 Troubleshooting
+
+### Docker Hub Setup Required
+
+📋 **See [DOCKER_HUB_SETUP.md](DOCKER_HUB_SETUP.md)** for complete Docker Hub repository setup instructions.
 
 ### Common Issues and Solutions
 
