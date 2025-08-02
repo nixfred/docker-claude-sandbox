@@ -28,39 +28,45 @@ EOF
 
 # Check requirements
 check_requirements() {
+    local missing_tools=""
+    
+    # Check for Docker
     if ! command -v docker &> /dev/null; then
-        echo -e "${RED}❌ Docker not found${NC}"
-        echo "Install Docker: https://docs.docker.com/get-docker/"
-        exit 1
+        missing_tools="docker"
+    else
+        # Docker exists, check if daemon is running
+        if ! docker info &> /dev/null 2>&1; then
+            echo -e "${YELLOW}⚠️  Docker is installed but not running${NC}"
+            echo ""
+            echo "Please start the Docker service and try again."
+            echo ""
+            exit 1
+        fi
     fi
-    
-    if ! docker info &> /dev/null; then
-        echo -e "${RED}❌ Docker daemon not running${NC}"
-        echo "Please start Docker and try again"
-        exit 1
-    fi
-    
-    echo -e "${GREEN}✓ Docker is ready${NC}"
     
     # Check for docker-compose
     if ! command -v docker-compose &> /dev/null; then
-        echo -e "${RED}❌ docker-compose not found${NC}"
+        if [ -n "$missing_tools" ]; then
+            missing_tools="$missing_tools and docker-compose"
+        else
+            missing_tools="docker-compose"
+        fi
+    fi
+    
+    # Report missing tools
+    if [ -n "$missing_tools" ]; then
+        echo -e "${RED}❌ Missing required tools: $missing_tools${NC}"
         echo ""
-        echo "Install docker-compose with one of these methods:"
+        echo "This project requires both Docker and docker-compose to run."
+        echo "Please install the missing tools and try again."
         echo ""
-        echo "Option 1 - Using apt (Debian/Ubuntu):"
-        echo "  sudo apt update && sudo apt install -y docker-compose"
-        echo ""
-        echo "Option 2 - Using pip:"
-        echo "  sudo pip3 install docker-compose"
-        echo ""
-        echo "Option 3 - Direct download (latest version):"
-        echo "  sudo curl -L \"https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose"
-        echo "  sudo chmod +x /usr/local/bin/docker-compose"
+        echo "Thank you! 😊"
         echo ""
         exit 1
     fi
     
+    # All good!
+    echo -e "${GREEN}✓ Docker is ready${NC}"
     echo -e "${GREEN}✓ docker-compose is ready${NC}"
 }
 
