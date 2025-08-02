@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v1.2.4] - 2024-12-XX
+
+### Added
+- Intelligent timezone detection for international users
+- Container configuration enhancements for better portability
+
+### Changed
+- Dockerfile now supports TZ environment variable with UTC fallback
+- run.sh auto-detects user timezone using timedatectl
+- Container info display shows detected timezone
+- Modernized filename conventions (ALL CAPS → lowercase)
+
+### Fixed
+- Hardcoded America/New_York timezone replaced with auto-detection
+- All internal file references updated to lowercase conventions
+
 ## [v1.2.3] - 2024-12-XX
 
 ### Added
@@ -136,6 +152,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **v1.2.1**: Critical volume collision bug fix
 - **v1.2.2**: Documentation consistency and professionalization
 - **v1.2.3**: GitHub professionalization with license, issue templates, badges
+- **v1.2.4**: Timezone detection, filename modernization, portability improvements
 
 ## Contributing
 

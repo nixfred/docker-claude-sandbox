@@ -1,4 +1,4 @@
-# 🤖 Docker Claude Sandbox v1.2.3
+# 🤖 Docker Claude Sandbox v1.2.4
 
 ![Version](https://img.shields.io/github/v/release/nixfred/docker-claude-sandbox?label=version&color=blue)
 ![License](https://img.shields.io/github/license/nixfred/docker-claude-sandbox?color=green)
@@ -394,7 +394,7 @@ For technical implementation details, see:
 
 ## 🏷️ Version Information
 
-- **Current version**: v1.2.3
+- **Current version**: v1.2.4
 - **Tested platforms**: Linux ARM64/x86_64, macOS Apple Silicon (Intel untested)  
 - **Docker compatibility**: 20.10+, Buildx optional
 - **Base image**: Ubuntu 22.04 LTS
