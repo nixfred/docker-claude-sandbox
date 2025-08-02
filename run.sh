@@ -224,6 +224,14 @@ main() {
     fi
     
     echo -e "${CYAN}🏗️  Building Claude Sandbox container...${NC}"
+    
+    # macOS/Colima buildx compatibility fix
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        echo -e "${YELLOW}🍎 Detected macOS - applying buildx compatibility fix...${NC}"
+        export DOCKER_BUILDKIT=0
+        export COMPOSE_DOCKER_CLI_BUILD=0
+    fi
+    
     docker-compose build || exit 1
     
     echo -e "${CYAN}🚀 Starting Claude Sandbox...${NC}"
