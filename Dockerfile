@@ -82,7 +82,8 @@ ENV HOME=/home/coder
 # Set up shell environment
 RUN echo 'export PS1="\[\033[0;32m\]\u@claude-sandbox\[\033[00m\]:\[\033[0;34m\]\w\[\033[00m\]\$ "' >> /home/coder/.bashrc && \
     echo 'cd /${WORKSPACE}' >> /home/coder/.bashrc && \
-    echo 'echo "claude"' >> /home/coder/.bashrc
+    echo 'echo "claude"' >> /home/coder/.bashrc && \
+    echo 'echo "Need software? Ask Claude to install and explain why."' >> /home/coder/.bashrc
 
 
 CMD ["/bin/bash"]
