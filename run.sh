@@ -1,5 +1,5 @@
 #!/bin/bash
-# Docker Claude Sandbox - Portable One-Command Setup v1.3.1
+# Docker Claude Sandbox - Portable One-Command Setup v1.3.2
 # Usage: curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
 
 set -e
@@ -130,6 +130,14 @@ download_config() {
     fi
     echo -e "${GREEN}    ✅ Dockerfile downloaded${NC}"
     
+    # Download requirements.txt for reproducible Python packages
+    echo -e "${BLUE}    📄 Downloading requirements.txt...${NC}"
+    if ! curl -fsSL "$base_url/requirements.txt" -o requirements.txt; then
+        echo -e "${RED}❌ Failed to download requirements.txt${NC}"
+        exit 1
+    fi
+    echo -e "${GREEN}    ✅ requirements.txt downloaded${NC}"
+    
     echo -e "${GREEN}✓ All configuration files ready${NC}"
 }
 
@@ -139,7 +147,7 @@ setup_project_directory() {
     local suggested_dir="$HOME/claude-sandbox"
     
     # If not already in a directory with config files, use recommended directory
-    if [ ! -f "docker-compose.yml" ] || [ ! -f "Dockerfile" ]; then
+    if [ ! -f "docker-compose.yml" ] || [ ! -f "Dockerfile" ] || [ ! -f "requirements.txt" ]; then
         PROJECT_DIR="$suggested_dir"
         if [ ! -d "$PROJECT_DIR" ]; then
             echo -e "${CYAN}📁 Creating project directory: $PROJECT_DIR${NC}"
@@ -199,7 +207,7 @@ main() {
     check_requirements
     
     # Handle local vs remote execution
-    if [ -f "docker-compose.yml" ] && [ -f "Dockerfile" ]; then
+    if [ -f "docker-compose.yml" ] && [ -f "Dockerfile" ] && [ -f "requirements.txt" ]; then
         echo -e "${GREEN}✓ Found local configuration files${NC}"
     else
         setup_project_directory
@@ -396,7 +404,7 @@ main() {
     # Check if we can actually allocate a TTY (not just if /dev/tty exists)
     if [ -t 0 ] && [ -t 1 ] && [ -c /dev/tty ]; then
         echo -e "${CYAN}Entering container...${NC}"
-        echo -e "${CYAN}Thank you for using Docker Claude Sandbox v1.3.1${NC}"
+        echo -e "${CYAN}Thank you for using Docker Claude Sandbox v1.3.2${NC}"
         echo ""
         exec docker exec -it "$CONTAINER_NAME" bash
     else
@@ -412,7 +420,7 @@ main() {
         echo ""
         echo -e "${GREEN}✨ Your Claude Sandbox is ready for AI-powered development!${NC}"
         echo ""
-        echo -e "${CYAN}Thank you for using Docker Claude Sandbox v1.3.1${NC}"
+        echo -e "${CYAN}Thank you for using Docker Claude Sandbox v1.3.2${NC}"
     fi
 }
 

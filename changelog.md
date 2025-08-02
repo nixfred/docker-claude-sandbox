@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v1.3.2] - 2024-12-XX
+
+### Added
+- **Package version pinning** - ✅ IMPLEMENTED - All Python packages now have pinned versions for reproducible builds
+- **requirements.txt** - Centralized Python dependency management with specific versions
+- **.nvmrc file** - Node.js version lock file specifying version 20
+- **Reproducible builds** - Ensures consistent environments across all installations
+
+### Changed
+- **Dockerfile** - Now uses requirements.txt for Python package installation
+- **run.sh** - Downloads requirements.txt along with other configuration files
+- **Build process** - More reliable with locked dependency versions
+
+### Technical Improvements
+- Python packages pinned: requests==2.31.0, pytest==7.4.3, black==23.11.0, etc.
+- Better dependency documentation and management
+- Prevents "works on my machine" issues with consistent versions
+
 ## [v1.3.1] - 2024-12-XX
 
 ### Added

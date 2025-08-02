@@ -1,4 +1,4 @@
-# 🤖 Docker Claude Sandbox v1.3.1
+# 🤖 Docker Claude Sandbox v1.3.2
 
 ![CI](https://img.shields.io/github/actions/workflow/status/nixfred/docker-claude-sandbox/ci.yml?branch=main&label=CI&color=brightgreen)
 ![Version](https://img.shields.io/github/v/release/nixfred/docker-claude-sandbox?label=version&color=blue)

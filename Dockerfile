@@ -57,21 +57,17 @@ RUN echo "⚡ Installing Node.js 20+ for Claude Code..." && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# Copy requirements file for reproducible builds
+COPY requirements.txt /tmp/requirements.txt
+
 # Install essential Python packages for Claude Code
 RUN echo "🐍 Installing essential Python packages..." && \
     pip3 install --no-cache-dir --upgrade pip setuptools wheel && \
-    echo "📚 Installing development and utility packages..." && \
-    pip3 install --no-cache-dir \
-    # Core libraries
-    requests urllib3 certifi \
-    # Development tools
-    pytest black flake8 pylint \
-    # Utilities
-    pyyaml toml \
-    # System utilities
-    psutil \
-    && echo "🧹 Cleaning pip cache..." && \
-    rm -rf ~/.cache/pip
+    echo "📚 Installing development and utility packages from requirements.txt..." && \
+    pip3 install --no-cache-dir -r /tmp/requirements.txt && \
+    echo "✅ All Python packages installed with pinned versions" && \
+    echo "🧹 Cleaning pip cache..." && \
+    rm -rf ~/.cache/pip /tmp/requirements.txt
 
 # Create workspace
 RUN echo "📁 Creating workspace directory..." 
