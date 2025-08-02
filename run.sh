@@ -325,7 +325,7 @@ RUN apt-get update && \\
     # Archive tools
     unzip zip tar gzip \\
     # Text processing
-    jq grep sed awk \\
+    jq grep sed gawk \\
     # Additional useful tools
     bc file rsync \\
     && apt-get autoremove -y \\
