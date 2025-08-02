@@ -1,5 +1,5 @@
 #!/bin/bash
-# Docker Claude Sandbox - Portable One-Command Setup v2.0
+# Docker Claude Sandbox - Portable One-Command Setup v2.0 - Updated 2025-08-02 01:40
 # Usage: curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/main/run.sh | bash
 
 set -e
