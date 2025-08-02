@@ -2,6 +2,13 @@
 
 **Lightweight Docker container optimized for Claude Code development**
 
+## 📋 Requirements
+
+- **Docker** - Container runtime
+- **docker-compose** - Container orchestration  
+- **2+ GB free disk space** - For Ubuntu base image and dependencies
+- **Internet connection** - For downloading packages during build
+
 ## ⚡ Quick Start
 
 **Option 1: One command (downloads everything)**
