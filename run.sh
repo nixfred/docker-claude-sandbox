@@ -226,11 +226,11 @@ main() {
     # Wait a moment for container to be fully ready
     sleep 2
     
-    echo -e "${GREEN}✅ Container ready! To start Claude Code, run:${NC}"
-    echo -e "${YELLOW}  docker exec -it $CONTAINER_NAME bash -c \"cd /workspace && claude\"${NC}"
+    echo -e "${GREEN}✅ Container ready! Entering container...${NC}"
     echo ""
-    echo -e "${CYAN}💡 Or use the sclaw alias (if you have FeNix):${NC}"
-    echo -e "${YELLOW}  sclaw${NC}"
+    
+    # Enter the container and start bash (which will show welcome message)
+    exec docker exec -it "$CONTAINER_NAME" bash
 }
 
 # Handle command line arguments
