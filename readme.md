@@ -102,7 +102,7 @@ cd docker-claude-sandbox
 
 ### Version-Pinned Install
 ```bash
-curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.2.3/run.sh | bash
+curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.2.6/run.sh | bash
 ```
 
 ### Cache-Busting Install (Force Latest)
@@ -284,7 +284,7 @@ docker exec -it YOUR_CONTAINER_NAME bash -c "cd /workspace && code ."
 # .github/workflows/test.yml
 - name: Setup Claude Code Environment
   run: |
-    curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.2.3/run.sh | bash
+    curl -fsSL https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.2.6/run.sh | bash
     docker exec claude-sandbox claude --version
 ```
 
@@ -364,7 +364,7 @@ docker system prune -f
 **"Input device is not a TTY" error**
 ```bash
 # Use specific commit to bypass CDN cache
-curl -fsSL "https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.2.2/run.sh" | bash
+curl -fsSL "https://raw.githubusercontent.com/nixfred/docker-claude-sandbox/v1.2.6/run.sh" | bash
 
 # Or clone locally
 git clone https://github.com/nixfred/docker-claude-sandbox.git
