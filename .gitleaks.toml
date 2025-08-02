@@ -1,0 +1,42 @@
+# GitLeaks configuration for Docker Claude Sandbox
+# Excludes false positives for documentation and setup guides
+
+title = "GitLeaks Config for Docker Claude Sandbox"
+
+[extend]
+# Use default GitLeaks rules
+useDefault = true
+
+[[rules]]
+description = "Docker Personal Access Token"
+id = "docker-pat"
+regex = '''dckr_pat_[a-zA-Z0-9]{36}'''
+keywords = ["dckr_pat"]
+
+# Allowlisted patterns for documentation
+[allowlist]
+description = "Allowlisted files and patterns"
+files = [
+    '''DOCKER_HUB_SETUP\.md''',   # Setup documentation can reference token format
+    '''AI_DEVELOPMENT_GUIDE\.md''', # AI guide can show examples
+    '''\.github/workflows/.*\.yml''', # Workflow files use secrets references
+]
+
+# Allow placeholder tokens in documentation
+[[allowlist.regexes]]
+regex = '''YOUR_DOCKER_TOKEN'''
+description = "Placeholder token in documentation"
+
+[[allowlist.regexes]]
+regex = '''dckr_pat_XXXXXXXXXX'''
+description = "Example token format in documentation"
+
+# Allow references to GitHub secrets syntax
+[[allowlist.regexes]]  
+regex = '''\$\{\{ secrets\.DOCKERHUB_TOKEN \}\}'''
+description = "GitHub Actions secrets syntax"
+
+# Paths to ignore completely
+[[allowlist.paths]]
+regex = '''gitleaks-report\.json'''
+description = "GitLeaks report files"

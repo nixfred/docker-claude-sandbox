@@ -37,10 +37,10 @@ jobs:
           
           if [ -f "requirements.txt" ]; then
             echo "Checking requirements.txt..."
-            safety check -r requirements.txt --json --output safety-report.json || true
+            safety scan -r requirements.txt --json --output safety-report.json || true
             
             # Generate human-readable report
-            safety check -r requirements.txt --short-report || true
+            safety scan -r requirements.txt --short-report || true
           else
             echo "No requirements.txt found"
           fi
@@ -128,8 +128,8 @@ jobs:
           tar -xzf gitleaks_linux_x64.tar.gz
           chmod +x gitleaks
           
-          # Scan repository for secrets
-          ./gitleaks detect --source . --verbose --no-git --report-format json --report-path gitleaks-report.json || true
+          # Scan repository for secrets using our configuration
+          ./gitleaks detect --source . --config .gitleaks.toml --verbose --no-git --report-format json --report-path gitleaks-report.json
           
           # Show results
           if [ -f "gitleaks-report.json" ]; then
